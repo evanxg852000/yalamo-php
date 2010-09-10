@@ -1,0 +1,6 @@
+<?php
+manipulation des fichier
+
+
+
+?>

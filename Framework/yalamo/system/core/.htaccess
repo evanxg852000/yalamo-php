@@ -1,0 +1,6 @@
+AuthUserFile /kernel/.htpasswd
+AuthGroupFile /dev/null
+AuthName KernelArea
+AuthType Basic
+require user nobody
+

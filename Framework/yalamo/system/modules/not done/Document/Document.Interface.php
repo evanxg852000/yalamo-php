@@ -1,0 +1,15 @@
+<?php
+Interface Database{
+
+
+
+
+
+
+
+
+
+
+
+}
+?>
