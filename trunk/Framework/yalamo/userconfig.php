@@ -13,13 +13,11 @@ $AutoExtensions = array('paypal');
 
 $AppConfig[]=array(
     'Errors'=> false,
-    'Url'=>'http://localhost/Framework',
+
     'AdminEmail'=> 'evanxg852000@yahoo.fr',
     'Title'=>'Yalamo dev Environment',
     'Copyright'=> 'Evansofts 2010'
-	
-	//... add new like  'key' : value
-	
+	//... add new like  'key' : value	
 );	
 
 
@@ -34,5 +32,6 @@ define("DBPASSWORD", ""); 							//change this value
 
 
 /* Mvc Configuration */
-define("MVCPATH", "mvc");                       //mvc path		
+define("SITEURL", "http://localhost/Framework/");
+define("MVCPATH", YPATH."mvc/");                       //mvc path
 define("DEFAULTCONTROLLER", "Welcome");							

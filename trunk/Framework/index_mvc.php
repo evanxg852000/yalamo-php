@@ -1,10 +1,12 @@
 <?php
 //include the framework
-require_once("yalamohp/yalamo.php");
-		
+require_once("yalamo/yalamo.php");
+
 
 # Create an  instance of WebApplication 
-$W=new WebApplication();
-$W->Build();
+$WebApplication=new Mvc();
+$WebApplication->Build();
 unset($w);
+
+
 ?>

@@ -7,9 +7,10 @@ define('YVERSION','0.2');
 define('YLICENCE','LGPL');
 define('YAUTHOR','Evance Soumaoro');
 
-define('YCOREFILE'  ,  YPATH.'system'.DS.'core'.DS.'core.php' );
-define('YMODELFILE' ,  YPATH.'system'.DS.'core'.DS.'model.php');
-define('YURIFILE'   ,  YPATH.'system'.DS.'core'.DS.'uri.php');
+define('YCOREFILE'  ,  YPATH.'system'.DS.'core'.DS.'core'.EXT );
+define('YMODELFILE' ,  YPATH.'system'.DS.'core'.DS.'model'.EXT);
+define('YURIFILE'   ,  YPATH.'system'.DS.'core'.DS.'uri'.EXT);
+define("YMVCFILE"   ,  YPATH.'system'.DS.'core'.DS.'mvc'.EXT);
 
 
 define('YMODULEDIR'    , YPATH.'system'.DS.'modules'.DS);

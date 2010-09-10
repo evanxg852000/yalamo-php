@@ -24,7 +24,14 @@ $v=new Path();
 $v->__toString();
 
 
+$u=new Uri() ;
+
+echo $u->Extract(0);
+
 ?>
 </pre>
 </body>
 </html>
+
+http://localhost/Framework/evan/care/var
+http://projects.evansofts.com/
