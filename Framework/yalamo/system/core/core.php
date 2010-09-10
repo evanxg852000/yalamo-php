@@ -6,10 +6,10 @@
 class Loader {
 public function  __construct() {
         ;
-    }
+}
 public function   __destruct() {
         ;
-    }
+}
 public function   __toString() {
         return "Load script from different location";
     }
@@ -19,18 +19,25 @@ public function   __toString() {
 Name | Type | Description | $this->Load->Module('file');
 </YalDocElem>
 */
-public function Module($name){
-   $classname=ucwords($name);
-   $fullpath=YMODULEDIR.$classname.EXT;
+public function Module($module){
+   $fullpath=YMODULEDIR.ucwords($module).EXT;
    $this->Load($fullpath);
 }
-public function Helper($name){
-   $fullpath=YHELPERSDIR.ucwords($name).EXT;
+public function Helper($helper){
+   $fullpath=YHELPERSDIR.ucwords($helper).EXT;
    $this->Load($fullpath);
 }
-public function Extension($name){
-   $fullpath=YEXTENTIONDIR.ucwords($name).EXT;
+public function Extension($extension){
+   $fullpath=YEXTENTIONDIR.ucwords($extension).EXT;
    $this->Load($fullpath);
+}
+public function Model($model){
+    $fullpath=MVCPATH."models/".ucwords($model).EXT;
+    $this->Load($fullpath);
+}
+public function View($view){
+    $fullpath=MVCPATH."views/".ucwords($view).EXT;
+    $this->Load($fullpath);
 }
 
 /*
@@ -38,19 +45,19 @@ public function Extension($name){
 Name | Type | Description | $this->Load->Module(array('file','url'));
 </YalDocElem>
 */
-public function Modules($names){
-   foreach($names as $name ){      
-      $this->Module($name);
+public function Modules($modules){
+   foreach($modules as $module ){
+      $this->Module($module);
    }
 }
-public function Helpers($names){
-   foreach($names as $name ){
-      $this->Helper($name);
+public function Helpers($helpers){
+   foreach($helpers as $helper ){
+      $this->Helper($helper);
    }
 }
-public function Extensions($names){
-   foreach($names as $name ){
-      $this->Extension($name);
+public function Extensions($extensions){
+   foreach($extensions as $extension ){
+      $this->Extension($extension);
    }
 }
 
