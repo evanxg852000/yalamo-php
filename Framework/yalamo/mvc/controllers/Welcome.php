@@ -1,27 +1,21 @@
 <?php
-Class Welcom extends WebApplicationController {
+class Welcome extends Controller {
 	
-	Public function Index()
-	{
-
-		$this->registry->View->Title = 'Welcom default';
-		$this->registry->View->content = 'welcom default content ';
-		$data['v']='';
+public function Index(){
+      $this->Load->View("index");
+        
 		
-		$this->registry->View->LoadView('Welcom','Hello',$data);
-	}
+}
 	
-	Public function Hello()
-	{
-		$this->registry->View->Title = 'Wellcom Hello';
-		$this->registry->View->content = 'wellcom hello content';
-		
-		$data['v']='grigera';
+public function Hello()	{
+    $this->View->Title = 'Wellcom Hello';
+    $this->View->content = 'wellcom hello content';
+    $data['v']='grigera';
+    $this->View->LoadView('Welcom','Hello',$data);
 
-		$this->registry->View->LoadView('Welcom','Hello',$data);
-
-	}
+    
+}
 
 
 }
-?>
+

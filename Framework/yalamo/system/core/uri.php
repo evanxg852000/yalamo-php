@@ -1,26 +1,51 @@
-<?php
-//Shsss, Silence is Golden !
+<?php if ( ! defined('YPATH')) exit('Access Denied !');
+
+define('A', "B");
+//URI CLASS IMPLEMENTATION
 Class Uri {
 
-private $segments=array();  				//segments :     /controller/method/param1/param2/...    $_server['PATH_INFO']			  						//fullurl:	   http://localhost/index.php/controller/method/param1/param2/....
-private $baseuri;		//define in userconfig	 						//baseurl        http://localhost/index.php
-private $requesturl;            //full url in the client browser
-private $querystr;              //query string
+private $baseuri;            //define in userconfig                         :  http://foo.com/
+private $requesturi;         //full url in the client browser               :  http://foo.com/controller/method/param1/param2
+private $segments=array();   //segments :                                   :  (controller, method , param1 , param2 )
+private $controller;         //current requested controller
+private $method;             //current requested method of the controller
+private $querystr=array();   //array containing the query string             :  ( param1 , param2 )
 
 public function __construct(){
-    $this->baseuri=SITEURL ;
-    $this->requesturl=$this->RequestUrl();
-    $this->querystr=str_replace($this->baseuri, "",  $this->requesturl );
-
-   $this->segments=explode('/',$this->querystr);
-
-   echo 'query='.$this->querystr.' ' ;
+    $this->controller=DEFAULTCONTROLLER;
     
-    var_dump($this->segments);
-    var_dump(explode('/',$this->baseuri));
+    $this->baseuri=SITEURL ;
+    $this->requesturi=$this->RequestUri();
+    $segementstring=str_replace($this->baseuri, "",  $this->requesturi );
+    $this->segments=explode('/',$segementstring);
+
+    if(array_key_exists(0, $this->segments) ){
+       if( $this->segments[0]!=""){
+          $this->controller=$this->segments[0];
+       }
+    }
+
+    if(array_key_exists(1, $this->segments)){
+        $this->method=$this->segments[1];
+    }
+    else {
+        $this->method="Index";
+    }
+    
+    for($i=2; $i< count($this->segments);$i++ ){
+        if(array_key_exists($i, $this->segments)){
+             $this->querystr[]=$this->segments[$i];
+        }
+    }   
 }
 
-Public function Extract($num){
+public function GetBase() {
+    return $this->baseuri;
+}
+public function GetFull() {
+    return $this->requesturi;
+}
+public function GetSegment($num){
     if(array_key_exists($num , $this->segments)){
 	return $this->segments[$num];
     }
@@ -28,16 +53,17 @@ Public function Extract($num){
 	return false;
     }
 }
-
-public function GetFullUrl() {
-    return $this->requesturl;
+public function GetController() {
+    return ucwords($this->controller);
+}
+public function GetMethod() {
+    return ucwords($this->method);
+}
+public function GetQueryString() {
+    return $this->querystr;
 }
 
-public function GetBaseUrl() {
-    return $this->baseuri;
-}
-
-private function RequestUrl() {
+private function RequestUri() {
     $url = 'http';
     $port='';
     if (isset($_SERVER["HTTPS"]) and ( $_SERVER["HTTPS"]== "on"))  {	$url .= "s"; }
@@ -52,28 +78,15 @@ private function RequestUrl() {
 }
 
 
+/*
+$u=new Uri() ;
+$u->GetBase();
+$u->GetFull();
+$u->GetSegment(1);
+$u->GetController();
+$u->GetMethod();
+$u->GetQueryString();
+*/
 
 
 
-
-Function YALCurrentController()
-{
-	$result=false;
-	$url=new Uri() ;
-	$result=$url->Extract(1);
-	unset($url);
-	
-        echo 'heresultt: '. $result;
-}
-
-# Utilitis necessary for WebApplication Package: MVC
-# Extract the second part of the url which is normally the current controller method
-# return the controller method name or false if not set
-Function YALCurrentControllerMethod()
-{
-	$result=false;
-	$url=new Uri() ;
-	$result=$url->Extract(2);
-	unset($url);
-	return $result;
-}

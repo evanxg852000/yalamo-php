@@ -4,15 +4,12 @@
 
 //Loader Class
 class Loader {
-public function  __construct() {
-        ;
-}
-public function   __destruct() {
-        ;
-}
+
+public function  __construct() {}
+public function   __destruct() {}
 public function   __toString() {
-        return "Load script from different location";
-    }
+    return "Load script from different location";
+}
 
 /*
 <YalDocElem>
@@ -32,11 +29,15 @@ public function Extension($extension){
    $this->Load($fullpath);
 }
 public function Model($model){
-    $fullpath=MVCPATH."models/".ucwords($model).EXT;
+    $fullpath=MVCPATH."models".DS.ucwords($model).EXT;
     $this->Load($fullpath);
 }
-public function View($view){
-    $fullpath=MVCPATH."views/".ucwords($view).EXT;
+public function View($view,$data=Null){
+    $fullpath=MVCPATH."views".DS.ucwords($view).EXT;
+    $this->Load($fullpath,$data);
+}
+public function Controller($controller){
+    $fullpath=MVCPATH."controllers".DS.ucwords($controller).EXT;
     $this->Load($fullpath);
 }
 
@@ -61,10 +62,22 @@ public function Extensions($extensions){
    }
 }
 
-private function  Load($fullpath){
+private function  Load($fullpath, $data=NULL){
+    //convert $data into variables by: var var trick
+    if( $data!=Null){
+	if(is_array($data)){
+           foreach ($data as $key => $val){
+                $$key = $val;
+           }
+        }
+    }
     if(file_exists($fullpath)){
         require_once ($fullpath);
     }
+    else{
+        return false;
+    }
+
 }
 
 }
