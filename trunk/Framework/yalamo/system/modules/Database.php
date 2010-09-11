@@ -1,2 +1,13 @@
 <?php
-//Shsss, Silence is Golden !
+class Database {
+
+    private function   __construct() {  }
+
+    public static function GetInstance(){
+        return true;
+    }
+
+}
+
+
+
