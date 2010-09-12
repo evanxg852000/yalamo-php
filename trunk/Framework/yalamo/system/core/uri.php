@@ -39,13 +39,13 @@ public function __construct(){
     }   
 }
 
-public function GetBase() {
+public function Base() {
     return $this->baseuri;
 }
-public function GetFull() {
+public function Full() {
     return $this->requesturi;
 }
-public function GetSegment($num){
+public function Segment($num){
     if(array_key_exists($num , $this->segments)){
 	return $this->segments[$num];
     }
@@ -53,13 +53,13 @@ public function GetSegment($num){
 	return false;
     }
 }
-public function GetController() {
+public function Controller() {
     return ucwords($this->controller);
 }
-public function GetMethod() {
+public function Method() {
     return ucwords($this->method);
 }
-public function GetQueryString() {
+public function QueryString() {
     return $this->querystr;
 }
 
@@ -80,12 +80,12 @@ private function RequestUri() {
 
 /*
 $u=new Uri() ;
-$u->GetBase();
-$u->GetFull();
-$u->GetSegment(1);
-$u->GetController();
-$u->GetMethod();
-$u->GetQueryString();
+$u->Base();
+$u->Full();
+$u->Segment(1);
+$u->Controller();
+$u->Method();
+$u->SQueryString();
 */
 
 
