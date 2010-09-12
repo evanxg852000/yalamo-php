@@ -5,6 +5,7 @@
 <title></title>
 </head>
 <body>
+    <a href="welcome/hello">Go to Hello</a>
 
 	<?php echo $data ?>
 

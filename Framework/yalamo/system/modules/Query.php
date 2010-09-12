@@ -6,7 +6,6 @@ class Query {
 
     public function   __construct() {
         $this->database=Database::GetInstance();
-        echo 'this is a query';
     }
 
     public function SelectAll(){

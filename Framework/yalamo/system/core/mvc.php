@@ -31,8 +31,8 @@ private $controllerinstance ;
 
 public function __construct() {
     $uri=new Uri();
-    $this->controller=$uri->GetController();
-    $this->method=$uri->GetMethod();
+    $this->controller=$uri->Controller();
+    $this->method=$uri->Method();
     $file=MVCPATH."controllers".DS.$this->controller.EXT;
     if ((!file_exists($file)) && (!is_readable($file))){
        $this->controller ="Error404";
