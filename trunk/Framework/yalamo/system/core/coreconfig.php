@@ -15,7 +15,7 @@ define("YMVCFILE"   ,  YPATH.'system'.DS.'core'.DS.'mvc'.EXT);
 
 define('YMODULEDIR'    , YPATH.'system'.DS.'modules'.DS);
 define('YHELPERSDIR'   , YPATH.'system'.DS.'helpers'.DS);
-define('YEXTENTIONDIR' , YPATH.'extention'.DS);
+define('YEXTENTIONDIR' , YPATH.'extensions'.DS);
 
 
 /* Array Modules */

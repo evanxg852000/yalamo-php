@@ -7,7 +7,7 @@ $Extensions[] = array();
 /* Autoload Arrays */
 $AutoModules    = array('cookie');
 $AutoHelpers    = array('regex','string');
-$AutoExtensions = array('paypal');
+$AutoExtensions = array('paypal','Javascript');
 
 /* Application and Custom Configuration  */
 

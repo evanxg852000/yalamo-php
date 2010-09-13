@@ -1,2 +1,4 @@
 <?php
-//Shsss, Silence is Golden !
+class File {
+
+}
