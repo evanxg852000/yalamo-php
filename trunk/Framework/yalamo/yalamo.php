@@ -1,5 +1,4 @@
-<?php
-//YALAMO KERNEL
+<?php //YALAMO KERNEL
 /* Set Error Level */
 error_reporting(E_ALL);
 
