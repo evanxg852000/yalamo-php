@@ -7,7 +7,9 @@
 <script type="text/javascript">
     $(function(){
         $("#a").fadeOut(4000, function (){
-            $(this).fadeIn(5000);
+            
+            $(this).fadeIn(5000, function(){$(this).slideUp(3000);});
+            
         });
     });
 </script>
@@ -15,7 +17,7 @@
 <body>
     <a href="welcome/hello">Go to Hello</a>
     <?php echo $data ?>
-    <div id="a" style="background-color:darkgray; width: 200px; height: 300px; margin:auto;padding: 10px;">
+    <div id="a" style="border:solid 2px gray ;background-color:darkgrey; width: 200px; height: 300px; margin:auto;padding: 10px;">
         <?php echo $content ?>
     </div>
 
