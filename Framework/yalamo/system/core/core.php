@@ -1,9 +1,16 @@
 <?php if ( ! defined('YPATH')) exit('Access Denied !');
 //IMPLEMENT CORE FUNCTIONALITY
 
+/* Yal Class for  Enums*/
+final class Yal{
+    const  Latest=0;
+    const  All=0;
+    const  Void=0;
 
-//Loader Class
-class Loader {
+}
+
+/* Loader Class */
+final class Loader {
 
 public function  __construct() {}
 public function   __destruct() {}
@@ -83,7 +90,7 @@ private function  Load($fullpath, $data=NULL){
 }
 
 
-//Auto Loading
+/* Auto Loading */
 function Autoload($AutoLoadArray){
   $load=new Loader();
   $load->Modules($AutoLoadArray['modules']);
@@ -94,5 +101,4 @@ function __autoload($classname){
    $load=new Loader();
    $load->Module($classname);
 }
-
 
