@@ -16,6 +16,7 @@ define('EXT', '.php');
 define("YPATH",pathinfo(__FILE__, PATHINFO_DIRNAME).DS);
 
 /* Include Required Files */
+
 require_once("userconfig".EXT);
 require_once("system".DS."core".DS."coreconfig".EXT);
 

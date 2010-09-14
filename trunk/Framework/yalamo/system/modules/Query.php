@@ -8,14 +8,18 @@
  */
 
 class Query {
-
+    private $sqlselect;
+    private $sqlinsert;
+    private $sqldelete;
+    private $uqlupdate;
+    private $sqlwhere ;
     private $database;
 
     public function   __construct() {
-        $this->database=Database::GetInstance();
+        $this->database=Database::Instance();
     }
 
-    public function SelectAll(){
+    public function Select($offset=Yalamo::All){
         echo 'all table selected';
     }
 

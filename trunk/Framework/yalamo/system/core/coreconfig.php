@@ -33,8 +33,7 @@ $YAutoLoad = array (
 
 
 
-
-/* Array Modules */
+/* Array Modules
 $YFiles['modules'] = array(
 'Cookie',
 'Database',
@@ -49,13 +48,14 @@ $YFiles['modules'] = array(
 );
 
 
-/* Array Helpers */
+ Array Helpers
 $YFiles['helper'] = array(
 'String',
 'Regex',
 'Uri'
 //...
 );
+*/
 
 
 

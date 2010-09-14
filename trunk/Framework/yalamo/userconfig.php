@@ -31,9 +31,8 @@ $AppConfig[]=array(
 
 /* Database Configuration */
 define("DBDRIVER", "MYSQL"); 							//change this value [POSTGRE,SQLITE]
-define("DBSERVER", "localhost");                   //change this value
-define("DBPATH", "C:/data/mydata.db");                   //change this value
-define("DBNAME", "test");                   //change this value
+define("DBSERVER", "localhost");                   //change this value                  //change this value
+define("DBNAME", "test");                         //C:/data/mydata.db for sqlite     //change this value
 define("DBUSER", "root"); 							//change this value
 define("DBPASSWORD", ""); 							//change this value
 
