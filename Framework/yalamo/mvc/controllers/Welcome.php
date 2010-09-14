@@ -2,9 +2,12 @@
 class Welcome extends Controller {
 	
 public function Index(){
-   $data['title']="Welcom >> Index";
+    $data['title']="Welcom >> Index";
     $data['content']="this is the content of my div from the welcome controller!";
     $this->Load->View("index",$data);
+
+    
+
  
 }
 	

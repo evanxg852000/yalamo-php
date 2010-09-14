@@ -14,7 +14,7 @@ protected $Table;
 protected $ResultSet;
 
 public function  __construct() {
-
+    $this->Database=Database::Instance();
 }
 public function   __destruct() {
 

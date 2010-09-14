@@ -11,8 +11,13 @@
 final class Error {
     //List of identified errors type
     const None  = "YE000|There is not an error";
-    const YE100 = "YE101|Invali argument/ file supllied";
+    const YE001 = "YE001|Not Implemented Error";
+    
+    const YE100 = "YE101|Invalid Argument/File Supllied Error";
     const YE101 = "YE102|Invali argument/ file supllied";
+    //...
+    const YE105 = "YE105|Database connection Error";
+    const YE106 = "YE106|Database Query Error";
     //...
 
     private $num;
@@ -49,14 +54,15 @@ final class Error {
 
 /* Debugger Class */
 final class Inspector {
-    private static $instance;
+    private static $instance=NULL;
     private $errors;
 
     private function  __construct() {
         $this->errors=array(); 
     }
+    private function  __clone() {}
     public static function  Instance(){
-        if(self::$instance==NULL){
+        if(!self::$instance){
             self::$instance=new Inspector();
         }
         return self::$instance;

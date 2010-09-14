@@ -10,11 +10,16 @@
 /* Yalamo Class for  Enums*/
 final class Yalamo {
     //List of constants
-    const  None     =0;
-    const  Latest   =2;
-
+    const  None         = 0;
     
+
+
+    const Pogsql        = "POSTGRESQL";
+    const Mysql         = "MYSQL";
+    const Sqlite        = "SQLITE";
+
     const  Void     ="";
+    const  Space    =" ";
     const  All      ="*";
 
     
