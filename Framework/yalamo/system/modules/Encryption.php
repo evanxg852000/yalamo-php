@@ -1,8 +1,12 @@
 <?php if ( ! defined('YPATH')) exit('Access Denied !');
 /*
- * REGULAR EXPRESSION HELPER
+ * INCRYPTION IMPLEMENTATION
  *
  *
  *
  * @author Evance Soumaoro
  */
+class Encryption {
+    //put your code here
+}
+

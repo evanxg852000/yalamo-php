@@ -1,7 +1,12 @@
 <?php if ( ! defined('YPATH')) exit('Access Denied !');
+/*
+ * URI IMPLEMENTATION
+ *
+ *
+ *
+ * @author Evance Soumaoro
+ */
 
-define('A', "B");
-//URI CLASS IMPLEMENTATION
 Class Uri {
 
 private $baseuri;            //define in userconfig                         :  http://foo.com/
