@@ -1,13 +1,26 @@
 <?php if ( ! defined('YPATH')) exit('Access Denied !');
-//IMPLEMENT CORE FUNCTIONALITY
+/*
+ * CORE IMPLEMENTATION
+ *
+ *
+ *
+ * @author Evance Soumaoro
+ */
 
-/* Yal Class for  Enums*/
-final class Yal{
-    const  Latest=0;
-    const  All=0;
-    const  Void=0;
+/* Yalamo Class for  Enums*/
+final class Yalamo {
+    //List of constants
+    const  None     =0;
+    const  Latest   =2;
 
+    
+    const  Void     ="";
+    const  All      ="*";
+
+    
 }
+
+
 
 /* Loader Class */
 final class Loader {

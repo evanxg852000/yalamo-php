@@ -1,7 +1,11 @@
 <?php if ( ! defined('YPATH')) exit('Access Denied !');
-//IMPLEMENT MVC FUNCTIONALITY
-
-
+/*
+ * MVC IMPLEMENTATION
+ *
+ *
+ *
+ * @author Evance Soumaoro
+ */
 
 /* Class Mvc Definition */
 final class Mvc {

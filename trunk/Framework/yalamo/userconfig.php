@@ -1,5 +1,12 @@
 <?php if ( ! defined('YPATH')) exit('Access Denied !');
-//USER CONFIGURATION
+/*
+ * USER CONFIGURATION
+ *
+ *
+ *
+ * @author Evance Soumaoro
+ */
+
 
 /* Array Extensions */
 $Extensions[] = array();

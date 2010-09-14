@@ -1,5 +1,12 @@
 <?php if ( ! defined('YPATH')) exit('Access Denied !');
-//IMPLEMENT Javascript Extension
+/*
+ * JAVASCRIPT EXTENSION
+ *
+ *
+ *
+ * @author Evance Soumaoro
+ */
+
 
 /* Enum Available Libraries*/
 final class Jslib{

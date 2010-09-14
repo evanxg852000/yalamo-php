@@ -1,4 +1,12 @@
-<?php //YALAMO KERNEL
+<?php
+/*
+ * YALAMO KERNEL
+ *
+ *
+ *
+ * @author Evance Soumaoro
+ */
+
 /* Set Error Level */
 error_reporting(E_ALL);
 
@@ -12,9 +20,14 @@ require_once("userconfig".EXT);
 require_once("system".DS."core".DS."coreconfig".EXT);
 
 require_once(YCOREFILE);
+require_once(YERRORFILE);
 require_once(YMODELFILE);
 require_once(YURIFILE);
 require_once(YMVCFILE);
+
+/* Initialise Inspector */
+$Inspector=  Inspector::Instance();
+
 
 /* Autoload */
 Autoload($YAutoLoad);

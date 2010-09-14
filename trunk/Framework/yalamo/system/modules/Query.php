@@ -1,4 +1,11 @@
-<?php
+<?php if ( ! defined('YPATH')) exit('Access Denied !');
+/*
+ * QUERY IMPLEMENTATION
+ *
+ *
+ *
+ * @author Evance Soumaoro
+ */
 
 class Query {
 
