@@ -71,17 +71,16 @@ abstract  class Controller {
     protected $Variables;
     protected $Load;
     protected $Uri;
-    protected $Query;
-    protected $Databse;
+    protected $Model;
+
 
     public function __construct() {
         $this->Variables=array();
         $this->Load=new Loader();
         $this->Uri=new Uri();
-        $this->Query=new Query();
-        //add additional important class that mig be called in the futur
+
     }
-    abstract function Index(); //default method must be defined
+    abstract function Index(); 
 
 }
 

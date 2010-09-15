@@ -6,53 +6,63 @@
  *
  * @author Evance Soumaoro
  */
+/* Databases Class */
 final class Database {
     private static $instance=NULL;
-    private function   __construct() {}
+    private $driverObject;
+    private function   __construct() {
+        switch(DBDRIVER){
+		case Yalamo::Mysql:
+                   $this->driverObject=new Mysql();
+                break;
+                case Yalamo::Sqlite:
+                   $this->driverObject=new Sqlite();
+                break;
+                case Yalamo::Pogsql:
+                    $this->driverObject=new Pogsql();
+		break;
+            }
+    }
     private function   __clone() {}
     
     public static function Instance(){
         if(!self::$instance){
-            switch(DBDRIVER){
-		case Yalamo::Mysql:
-                   self::$instance=new Mysql();
-                break;
-                case Yalamo::Sqlite:
-                   self::$instance=new Sqlite();
-                break;
-                case Yalamo::Pogsql:
-                   self::$instance=new Pogsql();
-
-		break;
-            }
+            self::$instance=new Database();
         }
         return self::$instance;
     }    
-   
+
+    public function Handle(){
+        return $this->driverObject;
+    }
+    public function Connection(){;
+        return $this->driverObject->Connection();
+    }
     public function Create($name){
-      return self::$instance->Create($name);
+      return $this->driverObject->Create($name);
     }
     public function Drop($name){
-      return self::$instance->Delete($name);
+      return $this->driverObject->Delete($name);
     }
     public function Export($name){
-       return self::$instance->Export($name);
+       return $this->driverObject->Export($name);
     }
     public function Databases(){
-       return self::$instance->Databases();
-    }
-
-    
+       return $this->driverObject->Databases();
+    }    
 }
 
-/* Abstract Base Class for Databases */
+/* Abstract Base Class for Databases Driver*/
 abstract  class DBDriver {
     protected  $connection;
     protected  $result;
-    protected function Onerror($e,$obj){
+    protected final function Onerror($e,$obj){
         $inspector=Inspector::Instance();
         $inspector->Add($e,$obj);
     }
+
+    public abstract function  __construct();
+    public abstract function  __destruct();
 
     public abstract function Connection();
     public abstract function Create($name);
@@ -78,3 +88,4 @@ abstract  class DBDriver {
     public abstract function AffectedRows();
 
 }
+

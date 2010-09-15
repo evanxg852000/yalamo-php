@@ -59,6 +59,7 @@ public function Extension($extension){
 public function Model($model){
     $fullpath=MVCPATH."models".DS.ucwords($model).EXT;
     $this->Load($fullpath);
+    return new $model(); //return the model object to work on
 }
 public function View($view,$data=Null){
     $fullpath=MVCPATH."views".DS.ucwords($view).EXT;

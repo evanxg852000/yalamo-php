@@ -22,6 +22,9 @@ final class Pogsql extends DBDriver{
         }
         return $this->connection;
     }
+    public function  __destruct(){
+        mysql_close($this->connection);
+    }
 
     public function Connection() {
         return $this->connection;
