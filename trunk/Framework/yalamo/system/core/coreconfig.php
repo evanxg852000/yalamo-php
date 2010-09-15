@@ -14,7 +14,7 @@ define('YLICENCE','LGPL');
 define('YAUTHOR','Evance Soumaoro');
 
 define('YCOREFILE'  ,  YPATH.'system'.DS.'core'.DS.'core'.EXT );
-define('YERRORFILE'  ,  YPATH.'system'.DS.'core'.DS.'inspector'.EXT );
+define('YERRORFILE'  , YPATH.'system'.DS.'core'.DS.'inspector'.EXT );
 define('YMODELFILE' ,  YPATH.'system'.DS.'core'.DS.'model'.EXT);
 define('YURIFILE'   ,  YPATH.'system'.DS.'core'.DS.'uri'.EXT);
 define("YMVCFILE"   ,  YPATH.'system'.DS.'core'.DS.'mvc'.EXT);

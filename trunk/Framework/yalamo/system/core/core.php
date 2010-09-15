@@ -7,7 +7,7 @@
  * @author Evance Soumaoro
  */
 
-/* Yalamo Class for  Enums*/
+/* Yalamo Class for Enumerating Supported Constants */
 final class Yalamo {
     //List of constants
     const  None         = 0;
@@ -21,6 +21,9 @@ final class Yalamo {
     const  Void     ="";
     const  Space    =" ";
     const  All      ="*";
+    const  Endline  ="\n";
+    const  Tab      ="\t";
+
 
     
 }
