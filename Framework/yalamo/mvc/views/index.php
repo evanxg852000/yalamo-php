@@ -15,22 +15,24 @@
 </script>
 </head>
 <body>
-    <!--
+    
     <a href="welcome/hello">Go to Hello</a>
     <?php echo $data ?>
     <div id="a" style="border:solid 2px gray ;background-color:darkgrey; width: 200px; height: 300px; margin:auto;padding: 10px;">
         <?php echo $content ?>
     </div>
-    -->
+    
     <pre>
         <?php
-            $con=new Mysql();
-            $con->Select("fdomaine", array("Num_do","Domaine"), array("Num_do",1), "");
-
-
+            $DB=Database::Instance();
+            echo "\n update single : ";
             
-                
-           
+            
+
+
+           var_dump($r);
+           $Inspector=  Inspector::Instance();
+           $Inspector->Investigate(true);
             
 
 

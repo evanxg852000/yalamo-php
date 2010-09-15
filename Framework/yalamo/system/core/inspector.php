@@ -54,7 +54,7 @@ final class Error {
 
 /* Debugger Class */
 final class Inspector {
-    private static $instance=NULL;
+    private static $instance=null;
     private $errors;
 
     private function  __construct() {
@@ -68,7 +68,7 @@ final class Inspector {
         return self::$instance;
     }
 
-    public function Add($type,$subject=NULL){
+    public function Add($type,$subject=null){
         $error=new Error($type,$subject);
         $this->errors[]=$error;
     }
@@ -82,14 +82,16 @@ final class Inspector {
 
     }
     public function Investigate($dump=false){
-        $str="";
+        $log="";
         foreach ($this->errors as $error) {
-            $str =$str." ".$error->__toString()." \n";
-        }
-        if($dump){
+            $str =$error->__toString().Yalamo::Endline;
             echo $str;
+            if($dump){
+                var_dump($error->Subject());
+            }
+            $log.=$str;
         }
-        return $str;
+        return $log;
     }
 
 }

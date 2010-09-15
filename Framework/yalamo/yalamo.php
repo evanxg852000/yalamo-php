@@ -26,8 +26,6 @@ require_once(YMODELFILE);
 require_once(YURIFILE);
 require_once(YMVCFILE);
 
-/* Initialise Inspector */
-$Inspector=  Inspector::Instance();
 
 
 /* Autoload */
