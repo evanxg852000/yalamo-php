@@ -22,7 +22,10 @@ final class Mysql extends DBDriver{
         }
         return $this->connection;
     }
-
+    public function  __destruct(){
+        mysql_close($this->connection);
+    }
+    
     public function Connection() {
         return $this->connection;
     }
@@ -65,6 +68,7 @@ final class Mysql extends DBDriver{
     }
 
     public function Execute($sql) {
+        echo $sql;
         if($this->connection){
             $this->result= @mysql_query($sql, $this->connection);
             if(!$this->result){

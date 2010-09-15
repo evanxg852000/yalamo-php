@@ -25,12 +25,11 @@
     <pre>
         <?php
             $DB=Database::Instance();
-            echo "\n update single : ";
             
             
 
 
-           var_dump($r);
+          
            $Inspector=  Inspector::Instance();
            $Inspector->Investigate(true);
             
