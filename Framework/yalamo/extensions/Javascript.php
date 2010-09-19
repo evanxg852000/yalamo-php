@@ -9,6 +9,12 @@
 
 
 /* Enum Available Libraries*/
+/**
+ * @abstract
+ * @name variante
+ *
+ *
+ */
 final class Jslib{
  const Chromeframe      =1;
  const Dojo             =2;

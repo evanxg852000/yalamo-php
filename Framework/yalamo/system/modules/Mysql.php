@@ -68,7 +68,6 @@ final class Mysql extends DBDriver{
     }
 
     public function Execute($sql) {
-        echo $sql;
         if($this->connection){
             $this->result= @mysql_query($sql, $this->connection);
             if(!$this->result){
