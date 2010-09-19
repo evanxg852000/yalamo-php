@@ -1,14 +1,27 @@
 <?php
+/**
+ * Yalamo framework
+ *
+ * A fast,light, and constraint-free Php framework.
+ *
+ * @package		Yalamo
+ * @author		Evance Soumaoro
+ * @copyright           Copyright (c) 2009 - 2011, Evansofts.
+ * @license		http://projects.evansofts.com/yalamof/license.html
+ * @link		http://evansofts.com
+ * @version		Version 1.0
+ * @filesource          index_mvc.php
+ */
+
 /*
  * MVC ENTRY POINT
  *
- *
- *
- * @author Evance Soumaoro
+ * To rename index.php if you choose to run in MVC-MODE
+ * 
  */
 
 
-/* Include the Framework */
+/* Include the framework */
 require_once("yalamo/yalamo.php");
 
 // Create an  instance of WebApplication

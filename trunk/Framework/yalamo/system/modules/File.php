@@ -7,5 +7,7 @@
  * @author Evance Soumaoro
  */
 class File {
-
+    public function  __construct() {
+        echo "auto loaded";
+    }
 }

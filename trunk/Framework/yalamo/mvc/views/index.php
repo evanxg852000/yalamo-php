@@ -24,11 +24,8 @@
     
     <pre>
         <?php
-            $DB=Database::Instance();
-            
-            
 
-
+           $f=new File();
           
            $Inspector=  Inspector::Instance();
            $Inspector->Investigate(true);
