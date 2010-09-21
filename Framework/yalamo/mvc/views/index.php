@@ -26,9 +26,10 @@
     <pre>
         <?php
 
-           $d=new Path("user\dir\home\\");
+           $d=new Dir("./eva/");
+           var_dump($d->Create(true));
 
-          var_dump($d);
+          var_dump($d->Entries());
         ?>
     </pre>
 

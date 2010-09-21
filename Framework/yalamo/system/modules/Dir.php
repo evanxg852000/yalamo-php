@@ -30,28 +30,30 @@
 final class Dir {
 
     private $path;
-    private $position;
-
+ 
     public function  __construct($path) {
         $this->path=new Path($path);
         if($this->path->IsFile()){
             $this->path=new Path($this->path->Directory());
         }
-        $this->position=0;
     }
-    public function   __toString() {return "Object of Type: Directory"; }
+    public function  __toString() {return "Object of Type: Directory"; }
+    public function  PathObject(){
+        return $this->path;
+    }
 
-    public function  Create(){
-        if (mkdir($this->repertoire, 0750)){
-		return true;
-	}
-	else{
-		return false;
-	}
+
+    public function  Create($recurssive=true){
+        if (@mkdir($this->path->Path(), 0750,$recurssive)) {
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     public function  Delete(){
-
+        $this->delete($this->path->Path());
     }
 
     public function  Entries($sort=true){
@@ -63,20 +65,37 @@ final class Dir {
              }
         }
         if((count($entrylist)>0) && ($sort==true)) {
-            array_multisort($tableau, SORT_ASC);
+            array_multisort($entrylist, SORT_ASC);
         }
            closedir($handle);
            return $entrylist;
     }
 
-    public function Back($step=1){
+    private function delete($directory){
+        $handle = opendir($directory);
+        //traverse all the directories to leave the empty
+	while($item = readdir($handle)) {
+            //si c'est un repertoire donc l'effacer
+            if(is_dir($directory.DS.$item) && substr($item, -2, 2) !== '..' && substr($item, -1, 1) !== '.') {
+                $this->delete($directory.DS.$item);
+            }
+            else{
+		if(substr($item, -2, 2) !== '..' && substr($item, -1, 1) !== '.'){
+                    unlink($directory.DS.$item);
+		}
+            }
+	}
 
+	$handle = opendir($directory);
+        //delete all the directories
+	while($item = readdir($handle)) {
+            if(is_dir($directory.DS.$item) && substr($item, -2, 2) !== '..' && substr($item, -1, 1) !== '.') {
+		$this->delete($directory.DS.$item);
+		rmdir($directory.DS.$item);
+            }
+	}
+        if (rmdir($directory)){return true;}else{return false;}
     }
-
-    public function Forward($step=1){
-
-    }
-
 
 
 }
