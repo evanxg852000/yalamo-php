@@ -47,6 +47,11 @@ final class Error {
         }
         return $this->subject;
     }
+    public static function LogInspector(){
+        $inspector =Inspector::Instance();
+        $logfile=YPATH."InspectorLog";
+        //TODO finish log inspection after file
+    }
     
 }
 
