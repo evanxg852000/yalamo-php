@@ -32,10 +32,7 @@ final class Dir {
     private $path;
  
     public function  __construct($path) {
-        $this->path=new Path($path);
-        if($this->path->IsFile()){
-            $this->path=new Path($this->path->Directory());
-        }
+        $this->path=$path; 
     }
     public function  __toString() {return "Object of Type: Directory"; }
     public function  PathObject(){
@@ -53,12 +50,12 @@ final class Dir {
     }
 
     public function  Delete(){
-        $this->erase($this->path->Path());
+        $this->delete($this->path->Path());
     }
 
     public function  Entries($sort=true){
         $entrylist=array();
-	$handle = opendir($this->path->Path());
+	$handle = opendir($this->path->Directory());
 	while ($file = readdir($handle)) {
              if (substr($file, -1)!="." ) {
 		$entrylist[]= $file;
@@ -71,13 +68,13 @@ final class Dir {
            return $entrylist;
     }
 
-    private function erase($directory){
+    private function delete($directory){
         $handle = opendir($directory);
         //traverse all the directories to leave the empty
 	while($item = readdir($handle)) {
             //si c'est un repertoire donc l'effacer
             if(is_dir($directory.DS.$item) && substr($item, -2, 2) !== '..' && substr($item, -1, 1) !== '.') {
-                $this->erase($directory.DS.$item);
+                $this->delete($directory.DS.$item);
             }
             else{
 		if(substr($item, -2, 2) !== '..' && substr($item, -1, 1) !== '.'){
@@ -90,7 +87,7 @@ final class Dir {
         //delete all the directories
 	while($item = readdir($handle)) {
             if(is_dir($directory.DS.$item) && substr($item, -2, 2) !== '..' && substr($item, -1, 1) !== '.') {
-		$this->erase($directory.DS.$item);
+		$this->delete($directory.DS.$item);
 		rmdir($directory.DS.$item);
             }
 	}
