@@ -18,7 +18,7 @@
 <body>
     
     <a href="welcome/hello">Go to Hello</a>
-    <?php echo $data ?>
+    <?php //echo $data ?>
     <div id="a" style="display: none;border:solid 2px gray ;background-color:darkgrey; width: 200px; height: 300px; margin:auto;padding: 10px;">
         <?php echo $content ?>
     </div>
@@ -26,8 +26,19 @@
     <pre>
         <?php
 
-           $d=new Dir("./evan/");
-            $d->Entries();
+           $path="C:\wamp\www\yaltester\\";
+
+           $f=new File($path."test.txt");
+           $f->Create();
+
+           $f->Append("\n Je suis Gargamelle ! Le mechant de stromph");
+
+
+           echo $f->Copy("C:\wamp\www\yaltester\\test_copy.txt");
+
+           
+
+
 
            $i=Inspector::Instance();
            $i->Investigate();

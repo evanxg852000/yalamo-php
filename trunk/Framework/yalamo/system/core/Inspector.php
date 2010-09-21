@@ -13,8 +13,8 @@ final class Error {
     const None  = "YE000|There is not an error";
     const YE001 = "YE001|Not Implemented Error";
     
-    const YE100 = "YE101|Invalid Argument/File Supllied Error";
-    const YE101 = "YE102|Invali argument/ file supllied";
+    const YE100 = "YE101|Invalid Argument/File Suplied Error";
+    const YE101 = "YE102|Invali argument/ file suplied";
     //...
     const YE105 = "YE105|Database connection Error";
     const YE106 = "YE106|Database Query Error";
@@ -97,6 +97,11 @@ final class Inspector {
             $log.=$str;
         }
         return $log;
+    }
+
+    public static function AddError($type,$subject=null){
+         $inspector=Inspector::Instance();
+         $inspector->Add($type,$subject);
     }
 
 }
