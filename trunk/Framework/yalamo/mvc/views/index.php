@@ -27,8 +27,10 @@
         <?php
 
            $d=new Dir("./evan/");
-           echo $d->PathObject()->Path();
-           print_r($d->Entries());
+            $d->Entries();
+
+           $i=Inspector::Instance();
+           $i->Investigate();
 
            //$d->Delete();
         ?>

@@ -57,9 +57,14 @@ final class Dir {
     }
 
     public function  Entries($sort=true){
+        if(!file_exists($this->path->Path())){
+            $inspector=Inspector::Instance();
+            $inspector->Add(Error::YE100,  $this);
+            return false;
+        }
         $entrylist=array();
-	$handle = opendir($this->path->Path());
-	while ($file = readdir($handle)) {
+	$handle = @opendir($this->path->Path());
+	while ($file = @readdir($handle)) {
              if (substr($file, -1)!="." ) {
 		$entrylist[]= $file;
              }
@@ -67,7 +72,7 @@ final class Dir {
         if((count($entrylist)>0) && ($sort==true)) {
             array_multisort($entrylist, SORT_ASC);
         }
-           closedir($handle);
+           @closedir($handle);
            return $entrylist;
     }
 
