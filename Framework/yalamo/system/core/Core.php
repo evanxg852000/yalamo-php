@@ -10,7 +10,7 @@
  * @license		http://projects.evansofts.com/yalamof/license.html
  * @link		http://evansofts.com
  * @version		Version 1.0
- * @filesource          Userconfig.php
+ * @filesource          Core.php
  */
 
 /*
@@ -29,7 +29,7 @@
  * to do useful thing.
  */
 final class Yalamo {
-//constants
+    //constants
     const  None         = 0;
     
 
@@ -43,105 +43,144 @@ final class Yalamo {
     const  Endline  ="\n";
     const  Tab      ="\t";
 
-//functions
+    const  Ds       =DS;
+    /**
+     * Loads the files contained in the $AutoLoadArray array
+     * @param <array> $AutoLoadArray
+     */
     public static function  Autoload($AutoLoadArray){
       $load=new Loader();
       $load->Modules($AutoLoadArray['modules']);
       $load->Helpers($AutoLoadArray['helpers']);
       $load->Extensions($AutoLoadArray['extensions']);
     }
-    /* Get application Variable*/
-    public static function AppConfig($key){
-        global  $AppVaribles;
-        if(array_key_exists($key,$AppVaribles)) {
-            return $AppVaribles[$key];
-        }
-        else{ return false; }
-    }
-
     
 }
 
 
 //------------------------------------------------------------------------------
-/* Loader Class */
+/**
+ * Loader Class
+ *
+ * The class that contains the framework enumeration and static methods
+ * to do useful thing.
+ */
 final class Loader {
 
-public function  __construct() {}
-public function   __destruct() {}
-public function   __toString() {
-    return "Load script from different location";
-}
+    public function  __construct() {}
+    public function   __destruct() {}
+    public function   __toString() {return "Object of Type: Loader"; }
 
-/*
-<YalDocElem>
-Name | Type | Description | $this->Load->Module('file');
-</YalDocElem>
-*/
-public function Module($module){
-   $fullpath=YMODULEDIR.ucwords($module).EXT;
-   $this->Load($fullpath);
-}
-public function Helper($helper){
-   $fullpath=YHELPERSDIR.ucwords($helper).EXT;
-   $this->Load($fullpath);
-}
-public function Extension($extension){
-   $fullpath=YEXTENTIONDIR.ucwords($extension).EXT;
-   $this->Load($fullpath);
-}
-public function Model($model){
-    $fullpath=MVCPATH."models".DS.ucwords($model).EXT;
-    $this->Load($fullpath);
-    return new $model(); //return the model object to work on
-}
-public function View($view,$data=Null){
-    $fullpath=MVCPATH."views".DS.ucwords($view).EXT;
-    $this->Load($fullpath,$data);
-}
-public function Controller($controller){
-    $fullpath=MVCPATH."controllers".DS.ucwords($controller).EXT;
-    $this->Load($fullpath);
-}
 
-/*
-<YalDocElem>
-Name | Type | Description | $this->Load->Module(array('file','url'));
-</YalDocElem>
-*/
-public function Modules($modules){
-   foreach($modules as $module ){
-      $this->Module($module);
-   }
-}
-public function Helpers($helpers){
-   foreach($helpers as $helper ){
-      $this->Helper($helper);
-   }
-}
-public function Extensions($extensions){
-   foreach($extensions as $extension ){
-      $this->Extension($extension);
-   }
-}
+    /**
+     * Loads a Module from the modules directory
+     * @param <string> $module
+     */
+    public function Module($module){
+        $fullpath=YMODULEDIR.ucwords($module).EXT;
+        $this->Load($fullpath);
+    }
 
-private function  Load($fullpath, $data=NULL){
-    //convert $data into variables by: var var trick
-    if( $data!=Null){
-	if(is_array($data)){
-           foreach ($data as $key => $val){
-                $$key = $val;
-           }
+    /**
+     * Loads a Helper from the helpers directory
+     * @param <string> $helper
+     */
+    public function Helper($helper){
+        $fullpath=YHELPERSDIR.ucwords($helper).EXT;
+        $this->Load($fullpath);
+    }
+
+    /**
+     * Loads an Extension from the Extensions directory
+     * @param <string> $extension
+     */
+    public function Extension($extension){
+        $fullpath=YEXTENTIONDIR.ucwords($extension).EXT;
+        $this->Load($fullpath);
+    }
+
+    /**
+     * Loads a Model from the mvc/models directory and instaciate the model to return
+     * @param <strin> $model
+     * @return model
+     */
+    public function Model($model){
+        $fullpath=MVCPATH."models".DS.ucwords($model).EXT;
+        $this->Load($fullpath);
+        return new $model();
+    }
+
+    /**
+     * Loads a view from the mvc/views directory
+     * @param <string> $view
+     * @param <any> $data
+     */
+    public function View($view,$data=Null){
+        $fullpath=MVCPATH."views".DS.ucwords($view).EXT;
+        $this->Load($fullpath,$data);
+    }
+
+    /**
+     * Loads a Controller from the mvc/controllers directory
+     * @param <string> $controller
+     */
+    public function Controller($controller){
+        $fullpath=MVCPATH."controllers".DS.ucwords($controller).EXT;
+        $this->Load($fullpath);
+    }
+
+    /**
+     * Loads Modules from the modules directory
+     * @param <array> $modules
+     */
+    public function Modules($modules){
+       foreach($modules as $module ){
+          $this->Module($module);
+       }
+    }
+
+     /**
+     * Loads Helpers from the helpers directory
+     * @param <array> $helpers
+     */
+    public function Helpers($helpers){
+       foreach($helpers as $helper ){
+          $this->Helper($helper);
+       }
+    }
+
+    /**
+     * Loads Extensions from the Extensions directory
+     * @param <array> $extensions
+     */
+    public function Extensions($extensions){
+       foreach($extensions as $extension ){
+          $this->Extension($extension);
+       }
+    }
+
+    /**
+     * Load a php file from any path specified. return false if not found
+     * @param <string> $fullpath
+     * @param <array> $data
+     * @return <Null>
+     */
+    private function  Load($fullpath, $data=NULL){
+        if( $data!=Null){ //convert $data into variables by: var var trick
+            if(is_array($data)){
+               foreach ($data as $key => $val){
+                    $$key = $val;
+               }
+            }
         }
-    }
-    if(file_exists($fullpath)){
-        require_once ($fullpath);
-    }
-    else{
-        return false;
-    }
+        if(file_exists($fullpath)){
+            require_once ($fullpath);
+        }
+        else{
+            return false;
+        }
 
-}
+    }
 
 }
 
@@ -151,6 +190,13 @@ function __autoload($classname){
    $load=new Loader();
    $load->Module($classname);
 }
+
+
+
+
+
+
+//TODO : move the following to conresponding helpers
 /*Framework auto Loading */
 function Autoload($AutoLoadArray){
     Yalamo::Autoload($AutoLoadArray);

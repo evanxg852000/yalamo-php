@@ -28,6 +28,5 @@ require_once(YURIFILE);
 require_once(YMVCFILE);
 
 
-
-/* Autoload */
-Autoload($YAutoLoad);
+/* Load the Autoload Array*/
+Yalamo::Autoload($YAutoLoad);
