@@ -1,0 +1,8 @@
+# Page personnalisée pour erreur de mot de passe
+ErrorDocument 401 /P_erreur/erreur401.php
+# Page personnalisée pour page interdite
+ErrorDocument 403 /P_erreur/erreur403.php
+# Page personnalisée pour page manquante
+ErrorDocument 404 /P_erreur/erreur404.php
+# Page personnalisée pour page supprimée
+ErrorDocument 410 /P_erreur/erreur410.php

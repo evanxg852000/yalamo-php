@@ -26,10 +26,11 @@
     <pre>
         <?php
 
-           $d=new Dir("./eva/");
-           var_dump($d->Create(true));
+           $d=new Dir("./evan/");
+           echo $d->PathObject()->Path();
+           print_r($d->Entries());
 
-          var_dump($d->Entries());
+           //$d->Delete();
         ?>
     </pre>
 
