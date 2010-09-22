@@ -19,11 +19,11 @@
  *
  * Contains the path manipulation/info functionalities
  */
-class File {
+class File extends Object {
     private $path;
-
+    
     public function  __construct($path) {
-        $this->path = new Path($path);  
+        $this->path = new Path($path);
     }
     public function  __toString() {return "Object of Type: File"; }
 
@@ -48,7 +48,7 @@ class File {
            return file_get_contents($this->path->Path());
         }
         else{
-            Inspector::AddError(Error::YE100, $path);
+            Inspector::AddError(Error::YE100, $this->path);
             return false;
         }
        
@@ -61,7 +61,7 @@ class File {
             return true;
 	}
 	else{
-            Inspector::AddError(Error::YE100, $path);
+            Inspector::AddError(Error::YE100, $this->path);
             return false;
         }
     }
@@ -74,7 +74,7 @@ class File {
           return  @copy($this->path->Path(), $dest);
         }
         else {
-            Inspector::AddError(Error::YE100, $path);
+            Inspector::AddError(Error::YE100, $this->path);
             return false;
         }
     }
@@ -88,17 +88,61 @@ class File {
         }
     } 
     
-    
-
-    
-    
-    //TODO Uplaod and Downlaod
-    public function Upload($files, $target){
-
+    private function maxupload(){
+       $postmaxsize = trim(ini_get('post_max_size'));
+       $unit = strtolower($postmaxsize{strlen($postmaxsize)-1});
+       switch($unit) {
+           case 'g':
+               $postmaxsize *= 1024;
+           case 'm':
+               $postmaxsize *= 1024;
+           case 'k':
+               $postmaxsize *= 1024;
+       }
+       return $postmaxsize;
     }
-    public function Download($files,$target){
+    public function Upload($files,$allowedmimetypes=array("image/gif","image/png","image/bmp","image/jpg","image/jpeg","text/pdf","text/txt" )){
+        if($this->path->IsDirectory()){ $targetfolder=$this->path->Path();}
+        echo $targetfolder;
+        $maxupload=$this->maxupload();
+        if( (!is_array($files)) || (empty($files))){
+            $this->Collect(Error::YE107);
+            return false;
+        }
+        $totalfile = count($files['file']['tmp_name']);
+	for($i = 0; $i< $totalfile; ++$i){
+            if(is_uploaded_file($files['file']['tmp_name'][$i])){
+		$name     	= $files['file']['name'][$i];
+		$tmp_name 	= $files['file']['tmp_name'][$i];
+		$type 		= $files['file']['type'][$i];
+		$error   	= $files['file']['error'][$i];
+		$clean_name = preg_replace('/[^a-z0-9.-]/', '-', strtolower(basename($name)));
 
+                
+		//check for the size
+		if($files['file']['size'][$i]<= $maxupload){
+                    //check if file mimetype is allowed
+                    foreach($allowedmimetypes as $mimetype){
+                        if($type==$mimetype){
+                            //move the file     
+                            if(!move_uploaded_file($tmp_name, $targetfolder.$clean_name)){
+                               $this->Collect(Error::YE107);  
+                            }
+                        }  
+                    }
+		}
+                else{
+                    $this->Collect(Error::YE107);
+                    return false;
+                }
+            }
+	}
+    }  
+    public function Download($targetfolder){
+        return @copy($this->path->Path(), $targetfolder.$this->path->FileName());
     }
-
-   
+  
 }
+
+
+
