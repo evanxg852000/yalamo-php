@@ -18,6 +18,7 @@ final class Error {
     //...
     const YE105 = "YE105|Database connection Error";
     const YE106 = "YE106|Database Query Error";
+    const YE107 = "YE107|Upload Error";
     //...
 
     private $num;
@@ -31,8 +32,8 @@ final class Error {
         $this->string=$parts[1];
         $this->subject=$subject;
     }
-    public function  __toString() {
-        return "Error: ".$this->Num()." , ".$this->String()." With Var= ".$this->Subject(true);
+    public function  __toString($dump=false) {
+        return "Error: ".$this->Num()." , ".$this->String()." With Var= ".$this->Subject($dump);
     }
 
     public function Num(){
@@ -47,11 +48,7 @@ final class Error {
         }
         return $this->subject;
     }
-    public static function LogInspector(){
-        $inspector =Inspector::Instance();
-        $logfile=YPATH."InspectorLog";
-        //TODO finish log inspection after file
-    }
+    
     
 }
 
@@ -90,18 +87,25 @@ final class Inspector {
         $log="";
         foreach ($this->errors as $error) {
             $str =$error->__toString().Yalamo::Endline;
-            echo $str;
             if($dump){
-                var_dump($error->Subject());
+                echo $str;
+                $error->Subject(true);
             }
             $log.=$str;
         }
         return $log;
     }
-
+    public function Log(){
+        $logfile=YPATH."log.log";
+        $f=new File($logfile);
+        echo  $logfile;
+        $f->Append($this->Investigate());
+    }
+    
     public static function AddError($type,$subject=null){
          $inspector=Inspector::Instance();
          $inspector->Add($type,$subject);
     }
 
+    
 }
