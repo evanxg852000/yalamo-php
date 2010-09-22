@@ -1,14 +1,31 @@
 <?php if ( ! defined('YPATH')) exit('Access Denied !');
-/*
- * ZIP IMPLEMENTATION
+/**
+ * Yalamo framework
  *
+ * A fast,light, and constraint-free Php framework.
  *
- *
- * @author Evance Soumaoro
+ * @package		Yalamo
+ * @author		Evance Soumaoro
+ * @copyright           Copyright (c) 2009 - 2011, Evansofts.
+ * @license		http://projects.evansofts.com/yalamof/license.html
+ * @link		http://evansofts.com
+ * @version		Version 1.0
+ * @filesource          Directory.php
  */
 
+/*
+ * Zip IMPLEMENTATION
+ *
+ * Contains the directory manipulation/info functionalities
+ */
 
-
+//------------------------------------------------------------------------------
+/**
+ * Zip Class
+ *
+ * The class that contains the framework enumeration and static methods
+ * to do useful thing.
+ */
 class Zip {
 	#handle of the zip object
 	Private $handleZip;
