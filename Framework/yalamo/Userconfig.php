@@ -28,12 +28,6 @@
  * Configuration for the framework
  */
 
-
-/*
- *  Array Extensions
-*/
-$Extensions[] = array();
-
 /*
  * Autoload Arrays
  *
@@ -80,7 +74,7 @@ define("DBPASSWORD", "");
  * @param string DEFAULTCONTROLLER  The default controller
  */
 define("SITEURL", "http://localhost/Framework/");
-define("MVCPATH", YPATH."mvc/");                       //mvc path
+define("MVCPATH", YPATH."mvc/");                       
 define("DEFAULTCONTROLLER", "Welcome");
 
 /**
@@ -92,8 +86,10 @@ define("DEFAULTCONTROLLER", "Welcome");
 $AppConfig=array(
     'AdminEmail'=> 'evanxg852000@yahoo.fr',
     'Title'=>'Yalamo dev Environment',
-    'Copyright'=> 'Evansofts 2010'
+    'Copyright'=> 'Evansofts 2010',
 //  'sample' => 'value'
 );
+
+
 
 //@todo : add hilight here
