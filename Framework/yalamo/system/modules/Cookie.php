@@ -7,10 +7,12 @@
  * @author Evance Soumaoro
  */
 class Cookie{
+    private static  $resgistry;
     private $lifetime;
     private $path;
 
     public function  __construct($liftime=31536000,$path=Yalamo::Void) {
+       self::$resgistry=$_COOKIE;
        if(is_numeric($liftime)){
            $this->lifetime=$liftime;
        }
@@ -33,64 +35,59 @@ class Cookie{
             }
        }
        $this->path=$path;
-    }
-    
+    }   
     public function  __toString() {
         return "Object of Type: Cookie";
     }
 
-    public function Set($key, $value){
+    private function  __set($name, $value) {
        if($this->path===Yalamo::Void){
-           return setcookie($key, $value,  time()+$this->lifetime);
+           setcookie($name, $value,  time()+$this->lifetime);
+           self::$resgistry=$_COOKIE;
+           return  true;
        }
-        else{
-           return setcookie($key, $value,  time()+$this->lifetime, $this->path);
+       else{
+           setcookie($key, $value,  time()+$this->lifetime, $this->path);
+           self::$resgistry=$_COOKIE;
+           return  true;
        }
     }
-    public function Create($cookies){
-        if(is_array($cookies)){
-            foreach($cookies as $key=>$value){
-            $this->Set($key, $value);
-            }
-            return true;
+    private function  __get($name) {
+        if((array_key_exists($name, self::$resgistry))&&(array_key_exists($name, $_COOKIE))){
+            return self::$resgistry[$name];
         }
-        Inspector::AddError(Error::YE101, $cookies);
-        return false;
-    }
-    public function Delete($keys){
-        if(is_array($keys)){
-            foreach($keys as $key){
-                $this->Set($key,  Yalamo::Void);
-            }
-            return true;
-        }
-        else {
-           return $this->Set($keys,  Yalamo::Void);
-        }
-    }
-    public function Content($key){
-        if (array_key_exists($key, $_COOKIE)){
-           return $_COOKIE[$key];
-	}
-         return false;
     }
 
-    public static function Clear($keys=Yalamo::All){
+    public function Registry(){
+        return self::$resgistry;
+    }
+    public function Set($key, $value){
+        $this->$key=$value;
+    }
+    public function Get($key){
+        return $this->$key;
+    }
+    public function Clear($keys=Yalamo::All){
         if($keys===Yalamo::All){
             foreach ($_COOKIE as $key=>$val){
-                @setcookie($key, Yalamo::Void);
+                $this->Set($key, Yalamo::Void);             
             }
+            self::$resgistry=$_COOKIE;
             return true;
         }
         if(is_array($keys)){
             foreach($keys as $key){
                 $this->Set($key,  Yalamo::Void);
             }
+            self::$resgistry=$_COOKIE;
             return true;
         }
         else {
-           return $this->Set($keys,  Yalamo::Void);
+           $this->Set($keys,  Yalamo::Void);
+           self::$resgistry=$_COOKIE;
+           return  true;
         }
     }
+
     
 }

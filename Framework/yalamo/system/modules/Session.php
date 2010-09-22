@@ -27,50 +27,70 @@
  * to do useful thing.
  */
 class Session {
+    private static  $resgistry;
+    private $id;
+
 
     public function  __construct() {
         session_start();
+        $this->id=$_COOKIE["PHPSESSID"];
+        self::$resgistry=$_SESSION;
     }
     public function  __toString() {return "Object of Type: Session"; }
 
-    public function Set($key, $value){
-        $_SESSION[$key]=$value;
-    }    
-    public function Content($key){
-        if(array_key_exists($key, $_SESSION)){
-            return $_SERVER[$key];
-        }
+    private function  __set($name, $value) {
+        $_SESSION[$name]=$value;
+        self::$resgistry=$_SESSION;
     }
-    public function End($redirect=Yalamo::Void){
-        session_unset();
-        session_destroy();
-        if($redirect !==Yalamo::Void){
-            header ('Location: '.$redirect);
-            exit();
+    private function  __get($name) {
+        if((array_key_exists($name, self::$resgistry)) && (array_key_exists($name, $_SESSION))){
+            return self::$resgistry[$name];
         }
     }
 
-    public static function Clear($key=Yalamo::All){
+    public function Id(){
+        return $this->id;
+    }
+    public function Registry(){
+        return self::$resgistry;
+    }
+    public function Set($key, $value){
+        $this->$key=$value;
+    }    
+    public function Get($key){
+        return $this->$key;
+    }
+    public function Clear($keys=Yalamo::All){
         if($keys===Yalamo::All){
             foreach ($_SESSION as $key=>$val){
                 unset ($_SESSION[$key]);
             }
+            self::$resgistry=$_SESSION;
             return true;
         }
         if(is_array($keys)){
             foreach($keys as $key){
                 unset ($_SESSION[$key]);
             }
+            self::$resgistry=$_SESSION;
             return true;
         }
         else {
-           unset ($_SESSION[$key]);
+           unset ($_SESSION[$keys]);
+           self::$resgistry=$_SESSION;
            return true;
         }
 
 
-
     }
-
-    
+    public function End($redirect=Yalamo::Void){
+        session_unset();
+        session_destroy();
+        self::$resgistry=$_SESSION;
+        if($redirect !==Yalamo::Void){
+            header ('Location: '.$redirect);
+            exit();
+        }
+    }
+     
 }
