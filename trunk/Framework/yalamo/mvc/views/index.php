@@ -25,25 +25,14 @@
     
     <pre>
         <?php
-
-           $path="C:\wamp\www\yaltester\\";
-
-           $f=new File($path."test.txt");
-           $f->Create();
-
-           $f->Append("\n Je suis Gargamelle ! Le mechant de stromph");
-
-
-           echo $f->Copy("C:\wamp\www\yaltester\\test_copy.txt");
+            
 
            
-
-
 
            $i=Inspector::Instance();
            $i->Investigate();
 
-           //$d->Delete();
+           
         ?>
     </pre>
 

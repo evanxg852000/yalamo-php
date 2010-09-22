@@ -10,18 +10,18 @@
  * @license		http://projects.evansofts.com/yalamof/license.html
  * @link		http://evansofts.com
  * @version		Version 1.0
- * @filesource          Directory.php
+ * @filesource          Dir.php
  */
 
 /*
- * DIRECTORY IMPLEMENTATION
+ * DIR IMPLEMENTATION
  *
  * Contains the directory manipulation/info functionalities
  */
 
 //------------------------------------------------------------------------------
 /**
- * Directory Class
+ * Dir Class
  *
  * The class that contains the framework enumeration and static methods
  * to do useful thing.

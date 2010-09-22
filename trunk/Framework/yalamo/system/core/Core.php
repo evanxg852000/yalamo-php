@@ -31,6 +31,8 @@
 final class Yalamo {
     //constants
     const  None         = 0;
+    const  Unic         = 1;
+    const  Double       = 2;
     
 
     const Pogsql        = "POSTGRESQL";
@@ -43,7 +45,9 @@ final class Yalamo {
     const  Endline  ="\n";
     const  Tab      ="\t";
 
+
     const  Ds       =DS;
+   
     /**
      * Loads the files contained in the $AutoLoadArray array
      * @param <array> $AutoLoadArray
@@ -183,6 +187,51 @@ final class Loader {
     }
 
 }
+
+//------------------------------------------------------------------------------
+/**
+ * ISerialisable Interface
+ *
+ * The Interface for serialisable object.
+ */
+interface ISerialisable {
+    public function Serialize();
+    public function Unserialize($object);
+}
+
+//------------------------------------------------------------------------------
+/**
+ * ICollectable Interface 
+ *
+ * Every class that raise yalamo error to be collected by the Inspector
+ * should implement to get more hierarchical capabilities
+ */
+interface ICollectable{
+    public function Collect($errortype);
+}
+
+//------------------------------------------------------------------------------
+/**
+ * Object Class
+ *
+ * The base Object of classes that want to use base functionalities without
+ * implementing base interfaces
+ */
+class Object implements ISerialisable, ICollectable {
+    public function Serialize(){
+        return serialize($this);
+    }
+    public function Unserialize($Object){
+        return (Object) unserialize($Object);
+    }
+    public function Collect($errortype) {
+        $inspector=Inspector::Instance();
+        $inspector->Add($errortype,  $this);
+    }
+
+}
+
+
 
 //------------------------------------------------------------------------------
 /* Php internal auto loading */

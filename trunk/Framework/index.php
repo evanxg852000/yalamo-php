@@ -28,4 +28,11 @@ $WebApplication=new Mvc();
 $WebApplication->Build();
 unset($w);
 
+
+/*$BEGING_TIME = microtime(true);
+$ENDING_TIME = microtime(true);
+echo 'Benchmark time : '.round($ENDING_TIME -$BEGING_TIME , 4);
+*/
+
+
 ?>

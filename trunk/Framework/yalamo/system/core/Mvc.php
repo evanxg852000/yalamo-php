@@ -67,7 +67,7 @@ public function Route(){
 
 
 /* Class Controller Definition */
-abstract  class Controller {
+abstract class Controller {
     protected $Variables;
     protected $Load;
     protected $Uri;
