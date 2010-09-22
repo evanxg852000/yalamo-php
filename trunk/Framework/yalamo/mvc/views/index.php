@@ -25,13 +25,13 @@
     
     <pre>
         <?php
-            
-
+       
            
 
            $i=Inspector::Instance();
            $i->Investigate();
 
+         print_r($_COOKIE);
            
         ?>
     </pre>
