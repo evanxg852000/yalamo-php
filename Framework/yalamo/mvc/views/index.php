@@ -24,14 +24,15 @@
     </div>
     
     <pre>
+					
+
         <?php
        
-           
 
-           $i=Inspector::Instance();
-           $i->Investigate();
+           $i=  Inspector::Instance();
+           $i->Investigate(true);
 
-         print_r($_COOKIE);
+         
            
         ?>
     </pre>
