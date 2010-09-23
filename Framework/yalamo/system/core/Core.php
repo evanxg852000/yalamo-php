@@ -201,13 +201,15 @@ interface ISerialisable {
 
 //------------------------------------------------------------------------------
 /**
- * ICollectable Interface 
+ * Abstract Class ICollectable 
  *
  * Every class that raise yalamo error to be collected by the Inspector
  * should implement to get more hierarchical capabilities
+ * is actually am Interface but for the reason that Php only allow Public methods
+ * in interfaces it is declared as an abstract class
  */
-interface ICollectable{
-    public function Collect($errortype);
+abstract class ICollectable{
+    abstract protected function Collect($errortype);
 }
 
 //------------------------------------------------------------------------------
@@ -217,14 +219,14 @@ interface ICollectable{
  * The base Object of classes that want to use base functionalities without
  * implementing base interfaces
  */
-class Object implements ISerialisable, ICollectable {
+class Object  extends ICollectable implements ISerialisable {
     public function Serialize(){
         return serialize($this);
     }
     public function Unserialize($Object){
         return (Object) unserialize($Object);
     }
-    public function Collect($errortype) {
+    protected function Collect($errortype) {
         $inspector=Inspector::Instance();
         $inspector->Add($errortype,  $this);
     }
