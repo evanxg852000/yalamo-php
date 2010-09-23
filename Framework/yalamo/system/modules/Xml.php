@@ -17,6 +17,8 @@ class Xml {
         $this->file=$file;
         //http://php.net/manual/en/book.simplexml.php
         $this->xmldocument=simplexml_load_file($file);
+
+
     }
 
 
