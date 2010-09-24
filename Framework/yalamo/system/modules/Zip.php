@@ -9,34 +9,29 @@
  * @copyright           Copyright (c) 2009 - 2011, Evansofts.
  * @license		http://projects.evansofts.com/yalamof/license.html
  * @link		http://evansofts.com
- * @version		Version 1.0
- * @filesource          Directory.php
+ * @version		Version 0.1
+ * @filesource          Zip.php
  */
 
 /*
  * Zip IMPLEMENTATION
  *
- * Contains the directory manipulation/info functionalities
+ * Contains compression functionalities for zip format
  */
 
 //------------------------------------------------------------------------------
 /**
  * Zip Class
  *
- * The class that contains the framework enumeration and static methods
- * to do useful thing.
+ * Define methods for manipulation and creating zip file
  */
 class Zip extends Object{
 	
 	private $handlezip;
 	private $sourcefolder;
-        private $filename;
-        
+        private $filename;        
         const extension=".zip";
-
-	
-	private $filelist;
-        
+  
 
 
         public function __construct($sourcefolder,$filename){

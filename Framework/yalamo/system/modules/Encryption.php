@@ -9,8 +9,8 @@
  * @copyright           Copyright (c) 2009 - 2011, Evansofts.
  * @license		http://projects.evansofts.com/yalamof/license.html
  * @link		http://evansofts.com
- * @version		Version 1.0
- * @filesource          Session.php
+ * @version		Version 0.1
+ * @filesource          Encryption.php
  */
 
 /*
@@ -21,12 +21,11 @@
 
 //------------------------------------------------------------------------------
 /**
- * Session Class
+ * Encryption Class
  *
- * The class that contains the framework enumeration and static methods
- * to do useful thing.
+ * The class that contains encryption method that can be used to encrypt or decrypt data
  */
-class Encryption {
+class Encryption extends Object {
     const  McryptDes        = MCRYPT_DES;
     const  McryptBlowfish   = MCRYPT_BLOWFISH;
     const  McryptGost       = MCRYPT_GOST;

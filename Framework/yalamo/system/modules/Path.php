@@ -9,7 +9,7 @@
  * @copyright           Copyright (c) 2009 - 2011, Evansofts.
  * @license		http://projects.evansofts.com/yalamof/license.html
  * @link		http://evansofts.com
- * @version		Version 1.0
+ * @version		Version 0.1
  * @filesource          Path.php
  */
 
@@ -23,8 +23,7 @@
 /**
  * Path Class
  *
- * The class that contains the framework enumeration and static methods
- * to do useful thing.
+ * The implement the path functionalities and means of manipulating path
  */
 final class Path {
     private $path;
