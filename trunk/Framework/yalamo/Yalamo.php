@@ -1,25 +1,43 @@
-<?php
+<?php if ( ! defined('YPATH')) exit('Access Denied !');
+/**
+ * Yalamo framework
+ *
+ * A fast,light, and constraint-free Php framework.
+ *
+ * @package		Yalamo
+ * @author		Evance Soumaoro
+ * @copyright           Copyright (c) 2009 - 2011, Evansofts.
+ * @license		http://projects.evansofts.com/yalamof/license.html
+ * @link		http://evansofts.com
+ * @version		Version 0.1
+ * @filesource          Yalamo.php
+ */
+
 /*
  * YALAMO KERNEL
  *
+ * Includes all the framework base component and define some constants use
+ * throughout the framework
  *
- *
- * @author Evance Soumaoro
  */
 
-/* Set Error Level */
+/**
+ * Set error level
+ */
 error_reporting(E_ALL);
 
-/* File System */
+/**
+ * Define file system variable as constants
+ */
 define("DS",DIRECTORY_SEPARATOR);
 define('EXT', '.php');
 define("YPATH",pathinfo(__FILE__, PATHINFO_DIRNAME).DS);
 
-/* Include Required Files */
-
+/**
+ * Include required files
+ */
 require_once("Userconfig".EXT);
 require_once("system".DS."core".DS."Coreconfig".EXT);
-
 
 require_once(YCOREFILE);
 require_once(YERRORFILE);
@@ -28,5 +46,7 @@ require_once(YURIFILE);
 require_once(YMVCFILE);
 
 
-/* Load the Autoload Array*/
+/**
+ *  Autoload user prefered files using the autoload array
+ */
 Yalamo::Autoload($YAutoLoad);

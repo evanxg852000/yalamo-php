@@ -1,32 +1,55 @@
 <?php if ( ! defined('YPATH')) exit('Access Denied !');
+/**
+ * Yalamo framework
+ *
+ * A fast,light, and constraint-free Php framework.
+ *
+ * @package		Yalamo
+ * @author		Evance Soumaoro
+ * @copyright           Copyright (c) 2009 - 2011, Evansofts.
+ * @license		http://projects.evansofts.com/yalamof/license.html
+ * @link		http://evansofts.com
+ * @version		Version 0.1
+ * @filesource          Core.php
+ */
+
 /*
  * MVC IMPLEMENTATION
  *
- *
- *
- * @author Evance Soumaoro
+ * The definition of the mvc functionality
  */
 
-/* Class Mvc Definition */
+
+
+//------------------------------------------------------------------------------
+/**
+ * Mvc Class
+ *
+ * The class that define the mvc entry point
+ */
 final class Mvc {
+    private $mediator;
 
-private $mediator;
+    public function __construct(){
+        $this->mediator=new Mediator();
+    }
+    public function __destruct() {
+        unset($this->mediator);
+    }
+    public function Build() {
+        // Loading  the controller
+        $this->mediator->Route();
+    }
 
-public function __construct(){
-    $this->mediator=new Mediator();
 }
-public function  __destruct() {
-    unset($this->mediator);
-}
-public   function Build() {
-    // Loading  the controller
-    $this->mediator->Route();
-}
 
-}
-
-
-/* Class Mediator Definition */
+//------------------------------------------------------------------------------
+/**
+ * Mediator Class
+ *
+ * The class that define the mvc mediator which chose where to route the navigation
+ * process
+ */
 final class Mediator {
 
 private $controller;
@@ -41,8 +64,6 @@ public function __construct() {
     if ((!file_exists($file)) && (!is_readable($file))){
        $this->controller ="Error404";
     }
-    //$this->registry = $registry;
-    
  }
 public function Route(){
     //load the controller file
@@ -65,8 +86,14 @@ public function Route(){
 
 }
 
+//------------------------------------------------------------------------------
+/**
+ * Controller Class
+ *
+ * The class that define the mvc controller base class and its base fucntionalities
+ * and members
+ */
 
-/* Class Controller Definition */
 abstract class Controller {
     protected $Variables;
     protected $Load;
@@ -78,7 +105,6 @@ abstract class Controller {
         $this->Variables=array();
         $this->Load=new Loader();
         $this->Uri=new Uri();
-
     }
     abstract function Index(); 
 

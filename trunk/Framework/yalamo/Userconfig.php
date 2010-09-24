@@ -9,7 +9,7 @@
  * @copyright           Copyright (c) 2009 - 2011, Evansofts.
  * @license		http://projects.evansofts.com/yalamof/license.html
  * @link		http://evansofts.com
- * @version		Version 1.0
+ * @version		Version 0.1
  * @filesource          Userconfig.php
  */
 
