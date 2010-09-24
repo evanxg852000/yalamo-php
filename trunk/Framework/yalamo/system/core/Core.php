@@ -44,6 +44,8 @@ final class Yalamo {
     const  All      ="*";
     const  Endline  ="\n";
     const  Tab      ="\t";
+    const  Fileonly ="FO";
+    const  Dironly  ="Do";
 
 
     const  Ds       =DS;

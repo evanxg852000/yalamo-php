@@ -26,19 +26,8 @@
     <pre>
         <?php
 
-            $file="C:\wamp\www\yaltester\sample.xml";
-
-
-            $xml=new Xml($file);
-
-         
-
-
-
-             var_dump($xml->Data());
-
-
-
+           
+           
            $i=  Inspector::Instance();
            $i->Investigate(true);
 

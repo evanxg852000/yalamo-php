@@ -26,204 +26,103 @@
  * The class that contains the framework enumeration and static methods
  * to do useful thing.
  */
-class Zip {
-	#handle of the zip object
-	Private $handleZip;
-	# path origin folder
-	Private $originePath;
-	#File name to be extracted or it can be the name of the file to be zipped
-	Private $fileName;
-	#path destination folder
-	Private $destinationPath;
-	#list of file to be added to a zip file
-	Private $fileList;
+class Zip extends Object{
+	
+	private $handlezip;
+	private $sourcefolder;
+        private $filename;
+        
+        const extension=".zip";
 
-	#use the magic method to display a warnnig when this object is echoed
-	Public Function __tostring()
-	{
-		return "Please, I have not anything to show";
+	
+	private $filelist;
+        
+
+
+        public function __construct($sourcefolder,$filename){
+           $sourcefolder=new Path($sourcefolder);
+           $this->sourcefolder = $sourcefolder->Path();
+           $this->filename=$filename.Zip::extension;
+           $this->handlezip = new ZipArchive();
+	}
+	public function __tostring(){ return "Object of Type: Zip";}
+
+	public function Create($defaultfolder=Yalamo::Void){
+            if ($this->handlezip->open( $this->sourcefolder.$this->filename, ZipArchive::CREATE) === true){
+                if($defaultfolder==Yalamo::Void){
+                    $defaultfolder= str_replace(Zip::extension,  Yalamo::Void, $this->filename);
+                }
+                $this->handlezip->addEmptyDir($defaultfolder);
+                $this->handlezip->close();
+                return true;
+            }
+            $this->Collect(Error::YE100);
+            return false;
 	}
 
-	#constructor which takes two parameters
-	#1st parameter: $path is the path of the folder wich  content the file
-	#2nd parameter: $filename is the file name it self
-	Public Function __construct($path,$filename)
-	{
-		 $this->originePath = $path;
-		 $this->fileName = $filename.'.zip';
-		 $this->handleZip = new ZipArchive;
+        public function AddFiles($filelist,$zippedfolder=Yalamo::Void){
+            if(!is_array($filelist)){
+                $this->Collect(Error::YE100);
+                return;
+            }
+            
+            if ( $this->handlezip->open($this->sourcefolder.$this->filename)===true) {
+                foreach ($filelist as $file){
+                     $this->handlezip->addFile($this->sourcefolder.$file,$zippedfolder.DS.$file );
+                     //TODO : fix this issue
+                     echo $this->sourcefolder.DS.$file;
+                     echo file_exists($this->sourcefolder.DS.$file);
+                }
+                $this->handlezip->close();
+                return true;
+            }
+            $this->Collect(Error::YE001);
+            return false;
+	}
+        public function AddFolder($folder){
+           if ($this->handlezip->open( $this->sourcefolder.$this->filename, ZipArchive::CREATE) === true){
+                $this->handlezip->addEmptyDir($folder);
+                $this->handlezip->close();
+                return true;
+            }
+            $this->Collect(Error::YE100);
+            return false;
+        }
+
+
+        public function ArchiveFolder($folder){
+            if(!is_dir($this->sourcefolder.$folder)){
+                $this->Collect(Error::YE100);
+                return;
+            }
+            $this->Create($folder);
+            $dir=new Dir($this->sourcefolder.$folder);
+            $filelist=$dir->Entries(Yalamo::Fileonly);
+            if ($this->AddFiles((array)$filelist,$folder)){
+                return true;
+            }
+            $this->Collect(Error::YE001);
+            return false;
 	}
 
-	#this method create a zip file
-	#return a boolean value to notify if it succeded or failled
-	Public Function CreateZip()
-	{
-		#remember that in the constroctor we concateneted the zip extension to the $filename name given as a parameter
-		#but now we want this file name  without any extention to be added as the name of the empty folder
-		#to mitigate that we get rid of the file extension by using the substr function
-		$emptyFolderName= substr($this->fileName, 0,strlen($this->fileName)-4);
-
-		#Now we try to open the zip in creation mode
-		$bool = $this->handleZip->open( $this->originePath.$this->fileName, ZipArchive::CREATE);
-		if ($bool === TRUE)
-		{
-			#we add to the zip object  our files or usually folder (the case in this context)
-			$this->handleZip->addEmptyDir($emptyFolderName);
-			#we close the stream to clean the ressource
-			$this->handleZip->close();
-			#return the notification
-			return true;
-		}
-		else
-		{
-			#return the notification
-			return false;
-		}
-
+        public function ExtractFiles($destination){
+           if ($this->handlezip->open($this->sourcefolder.$this->filename)===true){
+                $this->handlezip->extractTo($destination);
+		$this->handlezip->close();
+                return true;
+           }
+           $this->Collect(Error::YE100);
+           return false;
 	}
+	public function DeleteArchive(){
+            if (unlink($this->sourcefolder.$this->filename)){
+		return true;
+            }
+            $this->Collect(Error::YE100);
+            return false;
+	}       
+	
 
-    #this method extract the content of a zip file in a destination folder it takes one parameter
-	#Parameter: $destination is the destination path of the final extracted files
-	#return a boolean value to notify if it succed or failled
-	Public Function ExtractFiles($destination)
-	{
-		#we set the internal menber of our zip object
-		$this->destinationPath = $destination;
-		#we try to open the zip file
-		#note that the file path is obtained by concatenating its folder to its name
-		$bool = $this->handleZip->open($this->originePath.$this->fileName);
-
-		if ( $bool== TRUE)
-		{
-			#if we succeded to open the zip file then we extract its content in the destination folder
-			$this->handleZip->extractTo($this->destinationPath);
-			#we close the stream to cleanthe ressouce
-			$this->handleZip->close();
-			#return the notification
-			return true;
-		}
-		else
-		{
-			#return the notification
-			return false;
-		}
-	}
-
-	#this method add some files to a zip file takes a list of files ass parameter
-	#Parameter: $list=array('image.png','myfolder/somefile.css','photo.jpg')
-	#return a boolean value to notify if it succed or failled
-	Public Function AddFiles($filelist)
-	{
-		#set the internal file list of our object
-		$this->fileList=$filelist;
-		#To obtaine the directory of our ziped file we extract its extention and concatenate the dir separator
-		$zippedfolder=substr($this->fileName, 0, strlen($this->fileName)-4).'/';
-		#Now we try to open the zip
-		$bool = $this->handleZip->open($this->originePath.$this->fileName);
-
-		  if ( $bool== TRUE)
-		  {
-			  #we walk in the array to ..
-			  for($i=0;$i<count($this->fileList);$i++)
-			  {
-				#get the current file name
-				$filename=basename($this->fileList[$i]);
-				#add it to the zip by concatenating the zip folder already obtained earlier to the filename
-				$this->handleZip->addFile($this->fileList[$i],$zippedfolder.$filename );
-			  }
-
-			#we close the stream to cleanthe ressouce
-			$this->handleZip->close();
-			#return the notification
-			return true;
-		  }
-		  else
-		  {
-			return false;
-		  }
-	}
-
-	#This method use some of the previous method to zip a complete folder and its content
-	#return a boolean value to notify if it succed or failled
-	# Note that when you want to call this method the folder must exist otherwise it will fail
-	Public Function ArchiveFolder()
-	{
-		#To obtaine the directory of our ziped file we extract its extention and concatenate the dir separator
-		#the result has to be appende to the original path member
-		$directory=$this->originePath.substr($this->fileName, 0, strlen($this->fileName)-4).'/';
-		#we call the inetrnal method CreateZip()
-		$this->CreateZip();
-		#we get the list file that are in the folder
-		#this method will be declare at the end since it is a helper method
-		#it takes the $directory variable we obtained earlier as a parameter
-		$this->ListeFolder($directory);
-		#Now we call the internal method AddFiles by passing the content of the folder as a parameter
-		#the previous methode set our class member we are using  ($this->fileList)
-		$bool=$this->AddFiles($this->fileList);
-
-		#NOTE: since all those method give back a notification you should nest some  test conditions
-		#by check if each method succeeded on its mission, but to keep thing simpler i prefere to only checck the last one
-		if ($bool)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-
-	#This method delete the archive file
-	#Return a boolean value to nofify its sucess or its fail
-	Public Function DeleteArchive()
-	{
-		#we use the unlink fuction to delete the file
-		#the file path is its folder concatenated to its name
-	   $bool=unlink($this->originePath.$this->fileName);
-		if ($bool)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	#this is the helper method that we mentionned earlier
-	#it takes a directory path as parameter
-	#get the list of this directory in an array and give it back
-	#or return false if it failled
-	Private Function ListeFolder($directoryPath)
-	{
-		#initialize the result list and the counter
-		$result=array();
-		$i=0;
-		#we try to open the directory
-		  if($handleDir=opendir( $directoryPath))
-		  {
-			while ($file = readdir($handleDir))
-			{
-				#we check if the current pointer value is not a directory
-				if(!is_dir($file))
-				{
-					#add the entry to the result list
-					$result[$i]=$directoryPath.$file;
-					#increment the couter
-					$i++;
-				}
-			}
-			#we close the stream to cleanthe ressouce
-			closedir($handleDir);
-		  }
-		  else
-		  {
-			#if we could not open the dir for any reason we return false.
-			return false;
-		  }
-		  $this->fileList=$result;
-		  return true;
-	}
+        
 }
 
