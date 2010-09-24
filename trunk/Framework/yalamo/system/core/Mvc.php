@@ -26,18 +26,26 @@
  * Mvc Class
  *
  * The class that define the mvc entry point
+ * The core calss of the mvc patern in the framework
  */
 final class Mvc {
     private $mediator;
 
+    /**
+     * Constructor of the Mvc class
+     */
     public function __construct(){
         $this->mediator=new Mediator();
     }
     public function __destruct() {
         unset($this->mediator);
     }
+
+    /**
+    * This method load the right controller by using the route method
+     * of the mediator to assemble the pieces of the page
+    */
     public function Build() {
-        // Loading  the controller
         $this->mediator->Route();
     }
 
@@ -52,37 +60,41 @@ final class Mvc {
  */
 final class Mediator {
 
-private $controller;
-private $method;
-private $controllerinstance ;
+    private $controller;
+    private $method;
+    private $controllerinstance;
 
-public function __construct() {
-    $uri=new Uri();
-    $this->controller=$uri->Controller();
-    $this->method=$uri->Method();
-    $file=MVCPATH."controllers".DS.$this->controller.EXT;
-    if ((!file_exists($file)) && (!is_readable($file))){
-       $this->controller ="Error404";
+    /**
+     * Constructor get the current controller and sets up the mediator member variables
+     */
+    public function __construct() {
+        $uri=new Uri();
+        $this->controller=$uri->Controller();
+        $this->method=$uri->Method();
+        $file=MVCPATH."controllers".DS.$this->controller.EXT;
+        if ((!file_exists($file)) && (!is_readable($file))){
+           $this->controller ="Error404";
+        }
+     }
+
+    /**
+     *  This method loads the controller and call its method
+     */
+    public function Route(){
+        //load the controller file
+        $loader=new Loader();
+        $loader->Controller($this->controller) ;
+        //create an instance of the controller
+        $class = $this->controller ;
+        $this->controllerinstance = new $class();
+        //check if the method is callable
+        if (is_callable(array($this->controllerinstance, $this->method)) == false){
+            $this->method = 'Index';
+        }
+        //call the method
+        $varmethod=$this->method;
+        $this->controllerinstance->$varmethod();
     }
- }
-public function Route(){
-    //load the controller file
-    $loader=new Loader();
-    $loader->Controller($this->controller) ;
-    
-    //create an instance of the controller
-    $class = $this->controller ;
-    $this->controllerinstance = new $class();
-
-    //check if the method is callable
-    if (is_callable(array($this->controllerinstance, $this->method)) == false){
-        $this->method = 'Index';
-    }
-    //call the method
-    $varmethod=$this->method;
-    $this->controllerinstance->$varmethod();
-
-}
 
 }
 
@@ -93,20 +105,46 @@ public function Route(){
  * The class that define the mvc controller base class and its base fucntionalities
  * and members
  */
-
 abstract class Controller {
+    /**
+     * @var array Variables of the controller that can be passed as data parameter
+     *            when loading the view
+     */
     protected $Variables;
+
+    /**
+     * @var Loader $Load The Loader object available to load all sort of stuff it can
+     */
     protected $Load;
+
+    /**
+     * @var Uri  $Uri The uri object that can serve to retrieve info like query string
+     */
     protected $Uri;
+
+    /**
+     * @var Model $Model The model of this controller note initialised here and should be to take advantage of it
+     *                   again this is important when the controller operate on one model as gather data from subclasses
+     *                   of Table class 
+     */
     protected $Model;
 
-
+    /**
+     * Constructor that initialise the protected members that are important
+     * in a controller subclass
+     * Sould be called in any subclass constructor 
+     */
     public function __construct() {
         $this->Variables=array();
         $this->Load=new Loader();
         $this->Uri=new Uri();
     }
-    abstract function Index(); 
 
-}
+    /**
+     * Abstract default method that must be implemented in every controller's subclass
+     * this method is called when there not a method specified from the url or the method is not callable
+     */
+    abstract function Index();
+
+} 
 
