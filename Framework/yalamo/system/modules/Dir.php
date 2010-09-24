@@ -56,7 +56,7 @@ final class Dir {
         $this->erase($this->path->Path());
     }
 
-    public function  Entries($sort=true){
+    public function  Entries($filter=Yalamo::All,$sort=true){
         if(!file_exists($this->path->Path())){
             $inspector=Inspector::Instance();
             $inspector->Add(Error::YE100,  $this);
@@ -69,10 +69,30 @@ final class Dir {
 		$entrylist[]= $file;
              }
         }
+        //filter
+        if($filter===Yalamo::Fileonly){
+            $templist=array();
+            foreach ($entrylist as $entry){
+                if(is_file($this->path->Path().$entry)){
+                    $templist[]=$entry;
+                }
+                clearstatcache();
+            }
+            $entrylist=$templist;
+        }
+        if($filter===Yalamo::Dironly){
+            $templist=array();
+            foreach ($entrylist as $entry){
+                if(is_dir($this->path->Path().$entry)){
+                    $templist[]=$entry;
+                }
+            }
+            $entrylist=$templist;
+        }
         if((count($entrylist)>0) && ($sort==true)) {
             array_multisort($entrylist, SORT_ASC);
         }
-           @closedir($handle);
+        @closedir($handle);
            return $entrylist;
     }
 

@@ -38,6 +38,9 @@ final class Path {
             $this->path=$path;
          }
         $this->info=pathinfo($this->path);
+        if((!$this->Extension()) && (substr($path, -1)!=DS)){
+            $this->path .=DS;
+        }
     }
     public function  __toString() {return "Object of Type: Path"; }
     
