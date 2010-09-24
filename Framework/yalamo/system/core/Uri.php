@@ -40,6 +40,8 @@ public function __construct(){
     for($i=2; $i< count($this->segments);$i++ ){
         if(array_key_exists($i, $this->segments)){
              $this->querystr[]=$this->segments[$i];
+            //TODO : test this feature
+             $_GET[$i]=$this->segments[$i];
         }
     }   
 }
