@@ -1,67 +1,123 @@
 <?php if ( ! defined('YPATH')) exit('Access Denied !');
+/**
+ * Yalamo framework
+ *
+ * A fast,light, and constraint-free Php framework.
+ *
+ * @package		Yalamo
+ * @author		Evance Soumaoro
+ * @copyright           Copyright (c) 2009 - 2011, Evansofts.
+ * @license		http://projects.evansofts.com/yalamof/license.html
+ * @link		http://evansofts.com
+ * @version		Version 0.1
+ * @filesource          Inspector.php
+ */
+
 /*
  * DEBUGGER IMPLEMENTATION
  *
- *
- *
- * @author Evance Soumaoro
+ * Define diferrent kind of errors and an Error reporting class
+ * for reporting errors easily when developping
  */
 
-/* Error Class */
+//------------------------------------------------------------------------------
+/**
+ * Error Class
+ *
+ * The class that contains the framework enumeration and static methods
+ * for managed errors that can be reported.
+ */
 final class Error {
-    const YE000 = "Error YE000: There is not an error";
-    const YE001 = "Error YE001: Method or function not implemented";
+    /* Base zone */
+    const YE000 = "YE000| There is not an error";
+    const YE001 = "YE001| Method or function not implemented";
     
-    //arguments
-    const YE100 = "Error YE101: Invalid index suplied for array";
-    const YE101 = "Error YE101: Invalid argument suplied ";
+    /* Arguments zone */
+    const YE100 = "YE101| Invalid index suplied for array";
+    const YE101 = "YE101| Invalid argument suplied ";
 
-    //file
-    const YE200 = "Error YE200: File not found in the specified path";
-    const YE201 = "Error YE201: Directory not found in the specified path";
-    const YE202 = "Error YE202: Access denied on specified file";
-    const YE203 = "Error YE203: Impossible to upload file";
+    /* File zone */
+    const YE200 = "YE200| File not found in the specified path";
+    const YE201 = "YE201| Directory not found in the specified path";
+    const YE202 = "YE202| Access denied on specified file";
+    const YE203 = "YE203| Impossible to upload file";
 
-    //database
-    const YE300 = "Error YE300: Unable to connect to the database";
-    const YE301 = "Error YE301: SQl query execution error";
+    /* Database zone */
+    const YE300 = "YE300| Unable to connect to the database";
+    const YE301 = "YE301| SQl query execution error";
     
-    //misc
-    const YE400 = "Error YE400: Unable to connect to mail server";
+    /* Misc zone */
+    const YE400 = "YE400| Unable to connect to mail server";
 
 
     private $num;
     private $string;
-    private $subject; //object on which error was raised
+    private $subject; 
 
+    /**
+     * Error constructor 
+     *
+     * @param Error::Enum     $type      The Error type, constant of Error class
+     * @param Object          $subject   The subject is the Object on which the error was raised
+     */
     public function  __construct($type=Error::None,$subject=NULL) {
         $parts=explode("|",$type);    
         $this->num=str_replace("|","",$parts[0]);
         $this->string=$parts[1];
         $this->subject=$subject;
     }
+
+    /**
+     * Return the Error string 
+     *
+     * @param   bool    $dump  The optional parameter to explode the subject if set to true
+     * @return  string         The description of the error
+     */
     public function  __toString($dump=false) {
         return "Error: ".$this->Num()." , ".$this->String()." With Var= ".$this->Subject($dump);
     }
+    
+    /**
+     * Accessor to the error num
+     *
+     * @return string  The error identifier
+     */
     public function Num(){
         return $this->num;
     }
+
+    /**
+     *Accessor to the error description
+     *
+     * @return string The error description
+     */
     public function String(){
         return $this->string;
     }
+
+    /**
+     * Accessor to the error subject explode the object if dump is true
+     *
+     * @param  bool $dump   The optional parameter to explode the subject if set to true
+     * @return mixed        The object on which the error hapened
+     */
     public function Subject($dump=false){
         if($dump){
             var_dump($this->subject);
         }
         return $this->subject;
-    }
-    
+    }    
     
 }
 
 
-
-/* Debugger Class */
+//------------------------------------------------------------------------------
+/**
+ * Inspector Class
+ *
+ * The class that serves as the debugger in the framework.
+ * it has only one instance
+ */
 final class Inspector {
     private static $instance=null;
     private $errors;
@@ -70,6 +126,13 @@ final class Inspector {
         $this->errors=array(); 
     }
     private function  __clone() {}
+
+    /**
+     * Getter of the Inspector instance
+     * 
+     * @static
+     * @return Inspector  The inspector instance
+     */
     public static function  Instance(){
         if(!self::$instance){
             self::$instance=new Inspector();
@@ -77,10 +140,35 @@ final class Inspector {
         return self::$instance;
     }
 
+    /**
+     * Static conveniant method to add error to the inspector instance
+     *
+     * @static
+     * @param Error::Enum   $type       The error type constant of Error Class
+     * @param mixed         $subject    The Object on which the error was raised
+     */
+    public static function AddError($type,$subject=null){
+         $inspector=Inspector::Instance();
+         $inspector->Add($type,$subject);
+    }
+
+     /**
+     * Method to add error to the inspector instance
+     *
+     * @param Error::Enum   $type       The error type constant of Error Class
+     * @param mixed         $subject    The Object on which the error was raised
+     */
     public function Add($type,$subject=null){
         $error=new Error($type,$subject);
         $this->errors[]=$error;
     }
+    
+    /**
+     * Getter of specific Error in the inspector registry
+     * 
+     * @param int $offset   The index of the entry
+     * @return Error        An error object from the inspector registry
+     */
     public function Error($offset=Yalamo::All){
         if($offset==Yalamo::All){
             return $this->errors;  
@@ -90,6 +178,13 @@ final class Inspector {
         }
 
     }
+    
+    /**
+     * Walk through the inspector registry to report abaout every error
+     *
+     * @param bool $dump   The optional parameter to explode the subject if set to true
+     * @return string      The report text
+     */
     public function Investigate($dump=false){
         $log="";
         foreach ($this->errors as $error) {
@@ -108,11 +203,5 @@ final class Inspector {
         echo  $logfile;
         $f->Append($this->Investigate());
     }
-    
-    public static function AddError($type,$subject=null){
-         $inspector=Inspector::Instance();
-         $inspector->Add($type,$subject);
-    }
-
-    
+          
 }

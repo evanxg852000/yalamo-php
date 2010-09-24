@@ -1,5 +1,8 @@
 <?php
 
+function  getAppConfig($key){
+    return Yalamo::AppConfig($key);
+}
 
 function loadModule($modules){
     $load=new Loader();
@@ -42,3 +45,4 @@ function loadController($controller){
     $load=new Loader();
     $load->Controller($controller);
 }
+

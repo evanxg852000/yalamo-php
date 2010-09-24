@@ -9,7 +9,7 @@
  * @copyright           Copyright (c) 2009 - 2011, Evansofts.
  * @license		http://projects.evansofts.com/yalamof/license.html
  * @link		http://evansofts.com
- * @version		Version 1.0
+ * @version		Version 0.1
  * @filesource          index_mvc.php
  */
 
@@ -27,12 +27,5 @@ require_once("yalamo/yalamo.php");
 $WebApplication=new Mvc();
 $WebApplication->Build();
 unset($w);
-
-
-/*$BEGING_TIME = microtime(true);
-$ENDING_TIME = microtime(true);
-echo 'Benchmark time : '.round($ENDING_TIME -$BEGING_TIME , 4);
-*/
-
 
 ?>

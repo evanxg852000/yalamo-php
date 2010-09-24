@@ -26,6 +26,7 @@
     <pre>
         <?php
 
+       
            
            
            $i=  Inspector::Instance();

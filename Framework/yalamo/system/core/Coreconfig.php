@@ -1,65 +1,49 @@
 <?php if ( ! defined('YPATH')) exit('Access Denied !');
+/**
+ * Yalamo framework
+ *
+ * A fast,light, and constraint-free Php framework.
+ *
+ * @package		Yalamo
+ * @author		Evance Soumaoro
+ * @copyright           Copyright (c) 2009 - 2011, Evansofts.
+ * @license		http://projects.evansofts.com/yalamof/license.html
+ * @link		http://evansofts.com
+ * @version		Version 0.1
+ * @filesource          Userconfig.php
+ */
+
 /*
  * CORE CONFIGURATION
  *
- *
- *
- * @author Evance Soumaoro
+ * Contains base configuration of the framework
+ * and assemble some user defined configuration
  */
 
-define('YModule','Yalamo');
+define('YPACKAGE','Yalamo');
 define('YTYPE','PHP Framework');
-define('YVERSION','0.2');
+define('YVERSION','0.1');
 define('YLICENCE','LGPL');
 define('YAUTHOR','Evance Soumaoro');
 
-define('YCOREFILE'  ,  YPATH.'system'.DS.'core'.DS.'core'.EXT );
-define('YERRORFILE'  , YPATH.'system'.DS.'core'.DS.'inspector'.EXT );
-define('YMODELFILE' ,  YPATH.'system'.DS.'core'.DS.'model'.EXT);
-define('YURIFILE'   ,  YPATH.'system'.DS.'core'.DS.'uri'.EXT);
-define("YMVCFILE"   ,  YPATH.'system'.DS.'core'.DS.'mvc'.EXT);
+define('YCOREFILE'  ,  YPATH.'system'.DS.'core'.DS.'Core'.EXT );
+define('YERRORFILE'  , YPATH.'system'.DS.'core'.DS.'Inspector'.EXT );
+define('YMODELFILE' ,  YPATH.'system'.DS.'core'.DS.'Model'.EXT);
+define('YURIFILE'   ,  YPATH.'system'.DS.'core'.DS.'Uri'.EXT);
+define("YMVCFILE"   ,  YPATH.'system'.DS.'core'.DS.'Mvc'.EXT);
 
 
 define('YMODULEDIR'    , YPATH.'system'.DS.'modules'.DS);
 define('YHELPERSDIR'   , YPATH.'system'.DS.'helpers'.DS);
 define('YEXTENTIONDIR' , YPATH.'extensions'.DS);
 
-/* Array Autoload */
+/**
+ * Assemble autoload array
+ */
 $YAutoLoad = array (
-    'modules'=>$AutoModules,
-    'helpers'=>$AutoHelpers,
-    'extensions'=>$AutoExtensions
+    'modules'       =>$AutoModules,
+    'helpers'       =>$AutoHelpers,
+    'extensions'    =>$AutoExtensions
 );
-
-
-
-
-
-/* Array Modules
-$YFiles['modules'] = array(
-'Cookie',
-'Database',
-'Environment',
-'File',
-'Image',
-'Model',
-'Path',
-'Session',
-'Zip'
-    //...
-);
-
-
- Array Helpers
-$YFiles['helper'] = array(
-'String',
-'Regex',
-'Uri'
-//...
-);
-*/
-
-
-
 
 
