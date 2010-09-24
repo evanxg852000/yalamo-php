@@ -9,14 +9,14 @@
  * @copyright           Copyright (c) 2009 - 2011, Evansofts.
  * @license		http://projects.evansofts.com/yalamof/license.html
  * @link		http://evansofts.com
- * @version		Version 1.0
+ * @version		Version 0.1
  * @filesource          Dir.php
  */
 
 /*
  * DIR IMPLEMENTATION
  *
- * Contains the directory manipulation/info functionalities
+ * Contains the directory manipulation and info functionalities
  */
 
 //------------------------------------------------------------------------------
@@ -27,7 +27,7 @@
  * to do useful thing.
  */
 
-final class Dir {
+final class Dir extends Object{
 
     private $path;
  
@@ -47,19 +47,17 @@ final class Dir {
         if (@mkdir($this->path->Path(), 0750,$recurssive)) {
             return true;
         }
-        else{
-            return false;
-        }
+         $this->Collect(Error::YE204);
+         return false;
     }
 
     public function  Delete(){
-        $this->erase($this->path->Path());
+        return $this->erase($this->path->Path());
     }
 
     public function  Entries($filter=Yalamo::All,$sort=true){
         if(!file_exists($this->path->Path())){
-            $inspector=Inspector::Instance();
-            $inspector->Add(Error::YE100,  $this);
+            $this->Collect(Error::YE200);
             return false;
         }
         $entrylist=array();
@@ -93,7 +91,7 @@ final class Dir {
             array_multisort($entrylist, SORT_ASC);
         }
         @closedir($handle);
-           return $entrylist;
+        return $entrylist;
     }
 
     private function erase($directory){

@@ -1,10 +1,29 @@
 <?php if ( ! defined('YPATH')) exit('Access Denied !');
+/**
+ * Yalamo framework
+ *
+ * A fast,light, and constraint-free Php framework.
+ *
+ * @package		Yalamo
+ * @author		Evance Soumaoro
+ * @copyright           Copyright (c) 2009 - 2011, Evansofts.
+ * @license		http://projects.evansofts.com/yalamof/license.html
+ * @link		http://evansofts.com
+ * @version		Version 0.1
+ * @filesource          Cookie.php
+ */
+
 /*
  * COOKIE IMPLEMENTATION
  *
+ * Contains the cookie manipulation functionalities
+ */
+
+//------------------------------------------------------------------------------
+/**
+ * Cookie Class
  *
- *
- * @author Evance Soumaoro
+ * The class that contains the cookie manipulation methods
  */
 class Cookie{
     private static  $resgistry;

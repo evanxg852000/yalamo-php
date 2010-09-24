@@ -9,24 +9,23 @@
  * @copyright           Copyright (c) 2009 - 2011, Evansofts.
  * @license		http://projects.evansofts.com/yalamof/license.html
  * @link		http://evansofts.com
- * @version		Version 1.0
+ * @version		Version 0.1
  * @filesource          Session.php
  */
 
 /*
  * SESSION IMPLEMENTATION
  *
- * Contains the directory manipulation/info functionalities
+ * Contains session handling functionalities
  */
 
 //------------------------------------------------------------------------------
 /**
  * Session Class
  *
- * The class that contains the framework enumeration and static methods
- * to do useful thing.
+ * Define methods to create and manipulate sessions
  */
-class Session {
+class Session extends Object {
     private static  $resgistry;
     private $id;
 
@@ -46,6 +45,8 @@ class Session {
         if((array_key_exists($name, self::$resgistry)) && (array_key_exists($name, $_SESSION))){
             return self::$resgistry[$name];
         }
+        $this->Collect(Error::YE100);
+        return false;
     }
 
     public function Id(){

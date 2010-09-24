@@ -1,4 +1,18 @@
 <?php if ( ! defined('YPATH')) exit('Access Denied !');
+/**
+ * Yalamo framework
+ *
+ * A fast,light, and constraint-free Php framework.
+ *
+ * @package		Yalamo
+ * @author		Evance Soumaoro
+ * @copyright           Copyright (c) 2009 - 2011, Evansofts.
+ * @license		http://projects.evansofts.com/yalamof/license.html
+ * @link		http://evansofts.com
+ * @version		Version 0.1
+ * @filesource          Database.php
+ */
+
 /*
  * DATABASE IMPLEMENTATION
  *
@@ -6,7 +20,16 @@
  *
  * @author Evance Soumaoro
  */
-/* Databases Class */
+
+//------------------------------------------------------------------------------
+/**
+ * Databases Class
+ *
+ * The class that contains the implementation of manipulating and handling a database
+ * during the application life cycle for performence reason, it has been made singleton
+ * if you whish to manipulate many connections you should use the databse driver instead
+ *
+ */
 final class Database {
     private static $instance=NULL;
     private $driverObject;
@@ -52,15 +75,39 @@ final class Database {
     }    
 }
 
-/* Abstract Base Class for Databases Driver*/
-abstract  class DBDriver {
+//------------------------------------------------------------------------------
+/**
+ * DBDriver Class
+ *
+ * The abstract Base Class for Databases Driver. any supported database engine should extends this class
+ */
+abstract  class DBDriver extends ICollectable {
     protected  $connection;
     protected  $result;
-    protected final function Onerror($e,$obj){
-        $inspector=Inspector::Instance();
-        $inspector->Add($e,$obj);
-    }
 
+    /**
+     * The methode that makes a derived class collectable by the inspector
+     * and provide for that reason an easy way to raise error on that object
+     *
+     * @param Error::Enum $errortype
+     */
+    protected function Collect($errortype) {
+        $inspector=Inspector::Instance();
+        $inspector->Add($errortype,  $this);
+    }
+    
+    /**
+     * The P means Personalised which helps passed a specific object rather that the
+     * Top level object
+     *
+     * @param Error::Enum $errortype
+     * @param mixed $subject
+     */
+    protected function PCollect($errortype,$subject){
+        $inspector=Inspector::Instance();
+        $inspector->Add($errortype,  $subject);
+    }
+    
     public abstract function  __construct();
     public abstract function  __destruct();
 

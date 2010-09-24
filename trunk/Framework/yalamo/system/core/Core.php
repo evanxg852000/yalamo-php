@@ -216,6 +216,7 @@ interface ISerialisable {
  */
 abstract class ICollectable{
     abstract protected function Collect($errortype);
+    abstract protected function PCollect($errortype,$subject);
 }
 
 //------------------------------------------------------------------------------
@@ -255,6 +256,17 @@ class Object  extends ICollectable implements ISerialisable {
         $inspector->Add($errortype,  $this);
     }
 
+    /**
+     * The P means Personalised which helps passed a specific object rather that the
+     * Top level object
+     *
+     * @param Error::Enum $errortype
+     * @param mixed $subject
+     */
+    protected function PCollect($errortype,$subject){
+        $inspector=Inspector::Instance();
+        $inspector->Add($errortype,  $subject);
+    }
 }
 
 

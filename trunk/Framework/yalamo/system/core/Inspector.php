@@ -41,6 +41,8 @@ final class Error {
     const YE201 = "YE201| Directory not found in the specified path";
     const YE202 = "YE202| Access denied on specified file";
     const YE203 = "YE203| Impossible to upload file";
+    const YE204 = "YE204| Directory operation not successfully completed";
+    const YE205 = "YE205| File operation not successfully completed";
 
     /* Database zone */
     const YE300 = "YE300| Unable to connect to the database";
@@ -48,6 +50,7 @@ final class Error {
     
     /* Misc zone */
     const YE400 = "YE400| Unable to connect to mail server";
+    const YE401 = "YE401| Unable to send the mail";
 
 
     private $num;

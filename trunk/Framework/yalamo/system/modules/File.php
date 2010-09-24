@@ -9,15 +9,15 @@
  * @copyright           Copyright (c) 2009 - 2011, Evansofts.
  * @license		http://projects.evansofts.com/yalamof/license.html
  * @link		http://evansofts.com
- * @version		Version 1.0
- * @filesource          Path.php
+ * @version		Version 0.1
+ * @filesource          File.php
  */
 
 
 /*
  * FILE IMPLEMENTATION
  *
- * Contains the path manipulation/info functionalities
+ * Contains the file manipulation/info functionalities
  */
 class File extends Object {
     private $path;
@@ -47,12 +47,10 @@ class File extends Object {
         if(file_exists($this->path->Path())){
            return file_get_contents($this->path->Path());
         }
-        else{
-            Inspector::AddError(Error::YE100, $this->path);
-            return false;
-        }
-       
+        $this->Collect(Error::YE205);
+        return false;       
     }
+
     public function Append($content){
         if (file_exists($this->path->Path())){
             $handle=fopen($this->path->Path(),'a');
@@ -60,10 +58,8 @@ class File extends Object {
             fclose($handle);
             return true;
 	}
-	else{
-            Inspector::AddError(Error::YE100, $this->path);
-            return false;
-        }
+        $this->Collect(Error::YE205);
+        return false;
     }
     
     public function Copy($dest, $overwrite=false){
@@ -73,19 +69,15 @@ class File extends Object {
         if (file_exists($this->path->Path())){
           return  @copy($this->path->Path(), $dest);
         }
-        else {
-            Inspector::AddError(Error::YE100, $this->path);
-            return false;
-        }
+        $this->Collect(Error::YE205);
+        return false;
     }
     public function Delete(){
         if(file_exists($this->path->Path())){
             return  @unlink($this->path->Path());
         }
-        else{
-            Inspector::AddError(Error::YE100, $path);
-            return false;
-        }
+        $this->Collect(Error::YE205);
+        return false;
     } 
     
     private function maxupload(){
@@ -132,7 +124,7 @@ class File extends Object {
                     }
 		}
                 else{
-                    $this->Collect(Error::YE107);
+                    $this->Collect(Error::YE203);
                     return false;
                 }
             }

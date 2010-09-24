@@ -1,13 +1,29 @@
-<?php
-/* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+<?php if ( ! defined('YPATH')) exit('Access Denied !');
+/**
+ * Yalamo framework
+ *
+ * A fast,light, and constraint-free Php framework.
+ *
+ * @package		Yalamo
+ * @author		Evance Soumaoro
+ * @copyright           Copyright (c) 2009 - 2011, Evansofts.
+ * @license		http://projects.evansofts.com/yalamof/license.html
+ * @link		http://evansofts.com
+ * @version		Version 0.1
+ * @filesource          Mail.php
  */
 
-/**
- * Description of Mail
+/*
+ * MAIL IMPLEMENTATION
  *
- * @author Administrator
+ * Define functionalities for sending mails
+ */
+
+//------------------------------------------------------------------------------
+/**
+ * Mail Class
+ *
+ * Implements the method to create and send a mail via pmp mail function
  */
 final class Mail extends Object {
     private $emailexpeditor;
@@ -47,7 +63,7 @@ final class Mail extends Object {
         if(mail($this->emaildestination, $this->subject, $this->content, $this->headers)){
             return true ;
         }
-        $this->Collect(Error::YE100);
+        $this->Collect(Error::YE401);
         return false ;
 
       }

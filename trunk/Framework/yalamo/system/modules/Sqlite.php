@@ -1,13 +1,30 @@
 <?php if ( ! defined('YPATH')) exit('Access Denied !');
+/**
+ * Yalamo framework
+ *
+ * A fast,light, and constraint-free Php framework.
+ *
+ * @package		Yalamo
+ * @author		Evance Soumaoro
+ * @copyright           Copyright (c) 2009 - 2011, Evansofts.
+ * @license		http://projects.evansofts.com/yalamof/license.html
+ * @link		http://evansofts.com
+ * @version		Version 0.1
+ * @filesource          Sqlite.php
+ */
+
 /*
  * SQLITE DRIVER IMPLEMENTATION
  *
- *
- *
- * @author Evance Soumaoro
+ * The class that implements the driver for Sqlite database engine
  */
 
-/* Sqlite class */
+//------------------------------------------------------------------------------
+/**
+ * Sqlite Class
+ *
+ * Implements abstract methods from the DBDriver class for Sqlite engine
+ */
 final class Sqlite extends DBDriver{
     public function  __construct() {
         $this->result=NULL;
@@ -17,7 +34,7 @@ final class Sqlite extends DBDriver{
             $this->connection=$handle;
         }
         else {
-            $this->Onerror(Error::YE105,mysql_error());
+            $this->PCollect(Error::YE301,mysql_error() );
             $this->connection=false;
         }
         return $this->connection;
@@ -38,13 +55,12 @@ final class Sqlite extends DBDriver{
          return $this->Execute($sql);
     }
     public function Export($file){
-        $this->Onerror(Error::YE001,$name);
+        $this->Collect(Error::YE001);
     }
     public function Databases() {
         $dbs=array();
         if($this->connection){
             $list=mysql_list_dbs($this->connection);
-
             while($db= mysql_fetch_row($list)){
                 $dbs[]=$db[0];
             }
@@ -64,14 +80,14 @@ final class Sqlite extends DBDriver{
         return $vars;
     }
     public function Prepare($sql) {
-      $this->Onerror(Error::YE001,$name);
+      $this->Collect(Error::YE001);
     }
 
     public function Execute($sql) {
         if($this->connection){
             $this->result= @mysql_query($sql, $this->connection);
             if(!$this->result){
-                $this->Onerror(Error::YE106,mysql_error());
+                $this->PCollect(Error::YE301, mysql_error());
                 return false;
             }
         }
@@ -87,7 +103,7 @@ final class Sqlite extends DBDriver{
     }
     public function Insert($table,$keys,$values,$single=true){
         if((!is_array($keys) || (!is_array($values)))){
-            $this->Onerror(Error::YE100, array($keys,$values));
+            $this->PCollect(Error::YE101,array($keys,$values) );
             return false;
         }
         $keys=implode(" , ",$keys);
@@ -121,14 +137,14 @@ final class Sqlite extends DBDriver{
     public function Update($table,$values,$condition=Yalamo::Void){
         if(is_array($values)){
             foreach ($values as $key => $val) {
-                if(!is_string($key)){ $this->Onerror(Error::YE100, $values);  return false;}
+                if(!is_string($key)){ $this->PCollect(Error::YE101, $values);  return false;}
                 if(is_string($val)){ $val="'$val'";}
                 $str[]=$key."=".$val;
             }
             $values=implode(" , ", $str);
         }
         else{
-            $this->Onerror(Error::YE100, $values);
+            $this->PCollect(Error::YE101, $values);
             return false;
         }
         $sql="UPDATE $table SET $values ".$condition." ;";
@@ -189,7 +205,5 @@ final class Sqlite extends DBDriver{
             return 0;
         }
     }
-
     
 }
-

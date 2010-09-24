@@ -1,19 +1,29 @@
 <?php if ( ! defined('YPATH')) exit('Access Denied !');
+/**
+ * Yalamo framework
+ *
+ * A fast,light, and constraint-free Php framework.
+ *
+ * @package		Yalamo
+ * @author		Evance Soumaoro
+ * @copyright           Copyright (c) 2009 - 2011, Evansofts.
+ * @license		http://projects.evansofts.com/yalamof/license.html
+ * @link		http://evansofts.com
+ * @version		Version 0.1
+ * @filesource          Javascript.php
+ */
+
 /*
  * JAVASCRIPT EXTENSION
  *
- *
- *
- * @author Evance Soumaoro
+ *  This extension loads popular javascript libraries from google
  */
 
-
-/* Enum Available Libraries*/
+//------------------------------------------------------------------------------
 /**
- * @abstract
- * @name variante
+ * Jslib Class
  *
- *
+ * Enumerates availabe libraries
  */
 final class Jslib{
  const Chromeframe      =1;
@@ -29,12 +39,19 @@ final class Jslib{
  const Yui              =11;
 }
 
-/* Javascript class implementation*/
+//------------------------------------------------------------------------------
+/**
+ * Javascript Class
+ *
+ * Javascript library loading implementation
+ */
 final class Javascript {
    private $returnstr;
    public function  __construct() {
         $this->returnstr="<script type=\"text/javascript\" src=\"#library#\"></script>";
    }
+
+   public function  __toString() {return "Object of Type: Javascript"; }
    public function Get($library,$version){
         switch ($library) {
             case Jslib::Chromeframe:
@@ -92,6 +109,12 @@ final class Javascript {
         return $tag;
    }
 }
+
+
+//------------------------------------------------------------------------------
+/**
+ * Helper Functions
+ */
 
 /* Helper function implementation */
 function loadjs($library,$version,$insert=true){

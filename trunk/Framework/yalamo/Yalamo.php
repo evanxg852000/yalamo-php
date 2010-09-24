@@ -1,4 +1,4 @@
-<?php if ( ! defined('YPATH')) exit('Access Denied !');
+<?php 
 /**
  * Yalamo framework
  *
