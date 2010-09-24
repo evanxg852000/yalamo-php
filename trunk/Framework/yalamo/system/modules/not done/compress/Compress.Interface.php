@@ -1,6 +1,0 @@
-<?php
-Interface Compress{
-
-
-}
-?>

@@ -9,23 +9,31 @@
 
 /* Error Class */
 final class Error {
-    //List of identified errors type
-    const None  = "YE000|There is not an error";
-    const YE001 = "YE001|Not Implemented Error";
+    const YE000 = "Error YE000: There is not an error";
+    const YE001 = "Error YE001: Method or function not implemented";
     
-    const YE100 = "YE101|Invalid Argument/File Suplied Error";
-    const YE101 = "YE102|Invali argument/ file suplied";
-    //...
-    const YE105 = "YE105|Database connection Error";
-    const YE106 = "YE106|Database Query Error";
-    const YE107 = "YE107|Upload Error";
-    //...
+    //arguments
+    const YE100 = "Error YE101: Invalid index suplied for array";
+    const YE101 = "Error YE101: Invalid argument suplied ";
+
+    //file
+    const YE200 = "Error YE200: File not found in the specified path";
+    const YE201 = "Error YE201: Directory not found in the specified path";
+    const YE202 = "Error YE202: Access denied on specified file";
+    const YE203 = "Error YE203: Impossible to upload file";
+
+    //database
+    const YE300 = "Error YE300: Unable to connect to the database";
+    const YE301 = "Error YE301: SQl query execution error";
+    
+    //misc
+    const YE400 = "Error YE400: Unable to connect to mail server";
+
 
     private $num;
     private $string;
     private $subject; //object on which error was raised
 
-    //type=Error::YE102
     public function  __construct($type=Error::None,$subject=NULL) {
         $parts=explode("|",$type);    
         $this->num=str_replace("|","",$parts[0]);
@@ -35,7 +43,6 @@ final class Error {
     public function  __toString($dump=false) {
         return "Error: ".$this->Num()." , ".$this->String()." With Var= ".$this->Subject($dump);
     }
-
     public function Num(){
         return $this->num;
     }

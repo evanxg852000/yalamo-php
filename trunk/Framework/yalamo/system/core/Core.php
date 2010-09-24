@@ -33,19 +33,19 @@ final class Yalamo {
     const  None         = 0;
     const  Unic         = 1;
     const  Double       = 2;
-    
 
-    const Pogsql        = "POSTGRESQL";
-    const Mysql         = "MYSQL";
-    const Sqlite        = "SQLITE";
 
-    const  Void     ="";
-    const  Space    =" ";
-    const  All      ="*";
-    const  Endline  ="\n";
-    const  Tab      ="\t";
-    const  Fileonly ="FO";
-    const  Dironly  ="Do";
+    const  Pogsql       = "POSTGRESQL";
+    const  Mysql        = "MYSQL";
+    const  Sqlite       = "SQLITE";
+
+    const  Void         ="";
+    const  Space        =" ";
+    const  All          ="*";
+    const  Endline      ="\n";
+    const  Tab          ="\t";
+    const  Fileonly     ="FO";
+    const  Dironly      ="Do";
 
 
     const  Ds       =DS;
