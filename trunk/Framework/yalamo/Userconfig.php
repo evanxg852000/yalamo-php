@@ -68,12 +68,14 @@ define("DBPASSWORD", "");
  * Define the configuartion for the mvc mode
  *
  * @param string SITEURL            The website root url : http://yalamof.com
+ * @param string MODE               The usage mode wether mvc or classic: Mvc or Classic
  * @param string MVCPATH            The path of the mvc folder [ default YPATH."mvc/" ]
  *                                      inside the framework YPATH is a constant which
  *                                      definethe path of the framework
  * @param string DEFAULTCONTROLLER  The default controller
  */
 define("SITEURL", "http://localhost/Framework/");
+define("MODE", "Mvc");
 define("MVCPATH", YPATH."mvc/");                       
 define("DEFAULTCONTROLLER", "Welcome");
 

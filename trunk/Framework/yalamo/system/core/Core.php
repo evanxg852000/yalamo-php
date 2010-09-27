@@ -33,6 +33,8 @@ final class Yalamo {
     const  Unic         = 1;
     const  Double       = 2;
 
+    const  Mvc          ="Mvc";
+    const  Classic      ="Classic";
     const  Pogsql       = "POSTGRESQL";
     const  Mysql        = "MYSQL";
     const  Sqlite       = "SQLITE";
@@ -133,6 +135,16 @@ final class Loader {
      */
     public function Controller($controller){
         $fullpath=MVCPATH."controllers".DS.ucwords($controller).EXT;
+        $this->Load($fullpath);
+    }
+
+    /**
+     * Loads a page from the site root  directory in classic mode
+     *
+     * @param string $page  The page name
+     */
+    public function Page($page){
+        $fullpath=ucwords($page).EXT;
         $this->Load($fullpath);
     }
 
