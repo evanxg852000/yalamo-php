@@ -20,7 +20,7 @@
  * about core functionalities. These functions can be called from oo mode
  */
 
-function  getAppConfig($key){
+function AppConfig($key){
     return Yalamo::AppConfig($key);
 }
 
