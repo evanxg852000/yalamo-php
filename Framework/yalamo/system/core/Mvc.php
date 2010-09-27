@@ -71,7 +71,12 @@ final class Mediator {
         $uri=new Uri();
         $this->controller=$uri->Controller();
         $this->method=$uri->Method();
-        $file=MVCPATH."controllers".DS.$this->controller.EXT;
+        if(MODE==Yalamo::Classic){
+            $file=$this->controller.EXT;
+        }
+        else{
+           $file=MVCPATH."controllers".DS.$this->controller.EXT;
+        }
         if ((!file_exists($file)) && (!is_readable($file))){
            $this->controller ="Error404";
         }
@@ -81,9 +86,13 @@ final class Mediator {
      *  This method loads the controller and call its method
      */
     public function Route(){
-        //load the controller file
-        $loader=new Loader();
-        $loader->Controller($this->controller) ;
+        $load=new Loader();
+        
+        //if Mode=Classic load the pages
+        if(MODE==Yalamo::Classic){ $load->Page($this->controller); return;}
+       
+        //if not then load the controller file
+        $load->Controller($this->controller) ;
         //create an instance of the controller
         $class = $this->controller ;
         $this->controllerinstance = new $class();

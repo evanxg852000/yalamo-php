@@ -8,9 +8,3 @@
 #redirect all request towards index.php
 	RewriteRule ^(index\.php)|([/A-Za-z0-9-]+)$   index.php     
 </IfModule>
-
-
-
-   
-
-  

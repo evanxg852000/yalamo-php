@@ -27,5 +27,4 @@ require_once("yalamo/yalamo.php");
 $WebApplication=new Mvc();
 $WebApplication->Build();
 unset($w);
-
 ?>
