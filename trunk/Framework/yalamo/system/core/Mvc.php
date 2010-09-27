@@ -77,7 +77,7 @@ final class Mediator {
         else{
            $file=MVCPATH."controllers".DS.$this->controller.EXT;
         }
-        if ((!file_exists($file)) && (!is_readable($file))){
+        if ((!file_exists($file)) || (!is_readable($file))){
            $this->controller ="Error404";
         }
      }
