@@ -31,6 +31,7 @@ class Query {
     public function __construct() {
         $this->driverObject=Database::Instance()->Handle();
     }
+    public function  __toString() {return "Object of Type: Query"; }
     public function Execute($sql){
         $this->driverObject->Execute($sql);
     }

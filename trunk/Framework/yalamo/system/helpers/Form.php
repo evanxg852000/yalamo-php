@@ -21,8 +21,7 @@
  */
 
 class Form{
-    const  Get    = "GET";
-    const  Post   = "POST";
+  
 }
 
 
