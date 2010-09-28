@@ -33,9 +33,9 @@
  *
  * These arrays define the classes that should be auto-loaded
  */
-$AutoModules    = array('cookie');
-$AutoHelpers    = array('regex','string');
-$AutoExtensions = array('paypal','Javascript');
+$AutoModules    = array('Cookie');
+$AutoHelpers    = array('Validator','String');
+$AutoExtensions = array('Javascript');
 
 //------------------------------------------------------------------------------
 /**
@@ -65,7 +65,7 @@ define("DBPASSWORD", "");
 /**
  * Mvc Configuration
  *
- * Define the configuartion for the mvc mode
+ * Define the configuartion for the mode
  *
  * @param string SITEURL            The website root url : http://yalamof.com
  * @param string MODE               The usage mode wether mvc or classic: Mvc or Classic
@@ -87,9 +87,9 @@ define("DEFAULTCONTROLLER", "Welcome");
  */
 $AppConfig=array(
     'AdminEmail'=> 'evanxg852000@yahoo.fr',
-    'Title'=>'Yalamo dev Environment',
+    'Title'=>'Yalamo Framework',
     'Copyright'=> 'Evansofts 2010',
-//  'sample' => 'value'
+//  'key' => 'value'
 );
 
 

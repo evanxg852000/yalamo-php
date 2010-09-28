@@ -144,11 +144,11 @@ class Environment extends Object{
      */
     public static function Application($key){
         global $AppConfig;
-        if(!array_key_exists($key,$AppVaribles)) {
+        if(!array_key_exists($key,$AppConfig)) {
            $this->Collect(Error::YE100);
            return false;
         }
-         return $AppVaribles[$key];
+         return $AppConfig[$key];
     }
 
 }

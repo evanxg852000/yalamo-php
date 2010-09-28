@@ -21,7 +21,7 @@
  */
 
 function AppConfig($key){
-    return Yalamo::AppConfig($key);
+    return Environment::Application($key);
 }
 
 function loadModule($modules){
