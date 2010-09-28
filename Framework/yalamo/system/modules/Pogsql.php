@@ -39,6 +39,7 @@ final class Pogsql extends DBDriver{
         }
         return $this->connection;
     }
+    public function  __toString() {return "Object of Type: Pogsql"; }
     public function  __destruct(){
         mysql_close($this->connection);
     }

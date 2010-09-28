@@ -40,6 +40,7 @@ final class Mysql extends DBDriver {
         }
         return $this->connection;
     }
+    public function  __toString() {return "Object of Type: Mysql"; }
     public function  __destruct(){
         mysql_close($this->connection);
     }

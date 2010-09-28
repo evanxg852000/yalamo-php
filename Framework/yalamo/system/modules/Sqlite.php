@@ -39,6 +39,7 @@ final class Sqlite extends DBDriver{
         }
         return $this->connection;
     }
+    public function  __toString() {return "Object of Type: Sqlite"; }
     public function  __destruct(){
         mysql_close($this->connection);
     }
