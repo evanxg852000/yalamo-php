@@ -17,5 +17,3 @@ class B extends Object {
 
 }
 
-
-tri
