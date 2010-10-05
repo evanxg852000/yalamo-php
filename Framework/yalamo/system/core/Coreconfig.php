@@ -23,7 +23,7 @@
 define('YPACKAGE','Yalamo');
 define('YTYPE','PHP Framework');
 define('YVERSION','0.1');
-define('YLICENCE','LGPL');
+define('YLICENCE','MIT');
 define('YAUTHOR','Evance Soumaoro');
 
 define('YCOREFILE'  ,  YPATH.'system'.DS.'core'.DS.'Core'.EXT );

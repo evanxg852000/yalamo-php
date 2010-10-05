@@ -183,7 +183,7 @@ final class Inspector {
     }
     
     /**
-     * Walk through the inspector registry to report abaout every error
+     * Walk through the inspector registry to report about every error
      *
      * @param bool $dump   The optional parameter to explode the subject if set to true
      * @return string      The report text
@@ -200,10 +200,15 @@ final class Inspector {
         }
         return $log;
     }
-    public function Log(){
-        $logfile=YPATH."log.log";
+
+    public function Log($file=Yalamo::Void){
+        if($file==Yalamo::Void){
+            $logfile=YPATH."log.log";
+        }
+        else {
+            $logfile=$file;
+        }
         $f=new File($logfile);
-        echo  $logfile;
         $f->Append($this->Investigate());
     }
           

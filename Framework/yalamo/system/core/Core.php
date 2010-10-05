@@ -44,7 +44,7 @@ final class Yalamo {
     const  All          ="*";
     const  Endline      ="\n";
     const  Tab          ="\t";
-    const  Fileonly     ="FO";
+    const  Fileonly     ="Fo";
     const  Dironly      ="Do";
 
     const  Ds       =DS;
@@ -223,7 +223,7 @@ interface ISerialisable {
  *
  * Every class that raise yalamo error to be collected by the Inspector
  * should implement to get more hierarchical capabilities
- * is actually am Interface but for the reason that Php only allow Public methods
+ * is actually an Interface but for the reason that Php only allow Public methods
  * in interfaces it is declared as an abstract class
  */
 abstract class ICollectable{

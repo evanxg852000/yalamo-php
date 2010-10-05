@@ -59,7 +59,7 @@ final class Mvc {
  * process
  */
 final class Mediator {
-
+    private $page;
     private $controller;
     private $method;
     private $controllerinstance;
@@ -69,17 +69,24 @@ final class Mediator {
      */
     public function __construct() {
         $uri=new Uri();
+        $this->page=$uri->Page();
         $this->controller=$uri->Controller();
         $this->method=$uri->Method();
+
         if(MODE==Yalamo::Classic){
-            $file=$this->controller.EXT;
+            $file=$this->page.EXT;
+            if ((!file_exists($file)) || (!is_readable($file))){
+               $this->page="Error404";
+            }
         }
         else{
            $file=MVCPATH."controllers".DS.$this->controller.EXT;
+           if ((!file_exists($file)) || (!is_readable($file))){
+               $this->controller ="Error404";
+           }
         }
-        if ((!file_exists($file)) || (!is_readable($file))){
-           $this->controller ="Error404";
-        }
+
+        
      }
 
     /**
@@ -87,9 +94,11 @@ final class Mediator {
      */
     public function Route(){
         $load=new Loader();
-        
-        //if Mode=Classic load the pages
-        if(MODE==Yalamo::Classic){ $load->Page($this->controller); return;}
+
+        if(MODE==Yalamo::Classic){
+            $load->Page($this->page);
+            return;
+        }
        
         //if not then load the controller file
         $load->Controller($this->controller) ;
