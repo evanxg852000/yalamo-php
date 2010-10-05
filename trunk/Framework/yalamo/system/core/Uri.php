@@ -49,6 +49,13 @@ Class Uri {
     private $segments=array();
 
     /**
+    * The current requested page in classic mode
+    * @var string
+    * @example  services
+    */
+    private $page;
+
+    /**
      * The current requested controller
      * @var string
      * @example  services
@@ -73,34 +80,56 @@ Class Uri {
      * Constructor
      */
     public function __construct(){
-        $this->controller=DEFAULTCONTROLLER;
-
         $this->baseuri=SITEURL ;
         $this->requesturi=$this->RequestUri();
         $segementstring=str_replace($this->baseuri, "",  $this->requesturi );
         $this->segments=explode('/',$segementstring);
 
-        if(array_key_exists(0, $this->segments) ){
-           if( $this->segments[0]!=""){
-              $this->controller=$this->segments[0];
-           }
-        }
-
-        if(array_key_exists(1, $this->segments)){
-            $this->method=$this->segments[1];
-        }
-        else {
-            $this->method="Index";
-        }
-
-        for($i=2; $i< count($this->segments);$i++ ){
-            if(array_key_exists($i, $this->segments)){
-                 $this->querystr[]=$this->segments[$i];
-                //TODO : test this feature
-                 $_GET[$i]=$this->segments[$i];
+        if(MODE==Yalamo::Classic){
+          //page
+          $this->page=DEFAULTPAGE;
+          if(array_key_exists(0, $this->segments) ){
+               if( $this->segments[0]!=""){
+                  $this->page=$this->segments[0];
+               }
             }
+           //query string
+           for($i=1; $i< count($this->segments);$i++ ){
+                if(array_key_exists($i, $this->segments)){
+                     $this->querystr[]=$this->segments[$i];
+                     $_GET[$i]=$this->segments[$i];
+                }
+            }
+            $this->controller=null;
+            $this->method=null;
         }
+        else{
+            //controller
+            $this->controller=DEFAULTCONTROLLER;
+            if(array_key_exists(0, $this->segments) ){
+               if( $this->segments[0]!=""){
+                  $this->controller=$this->segments[0];
+               }
+            }
+            //method
+            if(array_key_exists(1, $this->segments)){
+                $this->method=$this->segments[1];
+            }
+            else {
+                $this->method="Index";
+            }
+            //query string
+            for($i=2; $i< count($this->segments);$i++ ){
+                if(array_key_exists($i, $this->segments)){
+                     $this->querystr[]=$this->segments[$i];
+                     $_GET[$i]=$this->segments[$i];
+                }
+            }
+            $this->page=null;
+        }
+
     }
+    
     public function  __toString() {return "Object of Type: Uri"; }
 
     /**
@@ -151,7 +180,16 @@ Class Uri {
             return false;
         }
     }
-    
+
+    /**
+     * The accessor to the  page of the uri
+     *
+     * @return String The page of the uri
+     */
+    public function Page() {
+        return ucwords($this->page);
+    }
+
     /**
      * The accessor to the  controller of the uri
      * 

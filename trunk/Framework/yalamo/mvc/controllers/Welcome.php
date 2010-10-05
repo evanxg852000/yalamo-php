@@ -9,7 +9,7 @@ public function Index(){
 
   // $m->InsertUser("Manigger");
 
-   
+    
       
       $this->Load->View("index",$data);
  

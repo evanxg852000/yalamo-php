@@ -28,7 +28,6 @@
 
        
            
-           
            $i=  Inspector::Instance();
            $i->Investigate(true);
 

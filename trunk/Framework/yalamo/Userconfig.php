@@ -73,11 +73,13 @@ define("DBPASSWORD", "");
  *                                      inside the framework YPATH is a constant which
  *                                      definethe path of the framework
  * @param string DEFAULTCONTROLLER  The default controller
+ * @param string DEFAULTPAGE  The default page when running in classic mode
  */
 define("SITEURL", "http://localhost/Framework/");
 define("MODE", "Mvc");
 define("MVCPATH", YPATH."mvc/");                       
 define("DEFAULTCONTROLLER", "Welcome");
+define("DEFAULTPAGE", "Classic");
 
 /**
  * Application Variables
@@ -94,4 +96,3 @@ $AppConfig=array(
 
 
 
-//@todo : add hilight here
