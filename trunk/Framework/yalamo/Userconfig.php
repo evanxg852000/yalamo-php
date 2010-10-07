@@ -96,3 +96,18 @@ $AppConfig=array(
 
 
 
+/**
+ * Alias Configuration
+ *
+ *
+ * Alias Array
+ *
+ * Define aliases for the helper's function
+ * @param bool ENABLEALIAS This constant activate aliases
+ * @param Key=> Value paire as much as you like
+ */
+define("ENABLEALIAS",true);
+$Alias=array(
+    "fu"=>"getUrl",
+    "fc"=>"getController"
+);
