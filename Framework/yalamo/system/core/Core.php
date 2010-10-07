@@ -282,7 +282,6 @@ class Object  extends ICollectable implements ISerialisable {
 }
 
 
-
 //------------------------------------------------------------------------------
 /**
  * Php internal auto loading
