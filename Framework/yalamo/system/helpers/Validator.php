@@ -10,7 +10,7 @@
  * @license		http://projects.evansofts.com/yalamof/license.html
  * @link		http://evansofts.com
  * @version		Version 0.1
- * @filesource          Regex.php
+ * @filesource          Validator.php
  */
 
 /*

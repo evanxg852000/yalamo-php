@@ -20,15 +20,22 @@ zip exemple
 
 <?php
             $sourcefolder="C:\wamp\www\yaltester";
-           $zipfilename="sampe";
+           $zipfilename="u";
 
            $zip=new Zip($sourcefolder,$zipfilename);
-           $zip->Create();
-           $zip->AddFiles(array("index.php","sample.xml"),"sample");
-           $zip->AddFolder("sampefolder");
+           //$zip->Create();
+           //$zip->AddFiles(array("sync.php","gre.xml"),"u");
+           //$zip->AddFolder("sampefolder");
 
-           $zip->ArchiveFolder("sample");
+           //$zip->ArchiveFolder("u");
 
-           $zip->ExtractFiles("C:\wamp\www\yaltester\gre");
-           $zip->DeleteArchive();
+          // $zip->ExtractFiles("C:\wamp\www\yaltester\gre");
+          $zip->DeleteArchive();
+
+
+           $i=  Inspector::Instance();
+           $i->Investigate(true);
+
+
+
 ?>
