@@ -104,7 +104,7 @@ final class Mail extends Object {
     }
 
 
-    public function send($content){
+    public function Send($content){
         $this->prepare($content);
         if(mail($this->recipients[0], $this->subject, $this->body, $this->headers)){
             return true ;
@@ -136,20 +136,58 @@ final class Mail extends Object {
                 break;
                 case Mail::HTML:
                         $delimiter = md5(date('r', time()));
-                        $this->headers .="Content-Type: multipart/alternative;
-                                         boundary=\"$delimiter\"
+                        $this->headers .="Content-Type: multipart/alternative; boundary=\"$delimiter\" ";
+                         $this->body=" --$delimiter
+                                         Content-Type: text/plain; charset=\"iso-8859-1\" \n
+                                         Content-Transfer-Encoding: 7bit
 
+                                         $content
                                          --$delimiter
-                                         charset=\"iso-8859-1\" \n
-                                         Content-Transfer-Encoding: 8bit";
+                                         Content-Type: text/html; charset=\"iso-8859-1\" \n
+                                         Content-Transfer-Encoding: 7bit
+
+                                         </p>$content</p>
+
+                                        --$delimiter--
+                                        ";
                 break;
             }
         }
          else{
+             $delimiter = md5(date('r', time()));
+             $AttachementStr=Yalamo::Void;
+             foreach($this->attachements as $attachement){
+                $AttachementStr .=" --$delimiter
+                                    Content-Type:$attachement->FileMime; name=\"$attachement->FileName\"
+                                    Content-Transfer-Encoding: base64
+                                    Content-Disposition: attachment
 
+                                    $attachement->FileData
+                                    ";
+             }         
+             $this->headers .="Content-Type: multipart/mixed; boundary=\"$delimiter\" ";
+             $this->body=" --$delimiter
+                         Content-Type: multipart/alternative; boundary=\"$delimiter\"
 
+                        --$delimiter
+                        Content-Type: text/plain; charset=\"iso-8859-1\" \n
+                        Content-Transfer-Encoding: 7bit
 
+                        $content
 
+                        --$delimiter
+                        Content-Type: text/html; charset=\"iso-8859-1\" \n
+                        Content-Transfer-Encoding: 7bit
+
+                        <p>$content</p>
+
+                        --$delimiter--
+
+                        --$delimiter
+                        
+                        $AttachementStr
+                        --$delimiter--
+                        ";
         }
         
           
@@ -157,18 +195,10 @@ final class Mail extends Object {
 
 }
 
-class Attachement{
+final class Attachement{
+
     public $FileName;
     public $FileMime;
     public $FileData;
+
 }
-
-
-/*
- *  $headers ="From: \"$this->nameexpeditor\" <$this->emailexpeditor> \n";
-                $headers .="Reply-To: $this->emailexpeditor \n";
-                $headers .='Content-Type: text/html; charset="iso-8859-1"'."\n";
-                $headers .='Content-Transfer-Encoding: 8bit';
-                $this->headers=$headers;
-                $this->content="<html><head><title>".$this->subject."</title></head><body>".$content."</body></html>";
- */
