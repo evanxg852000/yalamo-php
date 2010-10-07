@@ -31,6 +31,7 @@ final class Validator {
     const Email         ="//";
     const Password      ="//";
     const Urlhttp       ="//";
+    const Urlhttps      ="//";
     const Urlftp        ="//";
     const Pcusa         ="//";
     const Pcuk          ="//";
