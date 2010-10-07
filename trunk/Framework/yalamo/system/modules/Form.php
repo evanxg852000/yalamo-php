@@ -245,15 +245,16 @@ final class Textarea extends Control {
 
 final class Label extends control{
     private $text;
+    private $for;
     
-    public function  __construct($text, $option) {
+    public function  __construct($text,$for, $option) {
         parent::__construct($option);
-        $this->text=$text;        
+        $this->text=$text;
+        $this->for=$for;
     }
     
     public function  Code() {
-        $code=Yalamo::Void;
-        
+        $code="<label for=\"$this->for\">$this->text</label>" ;
         return $code;
     }
     

@@ -21,9 +21,11 @@
  */
 class File extends Object {
     private $path;
+    private $mime;
     
     public function  __construct($path) {
         $this->path = new Path($path);
+        $this->mime= finfo_file(finfo_open(FILEINFO_MIME_TYPE),$file_name, $options, $context);
     }
     public function  __toString() {return "Object of Type: File"; }
 
@@ -49,6 +51,9 @@ class File extends Object {
         }
         $this->Collect(Error::YE205);
         return false;       
+    }
+    public function FileMime(){
+        return $this->mime;
     }
 
     public function Append($content){

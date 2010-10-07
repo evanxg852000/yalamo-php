@@ -49,3 +49,8 @@ function getUriQueryString(){
     $uri=new Uri() ;
     return $uri->QueryString();
 }
+
+function Redirect($url){
+    $uri=new Uri();
+    $uri->Redirect($url);
+}
