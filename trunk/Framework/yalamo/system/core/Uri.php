@@ -216,5 +216,14 @@ Class Uri {
     public function QueryString() {
         return $this->querystr;
     }
+
+    /**
+     * The methode to redirect the user
+     *
+     * @param string $url The new location
+     */
+    public function Redirect($url){
+        header("Location: $url" );
+    }
     
 }
