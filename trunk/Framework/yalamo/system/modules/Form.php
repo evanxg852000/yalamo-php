@@ -263,25 +263,3 @@ final class Label extends control{
 
 
 
-/*
-
-    public function TextBox($name,$label, $multine=false,$options=null){
-
-    }
-    public function ComboBox($name,$label, $entries,$options=null){
-
-    }
-    public function CheckBox($name,$entries,$options=null){
-
-    }
-    public function Button($name,$options=null){
-
-    }
-    public function Submit($name,$options=null){
-
-    }
-    public function Resset($name,$options=null){
-
-    }
-
-   */

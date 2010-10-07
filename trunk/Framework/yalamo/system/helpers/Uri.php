@@ -54,3 +54,31 @@ function Redirect($url){
     $uri=new Uri();
     $uri->Redirect($url);
 }
+
+function MvcUrl($controller,$method,$params){
+    $paramstr=Yalamo::Void;
+    if(is_array($params)){
+        foreach($params as $param){
+            $paramstr .="/".$param;
+        }
+    }
+    $uri=new Uri();
+    if(substr($uri->Base(), -1)==="/"){
+     return $uri->Base()."$controller/$method/$paramstr";
+    }
+    return $uri->Base()."/$controller/$method/$paramstr";
+}
+
+function ClassicUrl($page,$params){
+    $paramstr=Yalamo::Void;
+    if(is_array($params)){
+        foreach($params as $param){
+            $paramstr .="/".$param;
+        }
+    }
+    $uri=new Uri();
+    if(substr($uri->Base(), -1)==="/"){
+     return $uri->Base()."$page/$paramstr";
+    }
+    return $uri->Base()."/$page/$paramstr";
+}

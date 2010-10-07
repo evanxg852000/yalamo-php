@@ -19,3 +19,8 @@
  * Includes usefull functions for user that want to use the framework in procedural mode
  * about regular expressions. These functions can be called from oo mode
  */
+
+function Matches($rule,$subject){
+    preg_match_all($rule, $subject, $matchesarray);
+    return $matchesarray;
+}
