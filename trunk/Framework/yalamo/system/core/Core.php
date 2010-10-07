@@ -192,7 +192,7 @@ final class Loader {
         if(ENABLEALIAS){ //convert alias array into variable
            foreach ($Alias as $key => $val){
                     $$key = $val;
-               } 
+               }
         }
         if( $data!=null){ //convert $data into variables by: var var trick
             if(is_array($data)){

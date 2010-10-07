@@ -55,18 +55,14 @@ class Zip extends Object{
             return false;
 	}
 
-        public function AddFiles($filelist,$zippedfolder=Yalamo::Void){
+        public function AddFiles($filelist,$zippedfolder=Yalamo::Void){           
             if(!is_array($filelist)){
                 $this->Collect(Error::YE100);
                 return;
             }
-            
             if ( $this->handlezip->open($this->sourcefolder.$this->filename)===true) {
                 foreach ($filelist as $file){
                      $this->handlezip->addFile($this->sourcefolder.$file,$zippedfolder.DS.$file );
-                     //TODO : fix this issue
-                     echo $this->sourcefolder.DS.$file;
-                     echo file_exists($this->sourcefolder.DS.$file);
                 }
                 $this->handlezip->close();
                 return true;
@@ -90,10 +86,19 @@ class Zip extends Object{
                 $this->Collect(Error::YE100);
                 return;
             }
-            $this->Create($folder);
+            $this->Create($folder); 
             $dir=new Dir($this->sourcefolder.$folder);
             $filelist=$dir->Entries(Yalamo::Fileonly);
-            if ($this->AddFiles((array)$filelist,$folder)){
+            //if ($this->AddFiles((array)$filelist,$folder)){
+             //   return true;
+           // }
+            if ( $this->handlezip->open($this->sourcefolder.$this->filename)===true) {
+                foreach ($filelist as $file){
+                     $this->handlezip->addFile($this->sourcefolder.$folder.DS.$file,$folder.DS.$file );
+                echo $this->sourcefolder.$folder.DS.$file;
+
+                }
+                $this->handlezip->close();
                 return true;
             }
             $this->Collect(Error::YE001);

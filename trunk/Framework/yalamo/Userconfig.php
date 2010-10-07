@@ -34,7 +34,7 @@
  * These arrays define the classes that should be auto-loaded
  */
 $AutoModules    = array('Cookie');
-$AutoHelpers    = array('Validator','String');
+$AutoHelpers    = array('Validator','Uri');
 $AutoExtensions = array('Javascript');
 
 //------------------------------------------------------------------------------
@@ -108,6 +108,6 @@ $AppConfig=array(
  */
 define("ENABLEALIAS",true);
 $Alias=array(
-    "fu"=>"getUrl",
+    "fu"=>"getUri",
     "fc"=>"getController"
 );
