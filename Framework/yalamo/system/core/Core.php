@@ -298,3 +298,10 @@ function __autoload($classname){
    $load=new Loader();
    $load->Module($classname);
 }
+
+
+class Profiler {
+
+
+
+}
