@@ -27,12 +27,14 @@
  */
 
 final class Validator {
-    const Name          ="//";
-    const Email         ="//";
-    const Password      ="//";
-    const Urlhttp       ="//";
-    const Urlhttps      ="//";
-    const Urlftp        ="//";
+    const Username      ="/^[a-z0-9_-]{3,16}$/";
+    const Password      ="/^[a-z0-9_-]{6,18}$/";
+    const Email         ="/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/";
+    const Ip            ="/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/";
+    const Urlhttp       ="/^(http:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/";
+    const Urlhttps      ="/^(https:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/";
+    const Urlftp        ="/^(ftp:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/";
+
     const Pcusa         ="//";
     const Pcuk          ="//";
     const Pcfrance      ="//";
