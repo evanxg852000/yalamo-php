@@ -111,3 +111,4 @@ $Alias=array(
     "fu"=>"getUri",
     "fc"=>"getController"
 );
+
