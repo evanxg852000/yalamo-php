@@ -332,8 +332,98 @@ class Object  extends ICollectable implements ISerialisable {
  *
  * The class to benchmarke the application speed
  */
-class Profiler {
+final class Profiler extends Object{
+    public static $instance=NULL;
+    private $checkpoints;
 
+    private function  __construct() {}
+    private function  __clone() {}
+    private function process($previous, $next){
+         $str=Yalamo::Void;
+         $str .="<tr>";
+		$str .="<td>".$previous['Name']."</td>";
+		$str .="<td>".$next['Name']."</td>";
 
+		$str .="<td>".$previous['Time']."</td>";
+		$str .="<td>".$next['Time']."</td>";
+                $v=$next['Time']+$previous['Time'];
+		$str .="<td>".$v."</td>";
 
+		$str .="<td>".$previous['EMemory']."</td>";
+		$str .="<td>".$next['EMemory']."</td>";
+                $v=$next['EMemory']-$previous['EMemory'];
+		$str .="<td>".$v."</td>";
+
+		$str .="<td>".$previous['RMemory']."</td>";
+		$str .="<td>".$next['RMemory']."</td>";
+                $v=$next['RMemory']-$previous['RMemory'];
+		$str .="<td>".$v."</td>";
+	$str .="</tr>";
+         return $str;
+    }
+    private function analyse($start, $end) {
+        $html='
+                <table id="profileanalyse">
+                <tr>
+                    <th colspan="2">Check Point</th>
+                    <th colspan="3">Time</th>
+                    <th colspan="3">Memory (Emalloc)</th>
+                    <th colspan="3">Memory (Real)</th>
+                </tr>
+                <tr>
+                    <td>From</td>
+                    <td>To</td>
+
+                    <td>Begin</td>
+                    <td>End</td>
+                    <td>Delta</td>
+
+                    <td>Begin</td>
+                    <td>End</td>
+                    <td>Delta</td>
+
+                    <td>Begin</td>
+                    <td>End</td>
+                    <td>Delta</td>
+                </tr>';
+        if(($start==Yalamo::All)||($end==Yalamo::All)){
+            $nbcpt=count($this->checkpoints);
+            for($i=0;$i<$nbcpt-1;$i++){
+                $html .=$this->process($this->checkpoints[$i],$this->checkpoints[$i+1]);
+            }
+        }
+        else {
+            if((!array_key_exists($start, $this->checkpoints)) || (!array_key_exists($end, $this->checkpoints))){
+                $this->Collect(Error::YE100);
+                return false;
+            }
+            //process here
+        }
+        $html .=$this->process($this->checkpoints[0], $this->checkpoints[count($this->checkpoints)-1]);
+        $html .="</table>";
+        return $html;
+    }
+    private function kbyte($m){ return @round($m/1024,2); }
+
+    public static function Instance(){
+        if(!self::$instance)
+        {
+            self::$instance=new Profiler();
+        }
+        return self::$instance;
+    }
+    public static function CheckPoint($name){
+        $ProfilerObject=  Profiler::Instance();
+        $ProfilerObject->checkpoints[]=array(
+            "Name"=>$name,
+            "Time"=>  microtime(true),
+            "EMemory"=>  $ProfilerObject->kbyte(memory_get_usage()),
+            "RMemory"=>  $ProfilerObject->kbyte(memory_get_usage(true))
+        );
+    } 
+    public static function Profile($start=Yalamo ::All, $end=Yalamo::All){
+        $ProfilerObject=  Profiler::Instance();
+        return $ProfilerObject->Analyse($start, $end);
+    }
+    
 }
