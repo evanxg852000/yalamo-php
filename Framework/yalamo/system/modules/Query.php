@@ -31,41 +31,42 @@ class Query {
     public function __construct() {
         $this->driverObject=Database::Instance()->Handle();
     }
-    public function  __toString() {return "Object of Type: Query"; }
+    public function __toString() {return "Object of Type: Query"; }
+
     public function Execute($sql){
-        $this->driverObject->Execute($sql);
+        return $this->driverObject->Execute($sql);
     }
     public function Select($table,$fields=Yalamo::All,$condition=Yalamo::Void){
         $this->driverObject->Select($table,$fields=Yalamo::All,$condition=Yalamo::Void);
     }
     public function Insert($table,$keys,$values,$single=true){
-        $this->driverObject->Insert($table,$keys,$values,$single=true);
+        return $this->driverObject->Insert($table,$keys,$values,$single=true);
     }
     public function Update($table,$values,$condition=Yalamo::Void){
-        $this->driverObject->Update($table,$values,$condition=Yalamo::Void);
+        return $this->driverObject->Update($table,$values,$condition=Yalamo::Void);
     }
     public function Delete($table,$condition=Yalamo::Void){
-        $this->driverObject->Delete($table,$condition=Yalamo::Void);
+        return $this->driverObject->Delete($table,$condition=Yalamo::Void);
     }
 
     public function ResultObject(){
-        $this->driverObject->ResultObject();
+        return $this->driverObject->ResultObject();
     }
     public function ResultSet(){
-        $this->driverObject->ResultSet();
+        return $this->driverObject->ResultSet();
     }
     public function ResultArray(){
-        $this->driverObject->ResultArray();
+       return $this->driverObject->ResultArray();
     }
 
     public function Fields(){
-        $this->driverObject->Fields();
+        return $this->driverObject->Fields();
     }
     public function NumRows(){
-        $this->driverObject->NumRows();
+        return $this->driverObject->NumRows();
     }
     public function AffectedRows(){
-        $this->driverObject->AffectedRows();
+        return $this->driverObject->AffectedRows();
     }
 
 }

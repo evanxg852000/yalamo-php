@@ -84,7 +84,7 @@ final class Database {
 abstract  class DBDriver extends ICollectable {
     protected  $connection;
     protected  $result;
-
+    
     /**
      * The methode that makes a derived class collectable by the inspector
      * and provide for that reason an easy way to raise error on that object

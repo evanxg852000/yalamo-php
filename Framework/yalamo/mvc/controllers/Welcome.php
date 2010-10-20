@@ -4,13 +4,16 @@ class Welcome extends Controller {
 public function Index(){
     $data['title']="Welcom >> Index";
     $data['content']="this is the content of my div from the welcome controller!";
- 
-    $m=$this->Model=$this->Load->Model('Users');
+    $this->Load->Module("Database");
 
-  // $m->InsertUser("Manigger");
 
+    $this->Model=$this->Load->Model('Users');
+
+   // $this->Model->InsertUser("Evance");
+
+    $data["users"]=$this->Model->SelectAll();
     
-      
+  
       $this->Load->View("index",$data);
  
 }

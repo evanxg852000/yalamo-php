@@ -63,7 +63,7 @@ final class Error {
      * @param Error::Enum     $type      The Error type, constant of Error class
      * @param Object          $subject   The subject is the Object on which the error was raised
      */
-    public function  __construct($type=Error::None,$subject=NULL) {
+    public function  __construct($type=Error::None,$subject=null) {
         $parts=explode("|",$type);    
         $this->num=str_replace("|","",$parts[0]);
         $this->string=$parts[1];
@@ -76,8 +76,8 @@ final class Error {
      * @param   bool    $dump  The optional parameter to explode the subject if set to true
      * @return  string         The description of the error
      */
-    public function  __toString($dump=false) {
-        return "Error: ".$this->Num()." , ".$this->String()." With Var= ".$this->Subject($dump);
+    public function  __toString() {
+        return "Error: ".$this->Num()." , ".$this->String()." With Var= ".$this->Subject(true);
     }
     
     /**

@@ -8,10 +8,13 @@ class Users extends Model {
         $u=new User();
         $u->id=null;
         $u->name=$name;
+
         $item=$u->Rows()->Create($u);
         parent::Insert($item);
     }
-
+    public function SelectAll(){
+        parent::Select();
+    }
 }
 
 class User extends Table{
