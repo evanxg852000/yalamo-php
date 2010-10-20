@@ -8,13 +8,15 @@ public function Index(){
 
 
     $this->Model=$this->Load->Model('Users');
-
+    $data["users"]=$this->Model->SelectAll();
    // $this->Model->InsertUser("Evance");
 
-    $data["users"]=$this->Model->SelectAll();
     
-  
-      $this->Load->View("index",$data);
+
+    
+    Profiler::CheckPoint("Controller");
+    $this->Load->View("index",$data);
+    
  
 }
 	

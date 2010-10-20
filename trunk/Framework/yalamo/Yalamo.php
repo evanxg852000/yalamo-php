@@ -50,3 +50,10 @@ require_once(YMVCFILE);
  *  Autoload user prefered files using the autoload array
  */
 Yalamo::Autoload($YAutoLoad);
+
+/**
+ * Initialise Profiler
+ */
+if(ENABLEPROFILING){
+   Profiler::CheckPoint("Init");
+}

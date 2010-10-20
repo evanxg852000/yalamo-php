@@ -14,6 +14,7 @@ class Users extends Model {
     }
     public function SelectAll(){
         parent::Select();
+        return $this->ResultObject();
     }
 }
 

@@ -112,3 +112,7 @@ $Alias=array(
     "fc"=>"getController"
 );
 
+/**
+ * Define whether the profilign is active or not
+ */
+define("ENABLEPROFILING",true);
