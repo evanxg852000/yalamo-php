@@ -28,7 +28,11 @@
  */
 final class Mysql extends DBDriver {
     public function  __construct() {
-        $this->result=NULL;
+        $this->result=null;
+        $this->resultset=null;
+        $this->resultarray=null;
+        $this->resultobject=null;
+
         $handle=@mysql_connect(DBSERVER,DBUSER,DBPASSWORD);
         $currentdb=mysql_select_db(DBNAME);
         if($handle && $currentdb){
@@ -101,7 +105,6 @@ final class Mysql extends DBDriver {
         }
         $sql="SELECT $fields FROM $table ".$condition." ;" ;
         $this->Execute($sql);
-        return $this->ResultSet();
     }
     public function Insert($table,$keys,$values,$single=true){
         if((!is_array($keys) || (!is_array($values)))){

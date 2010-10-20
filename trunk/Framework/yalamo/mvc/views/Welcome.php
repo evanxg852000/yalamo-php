@@ -6,7 +6,14 @@
 </head>
 <body>
 
-<?php   echo $content; ?>
+<?php   
+
+foreach ($users as  $user) {
+        echo $user."\n ";
+    }
+
+
+?>
     
 
 </body>

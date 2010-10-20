@@ -224,6 +224,46 @@ Class Uri {
      */
     public function Redirect($url){
         header("Location: $url" );
+        exit ();
+    }
+
+    /**
+     * This method create a url(to be used as href ) in mvc mode
+     *
+     * @param string $controller The controller of the url
+     * @param string $method     The method of the url
+     * @param strign $params     The query string
+     */
+    function CreateMvc($controller,$method,$params){
+        $paramstr=Yalamo::Void;
+        if(is_array($params)){
+            foreach($params as $param){
+                $paramstr .="/".$param;
+            }
+        }
+        if(substr($this->Base(), -1)==="/"){
+         return $this->Base()."$controller/$method/$paramstr";
+        }
+        return $this->Base()."/$controller/$method/$paramstr";
+    }
+
+    /**
+     * This method create a url(to be used as href ) in classic mode
+     *
+     * @param string $page       The page name
+     * @param strign $params     The query string
+     */
+    function CreateClassic($page,$params){
+        $paramstr=Yalamo::Void;
+        if(is_array($params)){
+            foreach($params as $param){
+                $paramstr .="/".$param;
+            }
+        }
+        if(substr($this->Base(), -1)==="/"){
+         return $this->Base()."$page/$paramstr";
+        }
+        return $this->Base()."/$page/$paramstr";
     }
     
 }

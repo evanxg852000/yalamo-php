@@ -100,6 +100,15 @@ class Model {
     }
 
     /**
+     * The getter for the numbers of rows from the
+     * last query
+     *
+     * @return int The numbers of rows
+     */
+    protected function NumRows(){
+        return $this->Query->NumRows();
+    }
+    /**
      * Select in the current table of the model from the database
      *
      * @param  string $condition    The conditions in sql statment to be appended to the query
@@ -107,7 +116,6 @@ class Model {
      */
     protected function Select($condition=Yalamo::Void){
         $this->Query->Select($this->Table,Yalamo::All,$condition);
-        return $this->Query->ResultObject();
     }
 
     /**
@@ -156,7 +164,7 @@ class Model {
  * the abstracte table  from the database. This helps make the model lighter, as well as opening
  * the oportinuity to deal with multiple tables in a single model
  */
-abstract  class Table{
+abstract  class Table extends Object {
 
     /**
      * Drop the abstracted table in the database
@@ -167,18 +175,12 @@ abstract  class Table{
     }
 
     /**
-     * The method that use reflexion to return an array of the class' fields
+     * This method returns the table fields
      *
-     * @return array Fields of the class
+     * @return array Fields of the table
      */
     public final function Fields(){
-       $reflection=new ReflectionClass($this);
-       $properties=$reflection->getProperties();
-       $result=array();
-        foreach ($properties as $property) {
-            $result[]=$property->getName();
-        }
-        return $result;
+        return $this->Properties(false);
     }
 
     /**
@@ -202,15 +204,15 @@ abstract  class Table{
  * into an actual table row usable in an sql Query object (or Database statement)
  * This class shouldn't be use directly. instead use it through The Table Class
  */
-final class TableRow{
+final class TableRow {
     /**
      * Table for which to create row
-     * @var string
+     * @var Object that inherite from table
      */
     private $table;
 
     /**
-     *  Constructor that sets up a table for which to generate a recors Row
+     *  Constructor that sets up a table for which to generate a record Row
      *
      * @param string $table Table that we want to create a record of kind
      */
@@ -219,7 +221,7 @@ final class TableRow{
     }
 
     /**
-     * Create a table row from an Object
+     * Create a table row from an Object that derives from Table
      *
      * @param (Table)Object $object The object that we want to convert into a usable TableRow
      * should be an object of the class passed as parameter
@@ -228,12 +230,7 @@ final class TableRow{
     public function Create($object){
         if(is_object($object)){
             if($object->Fields()==$this->table->Fields()){
-               $reflection=new ReflectionClass($object);
-               $properties=$reflection->getProperties();
-               $result=array();
-                foreach ($properties as $property) {
-                    $result[$property->getName()]=$property->getValue($object);
-                }
+                $result=$object->Properties();
                 return $result;
             }
         }

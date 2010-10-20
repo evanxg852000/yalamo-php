@@ -20,32 +20,32 @@
  * about uri. These functions can be called from oo mode
  */
 
-function getUri(){
+function GetUri(){
     $uri=new Uri() ;
     return $uri->Full();
 }
 
-function getUriBase(){
+function GetUriBase(){
     $uri=new Uri() ;
     return $uri->Base();
 }
 
-function getUriSegement($num){
+function GetUriSegement($num){
      $uri=new Uri() ;
      return $uri->Segment($num);
 }
 
-function getUriController(){
+function GetUriController(){
     $uri=new Uri() ;
     return $uri->Controller();
 }
 
-function getUriMethod(){
+function GetUriMethod(){
     $uri=new Uri() ;
      return $uri->Method();
 }
 
-function getUriQueryString(){
+function GetUriQueryString(){
     $uri=new Uri() ;
     return $uri->QueryString();
 }
@@ -56,29 +56,12 @@ function Redirect($url){
 }
 
 function MvcUrl($controller,$method,$params){
-    $paramstr=Yalamo::Void;
-    if(is_array($params)){
-        foreach($params as $param){
-            $paramstr .="/".$param;
-        }
-    }
-    $uri=new Uri();
-    if(substr($uri->Base(), -1)==="/"){
-     return $uri->Base()."$controller/$method/$paramstr";
-    }
-    return $uri->Base()."/$controller/$method/$paramstr";
+   $uri=new Uri();
+   return $uri->CreateMvc($controller, $method, $params);
 }
 
 function ClassicUrl($page,$params){
-    $paramstr=Yalamo::Void;
-    if(is_array($params)){
-        foreach($params as $param){
-            $paramstr .="/".$param;
-        }
-    }
-    $uri=new Uri();
-    if(substr($uri->Base(), -1)==="/"){
-     return $uri->Base()."$page/$paramstr";
-    }
-    return $uri->Base()."/$page/$paramstr";
+     $uri=new Uri();
+     return $uri->CreateClassic($page, $params);
 }
+

@@ -29,26 +29,13 @@ class Session extends Object {
     private static  $resgistry;
     private $id;
 
-
     public function  __construct() {
         session_start();
         $this->id=$_COOKIE["PHPSESSID"];
         self::$resgistry=$_SESSION;
     }
     public function  __toString() {return "Object of Type: Session"; }
-
-    private function  __set($name, $value) {
-        $_SESSION[$name]=$value;
-        self::$resgistry=$_SESSION;
-    }
-    private function  __get($name) {
-        if((array_key_exists($name, self::$resgistry)) && (array_key_exists($name, $_SESSION))){
-            return self::$resgistry[$name];
-        }
-        $this->Collect(Error::YE100);
-        return false;
-    }
-
+    
     public function Id(){
         return $this->id;
     }
@@ -56,10 +43,16 @@ class Session extends Object {
         return self::$resgistry;
     }
     public function Set($key, $value){
-        $this->$key=$value;
+         $_SESSION[$key]=$value;
+        self::$resgistry=$_SESSION;
     }    
     public function Get($key){
         return $this->$key;
+        if((array_key_exists($key, self::$resgistry)) && (array_key_exists($key, $_SESSION))){
+            return self::$resgistry[$key];
+        }
+        $this->Collect(Error::YE100);
+        return false;
     }
     public function Clear($keys=Yalamo::All){
         if($keys===Yalamo::All){
@@ -89,8 +82,8 @@ class Session extends Object {
         session_destroy();
         self::$resgistry=$_SESSION;
         if($redirect !==Yalamo::Void){
-            header ('Location: '.$redirect);
-            exit();
+            $uri=new Uri();
+            $uri->Redirect($redirect);
         }
     }
      

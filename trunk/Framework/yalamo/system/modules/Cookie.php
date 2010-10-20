@@ -59,9 +59,12 @@ class Cookie{
         return "Object of Type: Cookie";
     }
 
-    private function  __set($name, $value) {
-       if($this->path===Yalamo::Void){
-           setcookie($name, $value,  time()+$this->lifetime);
+    public function Registry(){
+        return self::$resgistry;
+    }
+    public function Set($key, $value){
+        if($this->path===Yalamo::Void){
+           setcookie($key, $value,  time()+$this->lifetime);
            self::$resgistry=$_COOKIE;
            return  true;
        }
@@ -71,20 +74,12 @@ class Cookie{
            return  true;
        }
     }
-    private function  __get($name) {
-        if((array_key_exists($name, self::$resgistry))&&(array_key_exists($name, $_COOKIE))){
-            return self::$resgistry[$name];
-        }
-    }
-
-    public function Registry(){
-        return self::$resgistry;
-    }
-    public function Set($key, $value){
-        $this->$key=$value;
-    }
     public function Get($key){
-        return $this->$key;
+        if((array_key_exists($key, self::$resgistry))&&(array_key_exists($key, $_COOKIE))){
+            return self::$resgistry[$key];
+        }
+        $this->Collect(Error::YE100);
+        return false;
     }
     public function Clear($keys=Yalamo::All){
         if($keys===Yalamo::All){

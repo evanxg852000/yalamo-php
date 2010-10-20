@@ -34,7 +34,7 @@
  * These arrays define the classes that should be auto-loaded
  */
 $AutoModules    = array('Cookie');
-$AutoHelpers    = array('Validator','Uri');
+$AutoHelpers    = array('Validator','Uri','Html');
 $AutoExtensions = array('Javascript');
 
 //------------------------------------------------------------------------------

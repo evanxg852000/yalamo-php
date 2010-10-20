@@ -214,6 +214,18 @@ final class Loader {
 
 //------------------------------------------------------------------------------
 /**
+ * Php internal auto loading
+ *
+ * @param string $classname The name of the class that's trying to be instanciated
+ */
+function __autoload($classname){
+   $load=new Loader();
+   $load->Module($classname);
+}
+
+
+//------------------------------------------------------------------------------
+/**
  * ISerialisable Interface
  *
  * The Interface for serialisable object.
@@ -245,7 +257,7 @@ abstract class ICollectable{
  * implementing base interfaces
  */
 class Object  extends ICollectable implements ISerialisable {
-    
+
     /**
      * The serialise method 
      * @return string The Object in string format
@@ -261,6 +273,31 @@ class Object  extends ICollectable implements ISerialisable {
      */
     public function Unserialize($Object){
         return (Object) unserialize($Object);
+    }
+
+    /**
+     *
+     * This method use reflexion to return an associated array of the class' members
+     * and their value
+     *
+     * @param bool $visible  If set to false, only the class' members will be returned
+     * @return array Members of the class
+     */
+    public function Properties($visible=true){
+        $reflection=new ReflectionClass($this);
+        $properties=$reflection->getProperties();
+        $result=array();
+        if($visible){
+            foreach ($properties as $property) {
+                $result[$property->getName()]=$property->getValue($this);
+            }
+        }
+        else{
+            foreach ($properties as $property) {
+                $result[]=$property->getName();
+            }
+        }
+        return $result;
     }
 
     /**
@@ -285,21 +322,16 @@ class Object  extends ICollectable implements ISerialisable {
         $inspector=Inspector::Instance();
         $inspector->Add($errortype,  $subject);
     }
+
 }
 
 
 //------------------------------------------------------------------------------
 /**
- * Php internal auto loading
+ * Profiler Class
  *
- * @param string $classname The name of the class that's trying to be instanciated
+ * The class to benchmarke the application speed
  */
-function __autoload($classname){
-   $load=new Loader();
-   $load->Module($classname);
-}
-
-
 class Profiler {
 
 

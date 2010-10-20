@@ -26,12 +26,10 @@
     <pre>
         <?php
 
-    
+           
            
            $i=  Inspector::Instance();
            $i->Investigate(true);
-
-           
 
         ?>
     </pre>
