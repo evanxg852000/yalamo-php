@@ -8,9 +8,10 @@ public function Index(){
 
 
     $this->Model=$this->Load->Model('Users');
-    $data["users"]=$this->Model->SelectAll();
+    //$data["users"]=$this->Model->SelectAll();
    // $this->Model->InsertUser("Evance");
 
+   //$this->Model->Escape();
     
 
     
@@ -24,9 +25,6 @@ public function Hello()	{
     $data['title'] = 'Welcome >> Hello';
     $data['content'] = 'wellcome hello content';
     $this->Load->View('Welcome',$data);
-
-
-    
 }
 
 

@@ -5,12 +5,10 @@
 <title><?php  echo $title ?></title>
 </head>
 <body>
-
+        welcom here
 <?php   
 
-foreach ($users as  $user) {
-        echo $user."\n ";
-    }
+
 
 
 ?>

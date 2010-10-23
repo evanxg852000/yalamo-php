@@ -341,36 +341,74 @@ final class Profiler extends Object{
     private function process($previous, $next){
          $str=Yalamo::Void;
          $str .="<tr>";
-		$str .="<td>".$previous['Name']."</td>";
-		$str .="<td>".$next['Name']."</td>";
+		$str .="<td class=\"checkpoint\">".$previous['Name']."</td>";
+		$str .="<td class=\"checkpoint\">".$next['Name']."</td>";
 
-		$str .="<td>".$previous['Time']."</td>";
-		$str .="<td>".$next['Time']."</td>";
-                $v=$next['Time']+$previous['Time'];
-		$str .="<td>".$v."</td>";
+		$str .="<td>".round($previous['Time'],3)."</td>";
+		$str .="<td>".round($next['Time'],3)."</td>";
+                $v=round($next['Time']-$previous['Time'],3);
+		$str .="<td class=\"delta\">".$v."</td>";
 
 		$str .="<td>".$previous['EMemory']."</td>";
 		$str .="<td>".$next['EMemory']."</td>";
                 $v=$next['EMemory']-$previous['EMemory'];
-		$str .="<td>".$v."</td>";
+		$str .="<td class=\"delta\">".$v."</td>";
 
 		$str .="<td>".$previous['RMemory']."</td>";
 		$str .="<td>".$next['RMemory']."</td>";
                 $v=$next['RMemory']-$previous['RMemory'];
-		$str .="<td>".$v."</td>";
+		$str .="<td class=\"delta\">".$v."</td>";
 	$str .="</tr>";
          return $str;
     }
     private function analyse($start, $end) {
         $html='
+                <style type="text/css">
+                    table#profileanalyse {
+                            border:solid 1px #918e8e;
+                            text-align:center;
+                            border-spacing:1px;
+                            font-family:calibri ;
+                    }
+
+                    table#profileanalyse td {
+                            border: solid  1px #918e8e;
+                            padding: 3px;
+                            text-align:center;
+
+                    }
+
+                    table#profileanalyse th {
+                            background-color: #8dc4fc;
+                            border: solid  1px #918e8e;
+                            padding: 3px;
+                    }
+                    table#profileanalyse .subth {
+                            background-color: #d2e1f4;
+                            border: solid  1px #918e8e;
+                            padding: 3px;
+                            font-style:italic;
+                    }
+                    table#profileanalyse .delta {
+                          color: #8cc75f;
+                          font-weight:bold;
+                    }
+                    table#profileanalyse .checkpoint {
+                            background-color: #8cb73f;
+                            border: solid  1px #918e8e;
+                            padding: 3px;
+                            font-style:italic;
+                            font-weight:bold;
+                    }
+                </style>
                 <table id="profileanalyse">
                 <tr>
                     <th colspan="2">Check Point</th>
-                    <th colspan="3">Time</th>
-                    <th colspan="3">Memory (Emalloc)</th>
-                    <th colspan="3">Memory (Real)</th>
+                    <th colspan="3">Time (s)</th>
+                    <th colspan="3">Memory Emalloc (ko)</th>
+                    <th colspan="3">Memory Real (ko)</th>
                 </tr>
-                <tr>
+                <tr class="subth">
                     <td>From</td>
                     <td>To</td>
 
@@ -416,14 +454,14 @@ final class Profiler extends Object{
         $ProfilerObject=  Profiler::Instance();
         $ProfilerObject->checkpoints[]=array(
             "Name"=>$name,
-            "Time"=>  microtime(true),
+            "Time"=>microtime(true),
             "EMemory"=>  $ProfilerObject->kbyte(memory_get_usage()),
             "RMemory"=>  $ProfilerObject->kbyte(memory_get_usage(true))
         );
     } 
     public static function Profile($start=Yalamo ::All, $end=Yalamo::All){
         $ProfilerObject=  Profiler::Instance();
-        return $ProfilerObject->Analyse($start, $end);
+        return $ProfilerObject->analyse($start, $end);
     }
     
 }

@@ -118,7 +118,7 @@ abstract  class DBDriver extends ICollectable {
     public abstract function Databases();
 
     public abstract function Escape($vars);
-    public abstract function Prepare($sql);
+    public abstract function Prepare($sql,$data);
 
     public abstract function Execute($sql);
     public abstract function Select($table,$fields=Yalamo::All,$condition=Yalamo::Void);

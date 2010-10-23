@@ -16,6 +16,13 @@ class Users extends Model {
         parent::Select();
         return $this->ResultObject();
     }
+    public function Escape(){
+        $vars="evance'soumaor \nis fiek ";
+        echo  $this->Query->Escape($vars);
+        echo $this->Query->Prepare("SELECT* FROM Table Where Name={name} AND Age={age} ", array("name"=>"evan'ce","age"=>56));
+
+    }
+
 }
 
 class User extends Table{
