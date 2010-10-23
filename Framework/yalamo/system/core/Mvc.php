@@ -94,7 +94,6 @@ final class Mediator {
      */
     public function Route(){
         $load=new Loader();
-
         if(MODE==Yalamo::Classic){
             $load->Page($this->page);
             return;

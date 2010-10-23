@@ -76,8 +76,8 @@ final class Mysql extends DBDriver {
 
     public function Escape($vars) {
         if(is_array($vars)){
-            for($i=0 ; $i<count($vars); $i++) {
-                $vars[$i]=@mysql_real_escape_string($vars[$i], $this->connection);
+            foreach ($vars as $key => $val) {
+                $vars[$key]=@mysql_real_escape_string($val, $this->connection);
             }
         }
         else{
@@ -85,8 +85,18 @@ final class Mysql extends DBDriver {
         }
         return $vars;
     }
-    public function Prepare($sql) {
-      $this->Collect(Error::YE001);
+    public function Prepare($sql,$data) {
+      if(is_array($data)){
+          foreach ($data as $key => $val) {
+              $val=  $this->Escape($val);
+              $sql=str_replace("{".$key."}", $val, $sql);
+          }
+        return $sql;
+      }
+      else {
+          $this->Collect(Error::YE101);
+          return false;
+      }
     }
 
     public function Execute($sql) {

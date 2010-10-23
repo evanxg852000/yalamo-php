@@ -33,6 +33,13 @@ class Query {
     }
     public function __toString() {return "Object of Type: Query"; }
 
+    public function Escape($vars) {
+        return $this->driverObject->Escape($vars);
+    }
+    public function Prepare($sql,$data) {
+        return $this->driverObject->Prepare($sql,$data);
+    }
+
     public function Execute($sql){
         return $this->driverObject->Execute($sql);
     }

@@ -25,10 +25,8 @@
     
     <pre>
 </pre>
+
         <?php
-        foreach ($users as $value) {
-            echo $value->Name."\n";
-        }
 
             Profiler::CheckPoint("View");
            
@@ -36,6 +34,9 @@
            $i->Investigate(true);
 
           echo Profiler::Profile();
+
+          
+
         ?>
     
 
