@@ -91,7 +91,7 @@ $AppConfig=array(
     'AdminEmail'=> 'evanxg852000@yahoo.fr',
     'Title'=>'Yalamo Framework',
     'Copyright'=> 'Evansofts 2010'
-//  'key' => 'value'
+//  'key' => 'value' 
 );
 
 
