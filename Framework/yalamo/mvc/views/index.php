@@ -28,12 +28,12 @@
 
         <?php
 
-            Profiler::CheckPoint("View");
+        Profiler::CheckPoint("View");
            
-           $i=  Inspector::Instance();
-           $i->Investigate(true);
+        $i=  Inspector::Instance();
+        $i->Investigate(true);
 
-          echo Profiler::Profile();
+        echo Profiler::Profile();
 
           
 
