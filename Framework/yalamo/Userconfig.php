@@ -90,7 +90,7 @@ define("DEFAULTPAGE", "Classic");
 $AppConfig=array(
     'AdminEmail'=> 'evanxg852000@yahoo.fr',
     'Title'=>'Yalamo Framework',
-    'Copyright'=> 'Evansofts 2010',
+    'Copyright'=> 'Evansofts 2010'
 //  'key' => 'value'
 );
 
