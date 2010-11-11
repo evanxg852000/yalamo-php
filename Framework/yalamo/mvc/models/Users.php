@@ -2,6 +2,7 @@
 class Users extends Model {
     public function  __construct() {
         parent::__construct();
+        $this->Component("Keylinker");
     }
 
     public function InsertUser($name){
