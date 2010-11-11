@@ -122,7 +122,7 @@ final class Mediator {
  * The class that define the mvc controller base class and its base fucntionalities
  * and members
  */
-abstract class Controller {
+abstract class Controller extends Object {
     /**
      * @var array Variables of the controller that can be passed as data parameter
      *            when loading the view
@@ -155,6 +155,11 @@ abstract class Controller {
         $this->Variables=array();
         $this->Load=new Loader();
         $this->Uri=new Uri();
+        $this->Model=$this->Load->Model(get_class($this));
+    }
+
+    protected function Component($name){
+        return $this->Load->Component($name, "controllers");
     }
 
     /**

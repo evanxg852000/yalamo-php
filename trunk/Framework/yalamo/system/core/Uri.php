@@ -27,6 +27,18 @@
  * to do useful thing.
  */
 Class Uri {
+    const Controller="{controller}";
+    const Method="{method}";
+    const Params="{params}";
+
+// "/{section}/{controler}/{method}/{params}/"
+    
+    /**
+     * Map uris, for routing
+     * @var array
+     */
+    private static $map=array();
+
     /**
      * Base uri, define in Userconfig.php file is the web app url
      * @var string
@@ -74,7 +86,13 @@ Class Uri {
      * @var array
      * @example [ option,vip ]
      */
-    private $querystr=array();   
+    private $querystr=array();
+
+    /**
+     * Custome uri scheme for routing
+     * @var array
+     */
+    private $custome=array();
 
     /**
      * Constructor
@@ -227,6 +245,14 @@ Class Uri {
         exit ();
     }
 
+    public static function Map(){
+        return Uri::$map;
+    }
+
+    public static function Connect($curi,$nuri){
+        Uri::$map[$curl]=$nuri;
+    }
+
     /**
      * This method create a url(to be used as href ) in mvc mode
      *
@@ -234,7 +260,7 @@ Class Uri {
      * @param string $method     The method of the url
      * @param strign $params     The query string
      */
-    function CreateMvc($controller,$method,$params){
+    public function CreateMvc($controller,$method,$params){
         $paramstr=Yalamo::Void;
         if(is_array($params)){
             foreach($params as $param){
@@ -253,7 +279,7 @@ Class Uri {
      * @param string $page       The page name
      * @param strign $params     The query string
      */
-    function CreateClassic($page,$params){
+    public function CreateClassic($page,$params){
         $paramstr=Yalamo::Void;
         if(is_array($params)){
             foreach($params as $param){
@@ -265,5 +291,7 @@ Class Uri {
         }
         return $this->Base()."/$page/$paramstr";
     }
+
     
+
 }

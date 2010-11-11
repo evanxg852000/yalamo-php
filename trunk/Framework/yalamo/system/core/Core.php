@@ -113,8 +113,12 @@ final class Loader {
      */
     public function Model($model){
         $fullpath=MVCPATH."models".DS.ucwords($model).EXT;
-        $this->Load($fullpath);
-        return new $model();
+        if($this->Load($fullpath)){
+            return new $model();
+        }
+         else {
+             return null;
+        }   
     }
 
     /**
@@ -146,6 +150,21 @@ final class Loader {
     public function Page($page){
         $fullpath=ucwords($page).EXT;
         $this->Load($fullpath);
+    }
+
+    /**
+     * Loads Component from the model , contoller  directory
+     *
+     * @param string $name The name of the component
+     */
+    public function Component($component,$type){
+       $fullpath=MVCPATH.$type.DS."components".DS.ucwords($component).EXT;
+       if($this->Load($fullpath)){
+            return new $component();
+        }
+         else {
+             return null;
+        } 
     }
 
     /**
@@ -203,6 +222,7 @@ final class Loader {
         }
         if(file_exists($fullpath)){
             require_once ($fullpath);
+            return true;
         }
         else{
             return false;
@@ -324,6 +344,24 @@ class Object  extends ICollectable implements ISerialisable {
     }
 
 }
+
+//------------------------------------------------------------------------------
+/**
+ * Component Class
+ *
+ * The base class for Component  
+ */
+class Component  extends Object {
+    protected $Load;
+    
+    public function  __construct() {
+        $this->Load=new Loader();
+    }
+    public function  __destruct() {}
+    public function  __toString() {return "Object of Type: Component"; }
+    
+}
+
 
 
 //------------------------------------------------------------------------------

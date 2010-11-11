@@ -27,7 +27,7 @@
  *
  * The class that contains the mcv model's  base class
  */
-class Model {
+class Model extends Object {
     /**
      * Query Object of the model
      *
@@ -152,7 +152,12 @@ class Model {
         $this->Query->Delete($this->Table, $condition);
         return $this->Query->AffectedRows();
     }
-    
+
+    protected function Component($name){
+         $l=new Loader();
+         return $l->Component($name, "models");
+    }
+
 }
 
 
