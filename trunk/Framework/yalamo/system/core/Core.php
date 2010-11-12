@@ -62,6 +62,121 @@ final class Yalamo {
     
 }
 
+//------------------------------------------------------------------------------
+/**
+ * ISerialisable Interface
+ *
+ * The Interface for serialisable object.
+ */
+interface ISerialisable {
+    public function Serialize();
+    public function Unserialize($object);
+}
+
+//------------------------------------------------------------------------------
+/**
+ * Abstract Class ICollectable
+ *
+ * Every class that raise yalamo error to be collected by the Inspector
+ * should implement to get more hierarchical capabilities
+ * is actually an Interface but for the reason that Php only allow Public methods
+ * in interfaces it is declared as an abstract class
+ */
+abstract class ICollectable{
+    abstract protected function Collect($errortype);
+    abstract protected function PCollect($errortype,$subject);
+}
+
+//------------------------------------------------------------------------------
+/**
+ * Object Class
+ *
+ * The base Object of classes that want to use base functionalities without
+ * implementing base interfaces
+ */
+class Object  extends ICollectable implements ISerialisable {
+
+    /**
+     * The serialise method
+     * @return string The Object in string format
+     */
+    public function Serialize(){
+        return serialize($this);
+    }
+
+    /**
+     *
+     * @param  string $Object   The object in string format
+     * @return Object           The object in pure Object format
+     */
+    public function Unserialize($Object){
+        return (Object) unserialize($Object);
+    }
+
+    /**
+     *
+     * This method use reflexion to return an associated array of the class' members
+     * and their value
+     *
+     * @param bool $visible  If set to false, only the class' members will be returned
+     * @return array Members of the class
+     */
+    public function Properties($visible=true){
+        $reflection=new ReflectionClass($this);
+        $properties=$reflection->getProperties();
+        $result=array();
+        if($visible){
+            foreach ($properties as $property) {
+                $result[$property->getName()]=$property->getValue($this);
+            }
+        }
+        else{
+            foreach ($properties as $property) {
+                $result[]=$property->getName();
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * The methode that makes a derived class collectable by the inspector
+     * and provide for that reason an easy way to raise error on that object
+     *
+     * @param Error::Enum $errortype
+     */
+    protected function Collect($errortype) {
+        $inspector=Inspector::Instance();
+        $inspector->Add($errortype,  $this);
+    }
+
+    /**
+     * The P means Personalised which helps passed a specific object rather that the
+     * Top level object
+     *
+     * @param Error::Enum $errortype
+     * @param mixed $subject
+     */
+    protected function PCollect($errortype,$subject){
+        $inspector=Inspector::Instance();
+        $inspector->Add($errortype,  $subject);
+    }
+
+}
+
+//------------------------------------------------------------------------------
+/**
+ * Component Class
+ *
+ * The base class for Component
+ */
+class Component  extends Object {
+    protected $Load;
+    public function  __construct() {
+        $this->Load=new Loader();
+    }
+    public function  __destruct() {}
+    public function  __toString() {return "Object of Type: Component"; }
+}
 
 //------------------------------------------------------------------------------
 /**
@@ -70,7 +185,7 @@ final class Yalamo {
  * The class that contains the framework enumeration and static methods
  * to do useful thing.
  */
-final class Loader {
+final class Loader extends Object {
     public function  __construct() {}
     public function  __destruct() {}
     public function  __toString() {return "Object of Type: Loader"; }
@@ -234,138 +349,6 @@ final class Loader {
 
 //------------------------------------------------------------------------------
 /**
- * Php internal auto loading
- *
- * @param string $classname The name of the class that's trying to be instanciated
- */
-function __autoload($classname){
-   $load=new Loader();
-   $load->Module($classname);
-}
-
-
-//------------------------------------------------------------------------------
-/**
- * ISerialisable Interface
- *
- * The Interface for serialisable object.
- */
-interface ISerialisable {
-    public function Serialize();
-    public function Unserialize($object);
-}
-
-//------------------------------------------------------------------------------
-/**
- * Abstract Class ICollectable 
- *
- * Every class that raise yalamo error to be collected by the Inspector
- * should implement to get more hierarchical capabilities
- * is actually an Interface but for the reason that Php only allow Public methods
- * in interfaces it is declared as an abstract class
- */
-abstract class ICollectable{
-    abstract protected function Collect($errortype);
-    abstract protected function PCollect($errortype,$subject);
-}
-
-//------------------------------------------------------------------------------
-/**
- * Object Class
- *
- * The base Object of classes that want to use base functionalities without
- * implementing base interfaces
- */
-class Object  extends ICollectable implements ISerialisable {
-
-    /**
-     * The serialise method 
-     * @return string The Object in string format
-     */
-    public function Serialize(){
-        return serialize($this);
-    }
-
-    /**
-     *
-     * @param  string $Object   The object in string format
-     * @return Object           The object in pure Object format
-     */
-    public function Unserialize($Object){
-        return (Object) unserialize($Object);
-    }
-
-    /**
-     *
-     * This method use reflexion to return an associated array of the class' members
-     * and their value
-     *
-     * @param bool $visible  If set to false, only the class' members will be returned
-     * @return array Members of the class
-     */
-    public function Properties($visible=true){
-        $reflection=new ReflectionClass($this);
-        $properties=$reflection->getProperties();
-        $result=array();
-        if($visible){
-            foreach ($properties as $property) {
-                $result[$property->getName()]=$property->getValue($this);
-            }
-        }
-        else{
-            foreach ($properties as $property) {
-                $result[]=$property->getName();
-            }
-        }
-        return $result;
-    }
-
-    /**
-     * The methode that makes a derived class collectable by the inspector
-     * and provide for that reason an easy way to raise error on that object
-     *
-     * @param Error::Enum $errortype
-     */
-    protected function Collect($errortype) {
-        $inspector=Inspector::Instance();
-        $inspector->Add($errortype,  $this);
-    }
-
-    /**
-     * The P means Personalised which helps passed a specific object rather that the
-     * Top level object
-     *
-     * @param Error::Enum $errortype
-     * @param mixed $subject
-     */
-    protected function PCollect($errortype,$subject){
-        $inspector=Inspector::Instance();
-        $inspector->Add($errortype,  $subject);
-    }
-
-}
-
-//------------------------------------------------------------------------------
-/**
- * Component Class
- *
- * The base class for Component  
- */
-class Component  extends Object {
-    protected $Load;
-    
-    public function  __construct() {
-        $this->Load=new Loader();
-    }
-    public function  __destruct() {}
-    public function  __toString() {return "Object of Type: Component"; }
-    
-}
-
-
-
-//------------------------------------------------------------------------------
-/**
  * Profiler Class
  *
  * The class to benchmarke the application speed
@@ -496,10 +479,98 @@ final class Profiler extends Object{
             "EMemory"=>  $ProfilerObject->kbyte(memory_get_usage()),
             "RMemory"=>  $ProfilerObject->kbyte(memory_get_usage(true))
         );
-    } 
+    }
     public static function Profile($start=Yalamo ::All, $end=Yalamo::All){
         $ProfilerObject=  Profiler::Instance();
         return $ProfilerObject->analyse($start, $end);
     }
-    
+
+}
+
+//------------------------------------------------------------------------------
+/**
+ * Sanitizer Class
+ *
+ * The class that cleans input data
+ */
+final class Sanitizer extends Object {
+    private static $instance=NULL;
+    private static $ListNoc;
+
+    private  function   __construct() {
+        self::$ListNoc=array(
+            "<"=>"&lt;",
+            ">"=>"&gt;",
+            "\'"=>"'"
+        );
+    }
+    private function  __clone() { }
+    public  function  __toString() { return "Object of Type: Sanitizer";}
+
+    public function CleanOut($data,$blacklist=NULL){
+        self::AddToList($blacklist);
+        if(is_array($data)){
+              $result=array();
+              foreach ($data as $key => $value) {
+                 $result[$key]=$this->CleanOut($value, $blacklist);
+              }
+              return $result;
+        }
+        return str_replace(array_keys(self::$ListNoc),  array_values(self::$ListNoc), $data);;
+    }
+    public function CleanIn($data,$blacklist=NULL){
+        self::$ListNoc=array_flip(self::$ListNoc);
+        return $this->CleanOut($data,$blacklist);
+    }
+
+    public static function Instance(){
+        if(!self::$instance)
+        {
+            self::$instance=new Sanitizer();
+        }
+        return self::$instance;
+    }
+
+    public static  function AddToList($blacklist){
+        if(is_array($blacklist)){
+            self::$ListNoc=array_merge($blacklist,self::$ListNoc);
+        }
+    }
+    /**
+     * Filter data for Output to the client browser
+     * @param mixed $data The data to be filtered can be array of string or string
+     */
+    public static function ForOut($data,$blacklist=null){
+        return Sanitizer::Instance()->CleanOut($data,$blacklist);
+    }
+
+    /**
+     * Filter data for Input from the client
+     * @param mixed $data The data to be filtered can be array of string or string
+     */
+    public static function ForIn($data,$blacklist=null){
+        return Sanitizer::Instance()->CleanIn($data,$blacklist);
+    }
+
+}
+
+
+/*========== CORE FUNTIONS ===================================================*/
+
+/**
+ * Php internal auto loading
+ *
+ * @param string $classname The name of the class that's trying to be instanciated
+ */
+function __autoload($classname){
+   $load=new Loader();
+   $load->Module($classname);
+}
+
+function y($data){
+    echo Sanitizer::ForOut($data);
+}
+
+function _y($object){
+    print_r($object);
 }

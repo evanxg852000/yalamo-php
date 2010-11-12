@@ -32,7 +32,7 @@ class File extends Object {
     }
     
     public function Create($content=""){
-        $handle=fopen($this->path->Path(),'w');
+        $handle=fopen($this->path->FullPath(),'w');
 	if(fwrite($handle,$content)){
             fclose($handle);
             $this->existance=true;
@@ -44,8 +44,8 @@ class File extends Object {
 	}
     }
     public function Content(){
-        if(file_exists($this->path->Path())){
-           return file_get_contents($this->path->Path());
+        if(file_exists($this->path->FullPath())){
+           return file_get_contents($this->path->FullPath());
         }
         $this->Collect(Error::YE205);
         return false;       
@@ -56,8 +56,8 @@ class File extends Object {
     }
 
     public function Append($content){
-        if (file_exists($this->path->Path())){
-            $handle=fopen($this->path->Path(),'a');
+        if (file_exists($this->path->FullPath())){
+            $handle=fopen($this->path->FullPath(),'a');
             fwrite($handle,$content);
             fclose($handle);
             return true;
@@ -70,15 +70,15 @@ class File extends Object {
         if((file_exists($dest)) && ($overwrite==false)){
             return false;
         }
-        if (file_exists($this->path->Path())){
-          return  @copy($this->path->Path(), $dest);
+        if (file_exists($this->path->FullPath())){
+          return  @copy($this->path->FullPath(), $dest);
         }
         $this->Collect(Error::YE205);
         return false;
     }
     public function Delete(){
-        if(file_exists($this->path->Path())){
-            return  @unlink($this->path->Path());
+        if(file_exists($this->path->FullPath())){
+            return  @unlink($this->path->FullPath());
         }
         $this->Collect(Error::YE205);
         return false;
@@ -98,7 +98,7 @@ class File extends Object {
        return $postmaxsize;
     }
     public function Upload($files,$allowedmimetypes=array("image/gif","image/png","image/bmp","image/jpg","image/jpeg","text/pdf","text/txt" )){
-        if($this->path->IsDirectory()){ $targetfolder=$this->path->Path();}
+        if($this->path->IsDirectory()){ $targetfolder=$this->path->FullPath();}
         echo $targetfolder;
         $maxupload=$this->maxupload();
         if( (!is_array($files)) || (empty($files))){
@@ -135,7 +135,7 @@ class File extends Object {
 	}
     }  
     public function Download($targetfolder){
-        return @copy($this->path->Path(), $targetfolder.$this->path->FileName());
+        return @copy($this->path->FullPath(), $targetfolder.$this->path->FileName());
     }
   
 }

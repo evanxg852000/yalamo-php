@@ -7,10 +7,11 @@ public function Index(){
     $this->Load->Module("Database");
 
     $s=$this->Component("Sizer");
-   
 
 
-   $this->Model=$this->Load->Model('Users');
+    
+
+    $this->Model=$this->Load->Model('Users');
    
     //$data["users"]=$this->Model->SelectAll();
    // $this->Model->InsertUser("Evance");
