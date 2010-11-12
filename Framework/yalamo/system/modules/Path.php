@@ -55,7 +55,7 @@ final class Path {
         $this->info=pathinfo($this->path);
     }
 
-    public function Path(){
+    public function FullPath(){
         return $this->path;
     }
     public function Segements(){

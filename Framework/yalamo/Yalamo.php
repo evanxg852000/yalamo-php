@@ -24,7 +24,7 @@
 /**
  * Set error level
  */
-error_reporting(E_ALL);
+error_reporting(E_ALL|E_STRICT);
 
 /**
  * Define file system variable as constants

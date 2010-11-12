@@ -36,7 +36,7 @@ class Zip extends Object{
 
         public function __construct($sourcefolder,$filename){
            $sourcefolder=new Path($sourcefolder);
-           $this->sourcefolder = $sourcefolder->Path();
+           $this->sourcefolder = $sourcefolder->FullPath();
            $this->filename=$filename.Zip::extension;
            $this->handlezip = new ZipArchive();
 	}

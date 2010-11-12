@@ -23,8 +23,11 @@
         <?php echo $content ?>
     </div>
     
+    
     <pre>
-</pre>
+
+    </pre>
+    
 
         <?php
 

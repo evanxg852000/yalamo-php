@@ -66,10 +66,4 @@ function loadController($controller){
     $load->Controller($controller);
 }
 
-function y($string){
-    echo $string;
-}
 
-function _y($object){
-    print_r($object);
-}

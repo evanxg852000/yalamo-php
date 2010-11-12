@@ -39,6 +39,12 @@ final class Validator {
     const Pcuk          ="//";
     const Pcfrance      ="//";
 
+    const Int="//";
+    const String="//";
+    const Float="//";
+    const Date="//";
+    const Time="//";
+
     private $regex;
 
     public function __construct($rule) {

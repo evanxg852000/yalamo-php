@@ -44,7 +44,7 @@ final class Dir extends Object{
 
 
     public function  Create($recurssive=true){
-        if (@mkdir($this->path->Path(), 0750,$recurssive)) {
+        if (@mkdir($this->path->FullPath(), 0750,$recurssive)) {
             return true;
         }
          $this->Collect(Error::YE204);
@@ -52,16 +52,16 @@ final class Dir extends Object{
     }
 
     public function  Delete(){
-        return $this->erase($this->path->Path());
+        return $this->erase($this->path->FullPath());
     }
 
     public function  Entries($filter=Yalamo::All,$sort=true){
-        if(!file_exists($this->path->Path())){
+        if(!file_exists($this->path->FullPath())){
             $this->Collect(Error::YE200);
             return false;
         }
         $entrylist=array();
-	$handle = @opendir($this->path->Path());
+	$handle = @opendir($this->path->FullPath());
 	while ($file = @readdir($handle)) {
              if (substr($file, -1)!="." ) {
 		$entrylist[]= $file;
@@ -71,7 +71,7 @@ final class Dir extends Object{
         if($filter===Yalamo::Fileonly){
             $templist=array();
             foreach ($entrylist as $entry){
-                if(is_file($this->path->Path().$entry)){
+                if(is_file($this->path->FullPath().$entry)){
                     $templist[]=$entry;
                 }
                 clearstatcache();
@@ -81,7 +81,7 @@ final class Dir extends Object{
         if($filter===Yalamo::Dironly){
             $templist=array();
             foreach ($entrylist as $entry){
-                if(is_dir($this->path->Path().$entry)){
+                if(is_dir($this->path->FullPath().$entry)){
                     $templist[]=$entry;
                 }
             }
