@@ -421,6 +421,10 @@ final class Profiler extends Object{
                             font-style:italic;
                             font-weight:bold;
                     }
+                    table#profileanalyse td:hover {
+                            background-color: #cfcfcf;
+                            cursor:pointer;
+                    }
                 </style>
                 <table id="profileanalyse">
                 <tr>

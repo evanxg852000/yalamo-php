@@ -31,7 +31,9 @@ final class Error {
     /* Base zone */
     const YE000 = "YE000| There is not an error";
     const YE001 = "YE001| Method or function not implemented";
-    
+    const YE002 = "YE002| Not Appropriate Object";
+
+
     /* Arguments zone */
     const YE100 = "YE101| Invalid index suplied for array";
     const YE101 = "YE101| Invalid argument suplied ";

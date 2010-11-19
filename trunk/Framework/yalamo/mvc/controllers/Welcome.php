@@ -6,12 +6,12 @@ public function Index(){
     $data['content']="this is the content of my div from the welcome controller!";
     $this->Load->Module("Database");
 
-    $s=$this->Component("Sizer");
+   // $s=$this->Component("Sizer");
 
-
+    $this->Delegate($this->Uri->Segment(2));
     
 
-    $this->Model=$this->Load->Model('Users');
+   // $this->Model=$this->Load->Model('Users');
    
     //$data["users"]=$this->Model->SelectAll();
    // $this->Model->InsertUser("Evance");
@@ -20,7 +20,7 @@ public function Index(){
     
 
     
-    Profiler::CheckPoint("Controller");
+   Profiler::CheckPoint("Controller");
     $this->Load->View("index",$data);
     
  
