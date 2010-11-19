@@ -116,10 +116,3 @@ $Alias=array(
  * Define whether the profilign is active or not
  */
 define("ENABLEPROFILING",true);
-
-
-//TODO: add url mapper
-//TODO: add shared component in models/ and controlers/
-//TODO: add helpers
-
-//Uri::Connect("admin/pages/edit/3","/{section}/{controler}/{method}/{params}/");

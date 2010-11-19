@@ -84,9 +84,7 @@ final class Mediator {
            if ((!file_exists($file)) || (!is_readable($file))){
                $this->controller ="Error404";
            }
-        }
-
-        
+        }  
      }
 
     /**
@@ -104,9 +102,18 @@ final class Mediator {
         //create an instance of the controller
         $class = $this->controller ;
         $this->controllerinstance = new $class();
+        if(!is_subclass_of($this->controllerinstance,Controller::Baseclass)){
+            $this->Collect(Error::YE002);
+            return;  
+        }
+         //check if the method is not empty
+         if($this->method==Yalamo::Void){
+             $this->method = 'Index';
+         }
         //check if the method is callable
-        if (is_callable(array($this->controllerinstance, $this->method)) == false){
-            $this->method = 'Index';
+        if (! is_callable(array($this->controllerinstance, $this->method))){
+            $load->Page("Error404");
+            exit();
         }
         //call the method
         $varmethod=$this->method;
@@ -123,6 +130,9 @@ final class Mediator {
  * and members
  */
 abstract class Controller extends Object {
+    const Sub="Sub";
+    const Baseclass="Controller";
+
     /**
      * @var array Variables of the controller that can be passed as data parameter
      *            when loading the view
@@ -157,9 +167,31 @@ abstract class Controller extends Object {
         $this->Uri=new Uri();
         $this->Model=$this->Load->Model(get_class($this));
     }
+    public function  __toString() {return "Object of Type: Controller"; }
 
     protected function Component($name){
         return $this->Load->Component($name, "controllers");
+    }
+
+    protected function Delegate($method) {
+        //get the name of the subcontroller
+        $Subcontroller= Controller::Sub.strtolower(get_class($this));
+        $this->Load->Controller($Subcontroller);
+        $Subinstance=new $Subcontroller();
+        if(!is_subclass_of($Subinstance, Controller::Baseclass)){
+            $this->Collect(Error::YE002);
+            return;
+        }
+        if($method==Yalamo::Void){
+            $method="Index";
+        }
+        //check if the method is callable
+        if (! is_callable(array($Subinstance, $method))){
+            $this->Load->Page("Error404");
+            exit();
+        }
+        //call the method
+        $Subinstance->$method();  
     }
 
     /**
