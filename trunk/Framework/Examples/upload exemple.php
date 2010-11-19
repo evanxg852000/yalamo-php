@@ -39,3 +39,17 @@ zip exemple
 
 
 ?>
+
+//exemple Pagination
+   $l=new Loader();
+        $l->Extension("Paginator");
+        Paginator::$Configuration=array(
+            "ItemPerPage"=>10,
+            "Class"=>"pagination",
+            "Previous"=>array("Text"=>"« Previous","Class"=>"previous"),
+            "Next"=>array("Text"=>"Next »","Class"=>'next'),
+            "Current"=>array("Class"=>"current"),
+            "Desable"=>array("Class"=>"off")
+        );
+        $p=new Paginator();
+        $p->Render(38,"/test/page/");
