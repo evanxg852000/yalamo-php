@@ -36,12 +36,15 @@ class Environment extends Object{
      * @param string $key The key in the $_ENV global array
      * @return mixed      It returns false if there is no match
      */
-    public static function Env($key){
+    public static function Env($key,$rule=null){
        if(!array_key_exists($key,$_ENV)) {
-           $this->Collect(Error::YE100);
+           self::scollect(Error::YE100);
            return false;
         }
-         return $_ENV[$key];
+        if((is_null($rule))  || ( self::validate($_REQUEST[$key], $rule) )) {
+             return $_ENV[$key];
+        }
+        return false;
     }
 
      /**
@@ -50,12 +53,15 @@ class Environment extends Object{
      * @param  string $key  The key in the $_REQUEST global array
      * @return mixed        It returns false if there is no match
      */
-    public static function Request($key){
+    public static function Request($key,$rule=null){
        if(!array_key_exists($key,$_REQUEST)) {
-           $this->Collect(Error::YE100);
+           self::scollect(Error::YE100);
            return false;
         }
-         return $_REQUEST[$key];
+        if((is_null($rule))  || ( self::validate($_REQUEST[$key], $rule) )) {
+             return $_REQUEST[$key];
+        }
+        return false;
     }
 
      /**
@@ -63,12 +69,15 @@ class Environment extends Object{
      * @param   string $key     The key in the $_SERVER global array
      * @return  mixed           It returns false if there is no match
      */
-    public static function Server($key){
+    public static function Server($key,$rule=null){
         if(!array_key_exists($key,$_SERVER)) {
-           $this->Collect(Error::YE100);
+           self::scollect(Error::YE100);
            return false;
         }
-         return $_SERVER[$key];
+        if((is_null($rule))  || ( self::validate($_SERVER[$key], $rule) )) {
+             return $_SERVER[$key];
+        }
+        return false;
     }
 
     /**
@@ -76,12 +85,15 @@ class Environment extends Object{
      * @param   string $key     The key in the $_SESSION global array
      * @return  mixed           It returns false if there is no match
      */
-    public static function Session($key){
+    public static function Session($key,$rule=null){
        if(!array_key_exists($key,$_SESSION)) {
-           $this->Collect(Error::YE100);
+           self::scollect(Error::YE100);
            return false;
         }
-         return $_SESSION[$key];
+        if((is_null($rule))  || ( self::validate($_SESSION[$key], $rule) )) {
+             return $_SESSION[$key];
+        }
+        return false;
     }
 
      /**
@@ -89,12 +101,15 @@ class Environment extends Object{
      * @param   string $key     The key in the $_COOKIE global array
      * @return  mixed           It returns false if there is no match
      */
-    public static function Cookie($key){
+    public static function Cookie($key,$rule=null){
         if(!array_key_exists($key,$_COOKIE)) {
-           $this->Collect(Error::YE100);
+           self::scollect(Error::YE100);
            return false;
         }
-         return $_COOKIE[$key];
+        if((is_null($rule))  || ( self::validate($_COOKIE[$key], $rule) )) {
+             return $_COOKIE[$key];
+        }
+        return false;
     }
 
     /**
@@ -102,12 +117,15 @@ class Environment extends Object{
      * @param   string $key     The key in the $_GET global array
      * @return  mixed           It returns false if there is no match
      */
-    public static function Get($key){
+    public static function Get($key,$rule=null){
         if(!array_key_exists($key,$_GET)) {
-           $this->Collect(Error::YE100);
+           self::scollect(Error::YE100);
            return false;
         }
-         return $_GET[$key];
+        if((is_null($rule))  || ( self::validate($_GET[$key], $rule) )) {
+             return $_GET[$key];
+        }
+        return false;
     }
 
     /**
@@ -115,12 +133,15 @@ class Environment extends Object{
      * @param   string $key     The key in the $_POST global array
      * @return  mixed           It returns false if there is no match
      */
-    public static function Post($key){
+    public static function Post($key,$rule=null){
         if(!array_key_exists($key,$_POST)) {
-            $this->Collect(Error::YE100);
+            self::scollect(Error::YE100);
             return false;
         }
-         return $_POST[$key];
+        if((is_null($rule))  || ( self::validate($_POST[$key], $rule) )) {
+             return $_POST[$key];
+        }
+        return false;
     }
 
     /**
@@ -130,7 +151,7 @@ class Environment extends Object{
      */
     public static function File($key){
         if(!array_key_exists($key,$_FILES)) {
-           $this->Collect(Error::YE100);
+           self::scollect(Error::YE100);
            return false;
         }
          return $_FILES[$key];
@@ -145,10 +166,25 @@ class Environment extends Object{
     public static function Application($key){
         global $AppConfig;
         if(!array_key_exists($key,$AppConfig)) {
-           $this->Collect(Error::YE100);
+           self::scollect(Error::YE100);
            return false;
         }
          return $AppConfig[$key];
     }
 
+    /**
+     * Validate a data
+     *
+     * @param string $subject
+     * @param regex $rule
+     * @return bool
+     */
+    private static function validate($subject,$rule){
+       $v=new Validator($rule);
+       return $v->Validate($subject);
+    }
+    private static function scollect($errortype){
+        $instance=new Environment();
+        $instance->Collect($errortype);
+    }
 }
