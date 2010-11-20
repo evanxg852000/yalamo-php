@@ -31,7 +31,12 @@ class Session extends Object {
 
     public function  __construct() {
         session_start();
-        $this->id=$_COOKIE["PHPSESSID"];
+        if(array_key_exists("PHPSESSID", $_COOKIE) ){
+            $this->id=$_COOKIE["PHPSESSID"];
+        }
+        else {
+            $this->id=Yalamo::Void;
+        }
         self::$resgistry=$_SESSION;
     }
     public function  __toString() {return "Object of Type: Session"; }
