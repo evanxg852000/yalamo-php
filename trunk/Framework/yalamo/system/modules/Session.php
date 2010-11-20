@@ -47,7 +47,6 @@ class Session extends Object {
         self::$resgistry=$_SESSION;
     }    
     public function Get($key){
-        return $this->$key;
         if((array_key_exists($key, self::$resgistry)) && (array_key_exists($key, $_SESSION))){
             return self::$resgistry[$key];
         }
