@@ -2,7 +2,7 @@
 class Welcome extends Controller {
 	
 public function Index(){
-    $data['title']="Welcom >> Index";
+    $data['title']="Welcome yf";
     $data['content']="this is the content of my div from the welcome controller!";
     $this->Load->Module("Database");
 
