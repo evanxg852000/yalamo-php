@@ -49,13 +49,35 @@ code {
  font-family: consolas ;
  background-color: #f9f9f9;
  border: 1px solid #D0D0D0;
- -moz-border-radius:3px;
- -webkit-border-radius:3px;
- border-radius:3px;
  padding: 1px 3px 1px 3px;
  margin: 2px;
  color: forestgreen;
+ -moz-border-radius:3px;
+ -webkit-border-radius:3px;
+ border-radius:3px;
+}
 
+#col-one {
+    width: 890px;
+    float: left;
+}
+
+#col-two{
+   width: 276px;  
+   float: right; 
+   
+   margin: 0px 5px ;
+
+
+}
+#links{
+   border: solid 1px #003399;
+   background-color: #f9f9f9;
+   border: 2px solid #D0D0D0;
+   min-height: 250px;
+   -moz-border-radius:3px;
+   -webkit-border-radius:3px;
+   border-radius:3px;
 }
 
 </style>
@@ -63,23 +85,75 @@ code {
 <?php loadjs(Jslib::Jquery, "1.4.2")  ?>
 </head>
 <body>
-
     <h1>Hi Sparky !</h1>
     <p>
         Welcome to yalamo framework, the fastest and constraint free web application framework!<br/>
-        Get started with the <a href="welcome/hello">API documentation</a>.Customise this page from here 
-        <code>yalamo/mvc/views/index.php</code>
+        Customise this page from here  <code>yalamo/mvc/views/index.php</code>
     </p>
-    <h1>Taste It !</h1>
-    <pre>
-          $this->Load->View('index');
-    </pre>
+    <div id="col-one">
+      <h1>Taste It !</h1>
+ <code>yalamo/mvc/controllers/Welcome.php</code>
+<pre>
+&lt;?php
+class Welcome extends Controller {
 
-    <h1>Benchmark </h1>      
-    <?php
-        Profiler::CheckPoint("View");
-        $i=  Inspector::Instance()->Investigate(true);
-        echo Profiler::Profile();
-    ?>
+    public function Index(){
+        $this->Model=$this->Load->Model('Users');
+        $this->Model->Create('Evance Soumaoro');
+        $this->Variables['message']="New User Created ";
+        
+        $this->Load->View('index', $this->Variables);
+    }
+
+}
+</pre>
+<code>yalamo/mvc/models/Users.php</code>
+<pre>
+&lt;?php
+class Users extends Model {
+   
+    public function Create($name){
+        $u=new User();
+        $u->id=null;
+        $u->name=$name;
+        $item=$u->Rows()->Create($u);
+        parent::Insert($item);
+    }
+}
+
+//user table
+class User extends Table{
+    public $id;
+    public $name;
+}
+</pre>
+      <h1>Benchmark </h1>
+        <?php
+            Profiler::CheckPoint("View");
+            $i=  Inspector::Instance()->Investigate(true);
+            echo Profiler::Profile();
+        ?>
+
+      <h1>Thanks ! </h1>
+    <p>
+        Thank you for downloading yf, I hope you will enjoy using it like I did when developing it.
+    </p>
+    </div>
+    <div id="col-two">
+        <h1>Get Started ! </h1>
+        <div id="links">
+            <ul>
+                <li><a href="http://evansofts.com">Home</a></li>
+                <li><a href="#">Quick Start</a></li>
+                <li><a href="#">User Guide</a></li>
+                <li><a href="#">API Doc</a></li>
+                <li><a href="#">Forum</a></li>
+            </ul>
+        </div>
+
+    </div>
+    
+
+    
 </body>
 </html>
