@@ -44,16 +44,16 @@ class Query {
         return $this->driverObject->Execute($sql);
     }
     public function Select($table,$fields=Yalamo::All,$condition=Yalamo::Void){
-        $this->driverObject->Select($table,$fields=Yalamo::All,$condition=Yalamo::Void);
+        $this->driverObject->Select($table,$fields,$condition);
     }
     public function Insert($table,$keys,$values,$single=true){
-        return $this->driverObject->Insert($table,$keys,$values,$single=true);
+        return $this->driverObject->Insert($table,$keys,$values,$single);
     }
     public function Update($table,$values,$condition=Yalamo::Void){
-        return $this->driverObject->Update($table,$values,$condition=Yalamo::Void);
+        return $this->driverObject->Update($table,$values,$condition);
     }
     public function Delete($table,$condition=Yalamo::Void){
-        return $this->driverObject->Delete($table,$condition=Yalamo::Void);
+        return $this->driverObject->Delete($table,$condition);
     }
 
     public function ResultObject(){
