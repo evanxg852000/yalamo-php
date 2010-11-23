@@ -32,6 +32,7 @@ error_reporting(E_ALL|E_STRICT);
 define("DS",DIRECTORY_SEPARATOR);
 define('EXT', '.php');
 define("YPATH",pathinfo(__FILE__, PATHINFO_DIRNAME).DS);
+define('YFSBASE', str_replace(basename(dirname(__FILE__)),"",pathinfo(__FILE__, PATHINFO_DIRNAME)));
 
 /**
  * Include required files
