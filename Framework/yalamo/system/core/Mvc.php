@@ -130,7 +130,6 @@ final class Mediator {
  * and members
  */
 abstract class Controller extends Object {
-    const Sub="Sub";
     const Baseclass="Controller";
 
     /**
@@ -175,7 +174,8 @@ abstract class Controller extends Object {
 
     protected function Delegate($method) {
         //get the name of the subcontroller
-        $Subcontroller= Controller::Sub.strtolower(get_class($this));
+        $Subcontroller= $this->Uri->Controller().$this->Uri->Method();
+
         $this->Load->Controller($Subcontroller);
         $Subinstance=new $Subcontroller();
         if(!is_subclass_of($Subinstance, Controller::Baseclass)){

@@ -97,12 +97,12 @@ class File extends Object {
        }
        return $postmaxsize;
     }
-    public function Upload($files,$allowedmimetypes=array("image/gif","image/png","image/bmp","image/jpg","image/jpeg","text/pdf","text/txt" )){
+    public function Upload($files,& $uploadedfiles=array(),$allowedmimetypes=array("image/gif","image/png","image/bmp","image/jpg","image/jpeg","text/pdf","text/txt" )){
         if($this->path->IsDirectory()){ $targetfolder=$this->path->FullPath();}
         echo $targetfolder;
         $maxupload=$this->maxupload();
         if( (!is_array($files)) || (empty($files))){
-            $this->Collect(Error::YE107);
+            $this->Collect(Error::YE101);
             return false;
         }
         $totalfile = count($files['file']['tmp_name']);
@@ -114,15 +114,17 @@ class File extends Object {
 		$error   	= $files['file']['error'][$i];
 		$clean_name = preg_replace('/[^a-z0-9.-]/', '-', strtolower(basename($name)));
 
-                
 		//check for the size
 		if($files['file']['size'][$i]<= $maxupload){
                     //check if file mimetype is allowed
                     foreach($allowedmimetypes as $mimetype){
                         if($type==$mimetype){
                             //move the file     
-                            if(!move_uploaded_file($tmp_name, $targetfolder.$clean_name)){
-                               $this->Collect(Error::YE107);  
+                            if(move_uploaded_file($tmp_name, $targetfolder.$clean_name)){
+                               $uploadedfiles[]=$targetfolder.$clean_name;
+                            }
+                            else{
+                                $this->Collect(Error::YE203);
                             }
                         }  
                     }
@@ -139,6 +141,4 @@ class File extends Object {
     }
   
 }
-
-
 
