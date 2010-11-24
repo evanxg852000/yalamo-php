@@ -2,7 +2,8 @@
 final  class Paginator {
 
     public static $Configuration=array(
-            "ItemPerPage"=>4,
+            "Itemlimit"=>4,
+            "Pagelimit"=>9,
             "Class"=>"pagination",
             "Previous"=>array("Text"=>"« Previous","Class"=>"previous"),
             "Next"=>array("Text"=>"Next »","Class"=>'next'),
@@ -12,62 +13,61 @@ final  class Paginator {
    
     public function  __construct() {  }
 
-    public function Render($total,$url,$currentpage=1, $dump=true){
-        
+    public function Render($total,$url,$currentpage=1, $dump=true){       
         $paginatorstr='<ul class="'.self::$Configuration['Class'].'">{content}</ul>';
         $content="";
         //previous
         if($currentpage==1){
-            $param="#";
-            $prev='<li class="'.self::$Configuration['Desable']['Class'].'">
-                    <a href="'.$param.'">'.self::$Configuration['Previous']['Text'] .'</a></li>';
+            $prev='<li><span  class="'.self::$Configuration['Desable']['Class'].'">'
+            .self::$Configuration['Previous']['Text'] .'</span></li>';
         }
         else {
             $param=$currentpage-1;
-            $prev='<li class="'.self::$Configuration['Previous']['Class'].'"><a href="'
-                    .$url.$param.'">'.
-                    self::$Configuration['Previous']['Text'] .'</a></li>';
+            $prev='<li><a href="'.$url.$param.'"  class="'.self::$Configuration['Previous']['Class'].'">'
+            .self::$Configuration['Previous']['Text'] .'</a></li>';
         }
        $content.=$prev;
 
        //pages 1 2 3 ...
-        $pagecount=ceil($total/self::$Configuration['ItemPerPage']);
-        for($i=1; $i<$pagecount; $i++ ){
-            $param=$i;
-            if($currentpage==$i){
-                $content.='<li class="'.self::$Configuration['Current']['Class'].'"><a href="#">'.$i.'</a></li>';
-                continue;
-            }
-            $content.='<li><a href="'.$url.$param.'">'.$i.'</a></li>';   
+        $pagecount=ceil($total/self::$Configuration['Itemlimit']);
+        $pagelimit=self::$Configuration['Pagelimit'];
+        $begin=1;
+        if($currentpage>=6){
+            $begin=$currentpage-3;
         }
 
+        for($i=$begin; $i<$begin+$pagelimit; $i++ ){
+            if($i>$pagecount){ break; }
+            $param=$i;
+            if($i==$currentpage){
+                $content.='<li><span class="'.self::$Configuration['Current']['Class'].'">'.$i.'</span></li>';
+                continue;
+            }
+            $content.='<li><a href="'.$url.$i.'">'.$i.'</a></li>';  
+        }
         //next
         if($currentpage==$pagecount){
-            $param="#";
-            $next='<li class="'.self::$Configuration['Desable']['Class'].'"><a href="'.$param.'">'
-                    .self::$Configuration['Next']['Text'] .'</a></li>';
+            $next='<li><span class="'.self::$Configuration['Desable']['Class'].'">'
+            .self::$Configuration['Next']['Text'] .'</span></li>';
         }
         else {
             $param=$currentpage+1;
-            $next='<li class="'.self::$Configuration['Next']['Class'].'"><a href="'
-                    .$url.$param.'">'.
-                    self::$Configuration['Next']['Text'] .'</a></li>';
+            $next='<li><a href="'.$url.$param.'" class="'.self::$Configuration['Next']['Class'].'">'
+            .self::$Configuration['Next']['Text'] .'</a></li>';
         }
         $content.=$next;
         $paginatorstr=str_replace("{content}", $content, $paginatorstr);
         if($dump){
             echo $paginatorstr;
         }
-        else{
            return $paginatorstr;
-        }
     }
     
 }
 
-/*  Sample Style
+/*Pagination  default Style
 
- .pagination {
+.pagination {
     margin-top:5px;
     padding-top:5px;
 }
@@ -76,32 +76,36 @@ final  class Paginator {
     font-size:14px;
     list-style:none;
 }
-.pagination li a {
+.pagination li a,.pagination li span {
     color:#000000;
     display:block;
     float:left;
-    padding:3px 6px;
+    padding:4px 6px;
     text-decoration:none;
-    border:solid 1px #cccccc;
+    font-weight: bold;
+    border:solid 2px #cccccc;
+    -moz-border-radius:3px;
+    -webkit-border-radius:3px;
     margin-right:2px;
 }
 .pagination li a:hover{
-    border:solid 1px #666666;
+    border-color: #666666;
     color:#666666;
     background:#e5e4e4;
 }
-.pagination off {
-    background-color: red;
+
+.pagination .previous {
+
 }
 .pagination .next {
 
 }
-.pagination .previous {
-
+.pagination .current{
+    background-color: #cccccc;
+    border-color: #4F5155;
 }
-.pagination .current {
-
+.pagination .off  {
+    background-color: #cccccc;
 }
-
 
  */

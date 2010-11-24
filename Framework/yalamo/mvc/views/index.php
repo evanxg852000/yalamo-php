@@ -77,6 +77,9 @@ code {
    border-radius:3px;
 }
 
+
+
+
 </style>
 <title><?php echo $title ?></title>
 <?php loadjs(Jslib::Jquery, "1.4.2")  ?>
@@ -129,8 +132,7 @@ class User extends Table{
             Profiler::CheckPoint("View");
             $i=  Inspector::Instance()->Investigate(true);
             echo Profiler::Profile();
-            $f=new Dir($path);
-            $f->Delete();
+            
         ?>
 
       <h1>Thanks ! </h1>

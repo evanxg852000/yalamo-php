@@ -26,7 +26,7 @@ function AppConfig($key){
 
 function loadModule($modules){
     $load=new Loader();
-    if(is_array($modules)){
+    if(!is_array($modules)){
         $load->Module($modules);
         return;
     }
@@ -35,7 +35,7 @@ function loadModule($modules){
 
 function loadHelper($helpers){
     $load=new Loader();
-    if(is_array($helpers)){
+    if(!is_array($helpers)){
         $load->Helper($helpers);
         return;
     }
@@ -44,7 +44,7 @@ function loadHelper($helpers){
 
 function loadExtension($extensions){
     $load=new Loader();
-    if(is_array($extensions)){
+    if(!is_array($extensions)){
         $load->Extension($extensions);
         return;
     }
