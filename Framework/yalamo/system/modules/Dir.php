@@ -52,7 +52,11 @@ final class Dir extends Object{
     }
 
     public function  Delete(){
-        return $this->erase($this->path->FullPath());
+        return $this->erase($this->path->FullPath(),false);
+    }
+
+    public function Clear(){
+         return $this->erase($this->path->FullPath(),true);
     }
 
     public function  Entries($filter=Yalamo::All,$sort=true){
@@ -94,7 +98,7 @@ final class Dir extends Object{
         return $entrylist;
     }
 
-    private function erase($directory){
+    private function erase($directory,$justempty){
         $handle = opendir($directory);
         //traverse all the directories to leave the empty
 	while($item = readdir($handle)) {
@@ -117,6 +121,7 @@ final class Dir extends Object{
 		rmdir($directory.DS.$item);
             }
 	}
+        if($justempty){ return true;   }
         if (rmdir($directory)){return true;}else{return false;}
     }
 

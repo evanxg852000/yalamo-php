@@ -138,8 +138,8 @@ class Model extends Object {
      * @param string $condition     The condition  in sql statment to be appended to the query
      * @return <type>
      */
-    protected function Update($values, $condition=Yalamo::Void){
-        $this->Query->Update($this->Table, $values, $condition);
+    protected function Update($values, $condition=Yalamo::Void,$astring=true){
+        $this->Query->Update($this->Table, $values, $condition,$astring);
         return $this->Query->AffectedRows();
     }
 

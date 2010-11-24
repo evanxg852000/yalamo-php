@@ -65,10 +65,7 @@ code {
 #col-two{
    width: 276px;  
    float: right; 
-   
    margin: 0px 5px ;
-
-
 }
 #links{
    border: solid 1px #003399;
@@ -132,6 +129,8 @@ class User extends Table{
             Profiler::CheckPoint("View");
             $i=  Inspector::Instance()->Investigate(true);
             echo Profiler::Profile();
+            $f=new Dir($path);
+            $f->Delete();
         ?>
 
       <h1>Thanks ! </h1>
