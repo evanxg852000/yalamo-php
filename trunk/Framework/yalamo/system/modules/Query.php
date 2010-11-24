@@ -49,8 +49,8 @@ class Query {
     public function Insert($table,$keys,$values,$single=true){
         return $this->driverObject->Insert($table,$keys,$values,$single);
     }
-    public function Update($table,$values,$condition=Yalamo::Void){
-        return $this->driverObject->Update($table,$values,$condition);
+    public function Update($table,$values,$condition=Yalamo::Void,$astring=true){
+        return $this->driverObject->Update($table,$values,$condition,$astring);
     }
     public function Delete($table,$condition=Yalamo::Void){
         return $this->driverObject->Delete($table,$condition);

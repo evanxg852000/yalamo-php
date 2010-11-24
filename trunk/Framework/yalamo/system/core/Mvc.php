@@ -168,11 +168,15 @@ abstract class Controller extends Object {
     }
     public function  __toString() {return "Object of Type: Controller"; }
 
-    protected function Component($name){
+    final protected function Set($name,$value){
+        $this->Variables[$name]=$value;
+    }
+
+    final protected function Component($name){
         return $this->Load->Component($name, "controllers");
     }
 
-    protected function Delegate($method) {
+    final protected function Delegate($method) {
         //get the name of the subcontroller
         $Subcontroller= $this->Uri->Controller().$this->Uri->Method();
 

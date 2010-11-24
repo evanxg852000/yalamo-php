@@ -123,7 +123,7 @@ abstract  class DBDriver extends ICollectable {
     public abstract function Execute($sql);
     public abstract function Select($table,$fields=Yalamo::All,$condition=Yalamo::Void);
     public abstract function Insert($table,$keys,$values,$single=true);
-    public abstract function Update($table,$values,$condition=Yalamo::Void);
+    public abstract function Update($table,$values,$condition=Yalamo::Void,$astring=true);
     public abstract function Delete($table,$condition=Yalamo::Void);
 
     public abstract function ResultObject();

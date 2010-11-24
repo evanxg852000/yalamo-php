@@ -135,11 +135,11 @@ final class Sqlite extends DBDriver{
         $this->Execute($sql);
         return $this->AffectedRows();
     }
-    public function Update($table,$values,$condition=Yalamo::Void){
+    public function Update($table,$values,$condition=Yalamo::Void,$astring=true){
         if(is_array($values)){
             foreach ($values as $key => $val) {
                 if(!is_string($key)){ $this->PCollect(Error::YE101, $values);  return false;}
-                if(is_string($val)){ $val="'$val'";}
+                 if((is_string($val)) && ($astring==true)){ $val="'$val'"; }
                 $str[]=$key."=".$val;
             }
             $values=implode(" , ", $str);
