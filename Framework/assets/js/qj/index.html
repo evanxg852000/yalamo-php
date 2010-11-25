@@ -1,0 +1,127 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<title>Qj Test Page</title>
+	<link rel="stylesheet" href="Qj.css" type="text/css" media="screen" />
+	<script type="text/javascript" src="jquery-1.4.2.js"></script> 
+	<script type="text/javascript" src="Qj.js"></script> 
+	
+	
+	<script type="text/javascript">
+		Qj.Init(function(){
+			//initialise ui style here
+			//alert("loading");
+			Qj.Tooltip.Styles={
+				"background":"#55ea55",
+				"color":"#000000"	
+			};
+			Qj.Notifycation.Position={
+			
+			}
+			
+		});
+		
+		Qj.Ready(function(){				
+			
+			Qj.Select("#notify").click(function(){
+				Qj.Notifycation.Show("This is a simple message","Qj",Qj.Notifycation.Error());
+			});
+			Qj.Select("#msg").click(function (){
+				Qj.Messaging.Question('What is Your name?',function(rep){alert(rep);});
+			});
+			
+			Qj.Select("#save").click(function(){			
+				var validators=new Qj.Form.Validators();
+				validators.Add("name",Qj.Matcher.Name , "Name should be at least 6 carater long !");
+				validators.Add("email",Qj.Matcher.Email, "Email should be at least 6 carater long !");
+				validators.Add("description",Qj.Matcher.Text, "Description should be at least 6 carater long !");
+				
+				var f=new Qj.Form(validators);
+				if(f.Validate()){
+					alert("Posting...");
+				}
+				else {
+					alert("please correct mistakes");
+				}
+				
+				return false;
+			});
+			
+			Qj.Editable.AddListener("test", function(val,status){
+				if(status){
+					alert("changin value to "+val);	
+				}
+			});
+			
+		});
+		
+		function success(sub,rst){
+			Qj.Select("#name").css({"color":"green","border":"solid 3px"});
+		}
+
+		function fail(sub,rst){
+			alert("failled with "+sub);
+		}
+		
+		
+		    
+	
+
+	</script>
+	<style type="text/css">
+		#container {
+			margin: auto;
+			width: 330px;
+			height: 300px;
+			border: solid 2px #efefef;
+			background: #fffeee;
+			padding:5px;
+		}		
+	</style>
+</head>
+	<body>
+	<div class="qj-progress">43%</div>
+	<div id="test" class="qj-editable text" >je suis editable </div>
+	
+	<form name="addbookform" action="index_submit" method="POST" >
+			<label for="name">Name:</label>
+			<input type="text" name="name" id="name"/>
+			
+			<label for="email">Email:</label>
+			<input type="text" name="email" id="email"/><span class="success"></span>
+
+			<label for="description">Description:</label>
+			<textarea name="description" id="description" rows="8" cols="40"></textarea>
+			<p>
+				<input type="submit" id="save" value="Save">	
+				<input type="reset" value="Cancel">				
+			</p>
+		</form>
+	
+	
+		<div id="container">
+		<span class="qj-editable" >je suis editable </span>
+		
+		
+		
+			
+		<input type="text" id="name" />
+		<button id="submit" >Validate</button>
+		
+		<button id="notify" >Notify</button>
+		<button id="msg" >Show Message</button>
+		
+		
+				
+		
+			
+			
+		</div>
+		
+		
+		
+		
+		
+		
+		
+	</body>
+</html>

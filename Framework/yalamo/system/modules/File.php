@@ -117,16 +117,14 @@ class File extends Object {
 		//check for the size
 		if($files['file']['size'][$i]<= $maxupload){
                     //check if file mimetype is allowed
-                    foreach($allowedmimetypes as $mimetype){
-                        if($type==$mimetype){
-                            //move the file     
+                    if(in_array($type, $allowedmimetypes)){
+                        //move the file
                             if(move_uploaded_file($tmp_name, $targetfolder.$clean_name)){
                                $uploadedfiles[]=$targetfolder.$clean_name;
                             }
                             else{
                                 $this->Collect(Error::YE203);
                             }
-                        }  
                     }
 		}
                 else{

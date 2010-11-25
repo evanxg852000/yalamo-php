@@ -1,0 +1,201 @@
+/*TOOLTIP*/
+
+.qj-tooltip {
+    position:absolute;
+    padding:8px;
+    overflow:hidden;
+    text-decoration:none;
+    border:solid 6px ;
+	-moz-border-radius: 3px;
+    -webkit-border-radius:3px;
+	z-index:500px;
+	background-color:#ffffff;
+    border-color: #e1e1e1;
+    font-size:12px;
+	color:#cecece;
+}
+/* PROGRESS BAR */
+
+.qj-progress {
+	-moz-border-radius: 3px;
+    -webkit-border-radius:3px;
+	border:solid 1px #9e9d9d;
+	background:#BFBFBF;
+	color:#222222;
+	text-align:center;	
+}
+
+.qj-progress div {
+	background:#8AC65F;
+	color:#FFF;
+	font-weight:bold;
+	width:65%;
+}
+
+/* NOTIFICATION */
+
+#qj-notification-container {
+	position:absolute;
+	left:0px;
+	top:0px;
+	z-index:500px;
+	background-color: transparent;
+}
+
+.qj-notification{
+	-moz-border-radius: 4px;
+    -webkit-border-radius:4px;
+	background:#BFBFBF;
+    border:solid 6px ;
+    border-color: #e1e1e1;
+    margin: 3px;	
+}
+.qj-notification div.qj-header {
+	background:#606060;
+	border-bottom: solid 1px #dfdfdf;
+	height:25px; 
+	padding: 0px;
+	clear: right;
+}
+
+.qj-notification div.qj-header h4 {
+	color: white;
+	text-transform: capitalize;
+	margin: 0px;
+	padding-left: 5px;
+	
+}
+.qj-notification div.qj-header a.qj-closebt {
+	border:none;
+	text-decoration:none;
+	background: transparent url("images/close.png") no-repeat center ;
+	width:24px;
+	height: 24px;
+	float: right;	
+}
+
+.qj-notification p{
+	margin: 5px;
+	padding: 3px;
+}
+
+.notification-info {
+	background-color:#BFBFBF ;
+}
+
+.notification-success {
+	background-color:#AACA87 ;
+}
+
+.notification-error {
+	background-color: #F9C3C6 ;
+}
+
+	
+/* MESSAGE BOX */	
+
+#qj-messagebox-container {
+	position:absolute;
+	top:0px;
+	left:0px;
+	background: transparent;
+	width: 100%;
+	height: 100%;
+	z-index: 501px;
+}
+
+.qj-messagebox {
+	margin: auto;
+	width:350px;
+	height: 150px;
+	-moz-border-radius: 4px;
+    -webkit-border-radius:4px;
+    border-radius:4px;
+	background:#BFBFBF;
+    border:solid 6px ;
+    border-color: #e1e1e1;
+    z-index:502px;
+    margin-top: 200px;	   
+}
+.qj-messagebox div.qj-header {
+	background:#606060;
+	border-bottom: solid 1px #dfdfdf;
+	height:25px; 
+	padding: 0px;
+	clear: right;
+}
+
+.qj-messagebox div.qj-header h4 {
+	color: white;
+	text-transform: capitalize;
+	margin: 0px;
+	padding-left: 5px;
+	
+}
+.qj-messagebox div.qj-header a.qj-closebt {
+	border:none;
+	text-decoration:none;
+	background: transparent url("images/close.png") no-repeat center ;
+	width:24px;
+	height: 24px;
+	float: right;	
+}
+
+.qj-messagebox p {
+	background:transparent no-repeat scroll 15px 17px;
+	padding: 30px 20px 20px 72px;
+}
+
+.messagebox-info p{
+	background-image: url("images/information.png");
+}
+
+.messagebox-warning p{
+	background-image: url("images/warning.png");
+}
+.messagebox-error p{
+	background-image: url("images/error.png");
+}
+.messagebox-question p{
+	background-image: url("images/question.png");
+}
+.messagebox-question p input[type="text"]{
+	border:solid 4px #e1e1e1;
+	margin: 3px;
+	-moz-border-radius: 4px;
+    -webkit-border-radius:4px;
+    border-radius:4px;
+}
+.messagebox-wait p{
+	background-image: url("images/waiting.png");
+}
+
+/* FORM VALIDATION */
+
+span.valid {
+	background: url("images/fvsuccess.png") no-repeat left center;
+	margin-left: 3px;
+	padding-left: 20px;	
+	font-size: 12px;
+	color: #a6a6a6;
+}
+span.notvalid {
+	background: url("images/fverror.png") no-repeat left center;
+	margin-left: 3px;
+	padding-left: 20px;
+	font-size: 12px;
+	color: #a6a6a6;	
+}
+label {
+	display:block;
+}
+
+/* EDITABLE */
+.qj-editable {
+	background: url("images/edit.png") no-repeat top right ;
+	padding:5px 13px 0px 0px;
+}
+
+
+
+

@@ -174,7 +174,7 @@ final class Mysql extends DBDriver {
 
     public function ResultObject() {
         $resultobjects=array();
-        while($obj=  mysql_fetch_object($this->result)){
+        while($obj= @mysql_fetch_object($this->result)){
                 $resultobjects[]=$obj;
         }
         return $resultobjects;
