@@ -6,6 +6,8 @@ public function Index(){
     $data['content']="this is the content of my div from the welcome controller!";
     $this->Load->Module("Database");
     
+    
+
    // $s=$this->Component("Sizer");
    // $this->Model=$this->Load->Model('Users');
     //$data["users"]=$this->Model->SelectAll();
