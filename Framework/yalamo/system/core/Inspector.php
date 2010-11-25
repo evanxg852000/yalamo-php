@@ -79,7 +79,7 @@ final class Error {
      * @return  string         The description of the error
      */
     public function  __toString() {
-        return "Error: ".$this->Num()." , ".$this->String()." With Var= ".$this->Subject(true);
+        return "Error: ".$this->Num()." , ".$this->String()." With Var= ".$this->Subject();
     }
     
     /**
@@ -164,8 +164,7 @@ final class Inspector {
      * @param mixed         $subject    The Object on which the error was raised
      */
     public function Add($type,$subject=null){
-        $error=new Error($type,$subject);
-        $this->errors[]=$error;
+        $this->errors[]=new Error($type,$subject);
     }
     
     /**
@@ -213,5 +212,32 @@ final class Inspector {
         $f=new File($logfile);
         $f->Append($this->Investigate());
     }
-          
+
 }
+
+/**
+ * Error reporter
+ * @param <type> $level
+ * @param <type> $string
+ * @param <type> $file
+ * @param <type> $line
+ * @return <type>
+ */
+function _yerror($level, $string, $file, $line) {
+    if(!(error_reporting() & $level)){
+        return;
+    }
+    $errorcontent='
+<pre style="font-family: consolas ;-moz-border-radius:3px;-webkit-border-radius:3px;
+background-color: #f9f9f9; border: 2px solid #D0D0D0;padding:10px;margin:3px;">
+Yalamo Encountered An Error
+Level: '.$level.'
+Message:  '.$string.'
+Filename: '.$file.'
+Line Number: '.$line.'
+Inspection:
+'.Inspector::Instance()->Investigate().'
+</pre>';
+    echo $errorcontent;
+}
+set_error_handler("_yerror");
