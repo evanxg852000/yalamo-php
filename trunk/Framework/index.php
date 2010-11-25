@@ -21,7 +21,7 @@
  */
 
 /* Include the Framework */
-require_once("yalamo/yalamo.php");
+require_once("yalamo".DIRECTORY_SEPARATOR."Yalamo.php");
 
 // Create an  instance of WebApplication
 $WebApplication=new Mvc();
