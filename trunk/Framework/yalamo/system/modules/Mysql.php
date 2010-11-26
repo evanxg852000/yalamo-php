@@ -27,7 +27,7 @@
  * 
  */
 final class Mysql extends DBDriver {
-    public function  __construct() {
+    public function  __construct($configuration) {
         $this->result=null;
         $this->resultset=null;
         $this->resultarray=null;

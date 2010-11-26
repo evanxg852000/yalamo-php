@@ -30,21 +30,29 @@
  * if you whish to manipulate many connections you should use the databse driver instead
  *
  */
-final class Database {
+final class Database extends Object {
     private static $instance=NULL;
     private $driverObject;
-    private function   __construct() {
-        switch(DBDRIVER){
-		case Yalamo::Mysql:
-                   $this->driverObject=new Mysql();
-                break;
-                case Yalamo::Sqlite:
-                   $this->driverObject=new Sqlite();
-                break;
-                case Yalamo::Pogsql:
-                    $this->driverObject=new Pogsql();
-		break;
-            }
+    private $name;
+    private $configuration;
+
+    private function   __construct($isdefault=true) {
+        global $DATABASES;
+        if($isdefault){
+            $this->name=key($DATABASES);
+            $this->configuration=$DATABASES[$this->name];
+             switch ($DATABASES[$this->name]['DRIVER']) {
+                    case Yalamo::Mysql:
+                        $this->driverObject=new Mysql($this->configuration);
+                    break;
+                    case Yalamo::Sqlite:
+                        $this->driverObject=new Sqlite($this->configuration);
+                    break;
+                    case Yalamo::Pogsql:
+                        $this->driverObject=new Pogsql($this->configuration);
+                    break;
+              }
+        }
     }
     private function   __clone() {}
     
@@ -54,25 +62,54 @@ final class Database {
         }
         return self::$instance;
     }    
+    public static function Parallel($dbname){
+        global $DATABASES;
+        $Instance=new Database(false);
+        $Instance->name=$dbname;
+        $Instance->configuration=$DATABASES[$Instance->name];
+        switch ($Instance->configuration['DRIVER']) {
+            case Yalamo::Mysql:
+                   $Instance->driverObject=new Mysql($Instance->configuration);
+                break;
+                case Yalamo::Sqlite:
+                    $Instance->driverObject=new Sqlite($Instance->configuration);
+                break;
+                case Yalamo::Pogsql:
+                     $Instance->driverObject=new Pogsql($Instance->configuration);
+		break;
+        }
+        return $Instance;
+    }
 
+    public function Name(){
+       return $this->name;
+    }
+    public function Configuration(){
+        return $this->configuration;
+    }
     public function Handle(){
         return $this->driverObject;
     }
     public function Connection(){;
         return $this->driverObject->Connection();
     }
-    public function Create($name){
-      return $this->driverObject->Create($name);
+    public function Query(){
+        return new Query($this);
     }
-    public function Drop($name){
-      return $this->driverObject->Delete($name);
+
+    public function Create(){
+      return $this->driverObject->DBCreate($this->name);
     }
-    public function Export($name){
-       return $this->driverObject->Export($name);
+    public function Drop(){
+      return $this->driverObject->DBDrop($this->name);
     }
-    public function Databases(){
-       return $this->driverObject->Databases();
-    }    
+    public function Tables(){
+        return $this->driverObject->Tables($this->name);
+    }
+    public function Export(){
+       return $this->driverObject->DBExport($this->name);
+    }
+    
 }
 
 //------------------------------------------------------------------------------
@@ -108,7 +145,7 @@ abstract  class DBDriver extends ICollectable {
         $inspector->Add($errortype,  $subject);
     }
     
-    public abstract function  __construct();
+    public abstract function  __construct($configuration);
     public abstract function  __destruct();
 
     public abstract function Connection();
@@ -133,6 +170,41 @@ abstract  class DBDriver extends ICollectable {
     public abstract function Fields();
     public abstract function NumRows();
     public abstract function AffectedRows();
+
+//Database opeartion area
+    public abstract function DBCreate($name);
+    public abstract function DBDrop($name);
+    public abstract function DBTables();
+    public abstract function DBExport();
+
+//Active recorde area
+    public abstract function On($table){
+
+    }
+    public abstract function Where($param,$logic="AND"){
+
+    }
+    public abstract function Limit($s,$count){
+
+    }
+    public abstract function Order($param,$direction){
+
+    }
+    public abstract function Join($table,$condition){
+
+    }
+    public abstract function Insert(){
+
+    }
+    public abstract function Select(){
+
+    }
+    public abstract function Update($values){
+
+    }
+    public abstract  function Delete(){
+
+    }
 
 }
 

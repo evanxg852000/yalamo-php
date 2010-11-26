@@ -28,8 +28,8 @@
 class Query {
     private $driverObject;
 
-    public function __construct() {
-        $this->driverObject=Database::Instance()->Handle();
+    public function __construct(& $database) {
+        $this->driverObject=& $database->Handle();
     }
     public function __toString() {return "Object of Type: Query"; }
 
@@ -75,6 +75,34 @@ class Query {
     public function AffectedRows(){
         return $this->driverObject->AffectedRows();
     }
+    
+    //Active record area
+    public function On($table){
 
+    }
+    public function Where($param,$logic="AND"){
+
+    }
+    public function Limit($s,$count){
+
+    }
+    public function Order($param,$direction){
+
+    }
+    public function Join($table,$condition){
+
+    }
+    public function Insert(){
+
+    }
+    public function Select(){
+
+    }
+    public function Update($values){
+
+    }
+    public function Delete(){
+
+    }
 }
 

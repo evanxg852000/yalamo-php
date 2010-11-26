@@ -59,8 +59,28 @@ define("DBDRIVER", "MYSQL");
 define("DBSERVER", "localhost");                   
 define("DBNAME", "test");                         
 define("DBUSER", "root"); 			
-define("DBPASSWORD", ""); 
+define("DBPASSWORD", "");
 
+$DATABASES=array(
+'test'=>array(
+	'DRIVER'=>"MYSQL" ,
+	'HOST'=>"localhost",
+	'USER'=>"root",
+	'PASSWORD'=>"",
+	),
+'bart'=>array(
+	'DRIVER'=>"POSTGRESQL",
+	'HOST'=>"",
+	'USER'=>"",
+	'PASSWORD'=>"",
+	),
+'DBNAME'=>array(
+	'DRIVER'=>"",
+	'HOST'=>"",
+	'USER'=>"",
+	'PASSWORD'=>"",
+	),
+);
 
 /**
  * Mvc Configuration
