@@ -295,3 +295,8 @@ Class Uri {
     
 
 }
+
+//TODO: Routing
+class Routes {
+
+}

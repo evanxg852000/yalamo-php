@@ -323,17 +323,11 @@ final class Loader extends Object {
      */
     private function  Load($fullpath, $data=null){
         global $Alias;  
-        if(ENABLEALIAS){ //convert alias array into variable
-           foreach ($Alias as $key => $val){
-                    $$key = $val;
-               }
+        if(ENABLEALIAS){ 
+           extract($Alias);
         }
-        if( $data!=null){ //convert $data into variables by: var var trick
-            if(is_array($data)){
-               foreach ($data as $key => $val){
-                    $$key = $val;
-               }
-            }
+        if( $data!=null){
+            extract($data);
         }
         if(file_exists($fullpath)){
             require_once ($fullpath);

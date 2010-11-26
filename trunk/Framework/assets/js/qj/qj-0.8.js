@@ -218,7 +218,6 @@ Qj.Tooltip=function(){
 			.css("left",e.pageX+13);
 		});
 	});
-	//TODO: stop flickering
 };
 Qj.Tooltip.Styles=null;
 
