@@ -27,20 +27,54 @@
  */
 class Session extends Object {
     private static  $resgistry;
+    private $cryptor;
     private $id;
-
+    private $object;
+    private $cookie;
+    private $cookie_name;
+    private $is_safe;
+ 
     public function  __construct() {
         session_start();
-        if(array_key_exists("PHPSESSID", $_COOKIE) ){
-            $this->id=$_COOKIE["PHPSESSID"];
+        $this->cryptor=new Encryption(cf("APP/COOKIESALT"), Encryption::McryptRc2, Encryption::TwoWayMode);
+        $this->id=session_id();
+        $this->cookie_name=cf("APP/SESSIONCOOKIE");
+        $this->cookie=new Cookie();
+        $this->is_safe=false;
+
+        if(!isset($_COOKIE["PHPSESSID"])){
+            //fisrt visit
+            $this->create_session_object();
+            $this->is_safe=true;
         }
         else {
-            $this->id=Yalamo::Void;
+            //session has been already created so verify the ingtegrity
+            $this->object=@unserialize($_SESSION[$this->cookie_name]);
+            $session_object= @unserialize($this->cookie->Get($this->cookie_name));
+            if($this->object==$session_object){
+                //update that object after 5 min
+                if((time()-$this->object->st) >=5*60 ){
+                    echo "updating";
+                    $this->create_session_object();
+                }
+                $this->is_safe=true;
+            }
         }
         self::$resgistry=$_SESSION;
     }
     public function  __toString() {return "Object of Type: Session"; }
-    
+    private function create_session_object(){
+        $this->object=new Object();
+        $this->object->id= Encryption::UnicKey();
+        $this->object->si= $this->id;
+        $this->object->ip= $_SERVER["REMOTE_ADDR"];
+        $this->object->ua= $_SERVER["HTTP_USER_AGENT"];
+        $this->object->st= time();
+        $cookie_value=$this->object->Serialize();
+        $this->cookie->Set($this->cookie_name,$cookie_value);
+        $_SESSION[$this->cookie_name]=$cookie_value;
+    }
+
     public function Id(){
         return $this->id;
     }
@@ -48,14 +82,19 @@ class Session extends Object {
         return self::$resgistry;
     }
     public function Set($key, $value){
-         $_SESSION[$key]=$value;
-        self::$resgistry=$_SESSION;
+        if($this->is_safe){        
+            $_SESSION[$key]=  $this->cryptor->Crypt($value);
+            self::$resgistry=$_SESSION;
+            return true;
+        }
+        return false;
     }    
     public function Get($key){
-        if((array_key_exists($key, self::$resgistry)) && (array_key_exists($key, $_SESSION))){
-            return self::$resgistry[$key];
+        if($this->is_safe){
+            if((isset(self::$resgistry[$key])) && (isset($_SESSION[$key])) ){
+                return $this->cryptor->Decrypt(self::$resgistry[$key]) ;
+            }
         }
-        $this->Collect(Error::YE100);
         return false;
     }
     public function Clear($keys=Yalamo::All){
@@ -84,9 +123,10 @@ class Session extends Object {
     public function End($redirect=Yalamo::Void){
         session_unset();
         session_destroy();
+        $this->cookie->Clear($this->cookie_name);
         self::$resgistry=$_SESSION;
-        if($redirect !==Yalamo::Void){
-            $uri=new Uri();
+        if(!empty($redirect)){
+            $uri=Uri::Instance();
             $uri->Redirect($redirect);
         }
     }

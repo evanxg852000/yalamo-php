@@ -31,7 +31,6 @@
  *
  */
 final class Database extends Object {
-    private static $instance=NULL;
     private $driverObject;
     private $name;
     private $configuration;
@@ -54,8 +53,7 @@ final class Database extends Object {
               }
         }
     }
-    private function   __clone() {}
-    
+        
     public static function Instance(){
         if(!self::$instance){
             self::$instance=new Database();
@@ -178,33 +176,15 @@ abstract  class DBDriver extends ICollectable {
     public abstract function DBExport();
 
 //Active recorde area
-    public abstract function On($table){
-
-    }
-    public abstract function Where($param,$logic="AND"){
-
-    }
-    public abstract function Limit($s,$count){
-
-    }
-    public abstract function Order($param,$direction){
-
-    }
-    public abstract function Join($table,$condition){
-
-    }
-    public abstract function Insert(){
-
-    }
-    public abstract function Select(){
-
-    }
-    public abstract function Update($values){
-
-    }
-    public abstract  function Delete(){
-
-    }
+    public abstract function On($table);
+    public abstract function Where($param,$logic="AND");
+    public abstract function Limit($s,$count);
+    public abstract function Order($param,$direction);
+    public abstract function Join($table,$condition);
+    //public abstract function Insert();
+   // public abstract function Select();
+    //public abstract function Update($values);
+   // public abstract  function Delete();
 
 }
 

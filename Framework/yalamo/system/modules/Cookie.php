@@ -25,13 +25,15 @@
  *
  * The class that contains the cookie manipulation methods
  */
-class Cookie{
+class Cookie extends Object{
     private static  $resgistry;
     private $lifetime;
     private $path;
+    private $cryptor;
 
     public function  __construct($liftime=31536000,$path=Yalamo::Void) {
        self::$resgistry=$_COOKIE;
+       $this->cryptor=new Encryption(cf("APP/COOKIESALT"), Encryption::McryptRc2, Encryption::TwoWayMode);
        if(is_numeric($liftime)){
            $this->lifetime=$liftime;
        }
@@ -63,22 +65,19 @@ class Cookie{
         return self::$resgistry;
     }
     public function Set($key, $value){
-        if($this->path===Yalamo::Void){
-           setcookie($key, $value,  time()+$this->lifetime);
-           self::$resgistry=$_COOKIE;
-           return  true;
-       }
-       else{
-           setcookie($key, $value,  time()+$this->lifetime, $this->path);
-           self::$resgistry=$_COOKIE;
-           return  true;
-       }
+        $value=$this->cryptor->Crypt($value);
+        if(setcookie($key, $value,  time()+$this->lifetime)){
+            self::$resgistry=$_COOKIE;
+            return  true;
+        }
+        $this->Collect(Error::YE402);
+        return false;   
     }
     public function Get($key){
-        if((array_key_exists($key, self::$resgistry))&&(array_key_exists($key, $_COOKIE))){
-            return self::$resgistry[$key];
+        if((isset(self::$resgistry[$key]))&&(isset($_COOKIE[$key]))){
+            return $this->cryptor->Decrypt(self::$resgistry[$key]) ;
         }
-        $this->Collect(Error::YE100);
+        $this->Collect(Error::YE403);
         return false;
     }
     public function Clear($keys=Yalamo::All){

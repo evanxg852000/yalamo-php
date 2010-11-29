@@ -53,6 +53,8 @@ final class Error {
     /* Misc zone */
     const YE400 = "YE400| Unable to connect to mail server";
     const YE401 = "YE401| Unable to send the mail";
+    const YE402 = "YE401| Unable to create cookie";
+    const YE403 = "YE401| Unable to retrieve cookie";
 
 
     private $num;

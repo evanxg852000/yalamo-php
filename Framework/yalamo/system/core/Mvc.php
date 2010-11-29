@@ -61,26 +61,26 @@ final class Mvc {
 final class Mediator {
     private $page;
     private $controller;
-    private $method;
-    private $controllerinstance;
+    private $action;
+    private $controller_instance;
 
     /**
      * Constructor get the current controller and sets up the mediator member variables
      */
     public function __construct() {
-        $uri=new Uri();
+        $uri=Uri::Instance();
         $this->page=$uri->Page();
         $this->controller=$uri->Controller();
-        $this->method=$uri->Method();
-
-        if(MODE==Yalamo::Classic){
+        $this->action=$uri->Action();
+           
+        if( cf("RUI/MODE")===Yalamo::Classic){
             $file=$this->page.EXT;
             if ((!file_exists($file)) || (!is_readable($file))){
                $this->page="Error404";
             }
         }
         else{
-           $file=MVCPATH."controllers".DS.$this->controller.EXT;
+           $file=cf("BASE/MVCPATH")."controllers".DS.$this->controller.EXT;
            if ((!file_exists($file)) || (!is_readable($file))){
                $this->controller ="Error404";
            }
@@ -92,7 +92,7 @@ final class Mediator {
      */
     public function Route(){
         $load=new Loader();
-        if(MODE==Yalamo::Classic){
+        if(cf("RUI/MODE")==Yalamo::Classic){
             $load->Page($this->page);
             return;
         }
@@ -101,23 +101,23 @@ final class Mediator {
         $load->Controller($this->controller) ;
         //create an instance of the controller
         $class = $this->controller ;
-        $this->controllerinstance = new $class();
-        if(!is_subclass_of($this->controllerinstance,Controller::Baseclass)){
+        $this->controller_instance = new $class();
+        if(!is_subclass_of($this->controller_instance,Controller::Baseclass)){
             $this->Collect(Error::YE002);
             return;  
         }
-         //check if the method is not empty
-         if($this->method==Yalamo::Void){
-             $this->method = 'Index';
+         //check if the action is not empty
+         if($this->action==Yalamo::Void){
+             $this->action = 'Index';
          }
-        //check if the method is callable
-        if (! is_callable(array($this->controllerinstance, $this->method))){
+        //check if the action is callable
+        if (! is_callable(array($this->controller_instance, $this->action))){
             $load->Page("Error404");
             exit();
         }
-        //call the method
-        $varmethod=$this->method;
-        $this->controllerinstance->$varmethod();
+        //call the action
+        $var_action=$this->action;
+        $this->controller_instance->$var_action();
     }
 
 }
@@ -163,7 +163,7 @@ abstract class Controller extends Object {
     public function __construct() {
         $this->Variables=array();
         $this->Load=new Loader();
-        $this->Uri=new Uri();
+        $this->Uri=Uri::Instance();
         $this->Model=$this->Load->Model(get_class($this));
     }
     public function  __toString() {return "Object of Type: Controller"; }
@@ -176,31 +176,31 @@ abstract class Controller extends Object {
         return $this->Load->Component($name, "controllers");
     }
 
-    final protected function Delegate($method) {
+    final protected function Delegate($action) {
         //get the name of the subcontroller
-        $Subcontroller= $this->Uri->Controller().$this->Uri->Method();
+        $sub_controller= $this->Uri->Controller().$this->Uri->Action();
 
-        $this->Load->Controller($Subcontroller);
-        $Subinstance=new $Subcontroller();
-        if(!is_subclass_of($Subinstance, Controller::Baseclass)){
+        $this->Load->Controller($sub_controller);
+        $sub_instance=new $sub_controller();
+        if(!is_subclass_of($sub_instance, Controller::Baseclass)){
             $this->Collect(Error::YE002);
             return;
         }
-        if($method==Yalamo::Void){
-            $method="Index";
+        if($action==Yalamo::Void){
+            $action="Index";
         }
-        //check if the method is callable
-        if (! is_callable(array($Subinstance, $method))){
+        //check if the action is callable
+        if (!is_callable(array($sub_instance, $action))){
             $this->Load->Page("Error404");
             exit();
         }
-        //call the method
-        $Subinstance->$method();  
+        //call the action
+        $sub_instance->$action();
     }
 
     /**
      * Abstract default method that must be implemented in every controller's subclass
-     * this method is called when there not a method specified from the url or the method is not callable
+     * this method is called when there not a action specified from the url or the method is not callable
      */
     abstract function Index();
 

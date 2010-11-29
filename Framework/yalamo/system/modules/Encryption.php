@@ -61,14 +61,20 @@ class Encryption extends Object {
 
     public function Decrypt($word){
         if($this->mode===Encryption::OneWayMode){return false;}
-        if($word==Yalamo::Void){return false;}
         return trim(mcrypt_decrypt($this->method, $this->salt,base64_decode($word),MCRYPT_MODE_ECB));
     }
 
-    public static function UnicKey($prefix) {
+    public static function UnicKey($prefix=Yalamo::Void) {
         return str_replace(".",  Yalamo::Void,uniqid($prefix, true));
     }
-    
+
+    public static function Md5(){
+        return md5($word);
+    }
+
+    public static function Sha1($word){
+        return sha1($word);
+    }
 }
 
 

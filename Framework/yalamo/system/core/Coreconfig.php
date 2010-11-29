@@ -27,6 +27,7 @@ define('YLICENCE','MIT');
 define('YAUTHOR','Evance Soumaoro');
 
 define('YCOREFILE'  ,  YPATH.'system'.DS.'core'.DS.'Core'.EXT );
+define('YCOREFUNCFILE',YPATH.'system'.DS.'core'.DS.'Corefunc'.EXT );
 define('YERRORFILE'  , YPATH.'system'.DS.'core'.DS.'Inspector'.EXT );
 define('YMODELFILE' ,  YPATH.'system'.DS.'core'.DS.'Model'.EXT);
 define('YURIFILE'   ,  YPATH.'system'.DS.'core'.DS.'Uri'.EXT);
@@ -40,10 +41,10 @@ define('YEXTENTIONDIR' , YPATH.'extensions'.DS);
 /**
  * Assemble autoload array
  */
-$YAutoLoad = array (
-    'modules'       =>$AutoModules,
-    'helpers'       =>$AutoHelpers,
-    'extensions'    =>$AutoExtensions
+$YAUTOLOADCINFIG = array (
+    'MODULES'       =>$BASECONFIG["AUTOLOAD"]["MODULES"],
+    'HELPERS'       =>$BASECONFIG["AUTOLOAD"]["HELPERS"],
+    'EXTENSIONS'    =>$BASECONFIG["AUTOLOAD"]["EXTENSIONS"]
 );
 
 
