@@ -37,24 +37,28 @@ define('YFSBASE', str_replace(basename(dirname(__FILE__)),"",pathinfo(__FILE__, 
 /**
  * Include required files
  */
-require_once("Userconfig".EXT);
-require_once("system".DS."core".DS."Coreconfig".EXT);
+require("configuration".DS."Base".EXT);
+require("configuration".DS."Uri".EXT);
+require("configuration".DS."Internationalisation".EXT);
+require("configuration".DS."Database".EXT);
+require("configuration".DS."Application".EXT);
+require("system".DS."core".DS."Coreconfig".EXT);
 
-require_once(YCOREFILE);
-require_once(YERRORFILE);
-require_once(YMODELFILE);
-require_once(YURIFILE);
-require_once(YMVCFILE);
-
+require(YCOREFILE);
+require(YCOREFUNCFILE);
+require(YERRORFILE);
+require(YMODELFILE);
+require(YURIFILE);
+require(YMVCFILE);
 
 /**
  *  Autoload user prefered files using the autoload array
  */
-Yalamo::Autoload($YAutoLoad);
+Yalamo::Autoload($YAUTOLOADCINFIG);
 
 /**
  * Initialise Profiler
  */
-if(ENABLEPROFILING){
+if($BASECONFIG["PROFILING"]){
    Profiler::CheckPoint("Init");
 }

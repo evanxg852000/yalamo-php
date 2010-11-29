@@ -26,32 +26,27 @@
  * The class that contains the framework enumeration and static methods
  * to do useful thing.
  */
-Class Uri {
+Class Uri extends Singleton{
+    const Page="{page}";
     const Controller="{controller}";
-    const Method="{method}";
-    const Params="{params}";
-
-// "/{section}/{controler}/{method}/{params}/"
-    
-    /**
-     * Map uris, for routing
-     * @var array
-     */
-    private static $map=array();
+   
+    private $uri_config;
 
     /**
      * Base uri, define in Userconfig.php file is the web app url
      * @var string
      * @example http://evansofts.com/
      */
-    private $baseuri;
+    private $base_uri;
 
     /**
      * Full uri in the client browser
      * @var string
      * @example http://evansofts.com/services/consultancy/option/vip
      */
-    private $requesturi;         
+    private $request_uri;
+
+    private $full_uri;
     
     /**
      * The uri segments
@@ -75,104 +70,146 @@ Class Uri {
     private $controller;
 
     /**
-     * The current requested method of the controller
+     * The current requested action of the controller
      * @var string
      * @example  consultancy
      */
-    private $method;
+    private $action;
 
     /**
      * The array containing the query string
      * @var array
      * @example [ option,vip ]
      */
-    private $querystr=array();
-
-    /**
-     * Custome uri scheme for routing
-     * @var array
-     */
-    private $custome=array();
+    private $query_string=array();
 
     /**
      * Constructor
      */
-    public function __construct(){
-        $this->baseuri=SITEURL ;
-        $this->requesturi=$this->RequestUri();
-        $segementstring=str_replace($this->baseuri, "",  $this->requesturi );
-        $this->segments=explode('/',$segementstring);
+    private function __construct(){
+        $this->uri_config= cf("URI/");
+        $this->base_uri=$this->uri_config["BASE"];
+        $this->setupuri();
+        $this->checkmap();
+        $this->segments=explode("/",$this->request_uri);
 
-        if(MODE==Yalamo::Classic){
-          //page
-          $this->page=DEFAULTPAGE;
-          if(array_key_exists(0, $this->segments) ){
-               if( $this->segments[0]!=""){
-                  $this->page=$this->segments[0];
-               }
-            }
-           //query string
-           for($i=1; $i< count($this->segments);$i++ ){
-                if(array_key_exists($i, $this->segments)){
-                     $this->querystr[]=$this->segments[$i];
-                     $_GET[$i]=$this->segments[$i];
+        //initialise using uri scheme;
+        $this->uri_config["SCHEME"]=trim($this->uri_config["SCHEME"],"/");
+        //classic mode
+        if($this->uri_config["MODE"]===Yalamo::Classic){
+            $this->page=$this->uri_config["DEFAULTPAGE"];
+            $page_position= array_keys(explode("/", $this->uri_config["SCHEME"]),Uri::Page);
+            $page_position=$page_position[0];
+            //page
+            if(isset($this->segments[$page_position])){
+                $this->page=$this->segments[$page_position];
+            }       
+            //query string
+            $c=count($this->segments);
+            for($i=$page_position+1; $i<$c;$i++ ){
+                if(isset($this->segments[$i])){
+                    $this->query_string[]=$this->segments[$i];
+                    $_GET[$i]=$this->segments[$i];
                 }
             }
             $this->controller=null;
-            $this->method=null;
+            $this->action=null; 
         }
-        else{
+        //mvc mode
+        else {
+            $this->controller=$this->uri_config["DEFAULTCONTROLLER"];
+            $controller_position= array_keys(explode("/", $this->uri_config["SCHEME"]),Uri::Controller);
+            $controller_position=$controller_position[0];
+
             //controller
-            $this->controller=DEFAULTCONTROLLER;
-            if(array_key_exists(0, $this->segments) ){
-               if( $this->segments[0]!=""){
-                  $this->controller=$this->segments[0];
-               }
+            if((isset($this->segments[$controller_position])) && (!empty($this->segments[$controller_position])) ){
+                   $this->controller=$this->segments[$controller_position];
             }
-            //method
-            if(array_key_exists(1, $this->segments)){
-                $this->method=$this->segments[1];
+            //action
+            if((isset($this->segments[$controller_position+1])) && (!empty($this->segments[$controller_position+1]))){
+                $this->action=$this->segments[$controller_position+1];
             }
             else {
-                $this->method="Index";
+                $this->action="index";
             }
             //query string
-            for($i=2; $i< count($this->segments);$i++ ){
-                if(array_key_exists($i, $this->segments)){
-                     $this->querystr[]=$this->segments[$i];
-                     $_GET[$i]=$this->segments[$i];
+            $c=count($this->segments);
+            for($i=$controller_position+2; $i<$c;$i++ ){
+                if(isset($this->segments[$i])){
+                    $this->query_string[]=$this->segments[$i];
+                    $_GET[$i]=$this->segments[$i];
                 }
             }
-            $this->page=null;
+            $this->page=null;    
         }
-
     }
-    
     public function  __toString() {return "Object of Type: Uri"; }
+
+    public static function Instance(){
+        if(!self::$instance){
+            self::$instance=new Uri();
+        }
+        return self::$instance;
+    }
 
     /**
      *@access private
      * @return string
      */
-    private function RequestUri() {
-        $url = 'http';
-        $port='';
-        if (isset($_SERVER["HTTPS"]) and ( $_SERVER["HTTPS"]== "on"))  {	$url .= "s"; }
-         $url .= "://";
-         if ($_SERVER["SERVER_PORT"] !== "80") {
-            $port =':'.$_SERVER["SERVER_PORT"];
-         }
-         $url .= $_SERVER["SERVER_NAME"].$port.$_SERVER["REQUEST_URI"];
-         return $url;
+    private function setupuri() {
+        $this->full_uri =(isset($_SERVER["HTTPS"]) && ( $_SERVER["HTTPS"]== "on"))? "https://" :"http://" ;
+        if(isset($_SERVER["SERVER_NAME"])){
+            $this->full_uri .=$_SERVER["SERVER_NAME"];
+        }
+        if ((isset($_SERVER["SERVER_PORT"])) && ($_SERVER["SERVER_PORT"] !== "80")) {
+            $this->full_uri .=':'.$_SERVER["SERVER_PORT"];
+        }
+       //check if we are in sub folder or webroot
+       $SubFolder=trim(str_replace($this->full_uri,"", $this->base_uri),"/");
+       if(!empty($SubFolder)){
+           $this->full_uri.="/".$SubFolder;
+       }
+        //1st chance
+        if (isset($_GET) && count($_GET) == 1 && trim(key($_GET), '/') != ''){
+            $this->request_uri=trim(key($_GET),"/");
+            $this->full_uri .="/".$this->request_uri;
+            return ;
+        }
+       //2nd chance
+       if($_SERVER["QUERY_STRING"]){
+            $this->request_uri=trim($_SERVER["QUERY_STRING"],"/");
+            $this->full_uri .="/".$this->request_uri;
+            return ;
+        }
+        //3rd chance
+        if(isset ($_SERVER["REQUEST_URI"])){
+            $this->request_uri=trim(str_replace($SubFolder,"",$_SERVER["REQUEST_URI"]),"/");
+            $this->full_uri .="/".$this->request_uri;
+            return ;
+        }
+        //last chance
+        if(isset($_SERVER["PATH_INFO"])){
+            $this->request_uri=trim($_SERVER["PATH_INFO"],"/");
+            $this->full_uri .="/".$this->request_uri;
+            return ;
+        }
+        
     }
-    
-    /**
+
+    /* check map for routing */
+    private function checkmap(){
+        if(isset($this->uri_config["MAP"][$this->full_uri."/"])){
+             $this->Redirect($this->uri_config["MAP"][$this->full_uri."/"]);
+        }
+    }
+
+        /**
      * The accessor to the base uri
      * 
      * @return string The base uri
      */
     public function Base() {
-        return $this->baseuri;
+        return $this->base_uri;
     }
 
     /**
@@ -181,22 +218,7 @@ Class Uri {
      * @return string The full uri
      */
     public function Full() {
-        return $this->requesturi;
-    }
-    
-    /**
-     * The accessor  to a portion of the uri
-     *
-     * @param int $num  The index of the uri registry
-     * @return string   The portion value
-     */
-    public function Segment($num){
-        if(array_key_exists($num , $this->segments)){
-            return $this->segments[$num];
-        }
-        else {
-            return false;
-        }
+          return $this->full_uri;
     }
 
     /**
@@ -210,29 +232,49 @@ Class Uri {
 
     /**
      * The accessor to the  controller of the uri
-     * 
-     * @return String The controller of the uri 
+     *
+     * @return String The controller of the uri
      */
     public function Controller() {
         return ucwords($this->controller);
     }
 
     /**
-     * The accessor to the  method of the uri
+     * The accessor to the  action of the uri
      *
      * @return String The method of the uri
      */
-    public function Method() {
-        return ucwords($this->method);
+    public function Action(){
+        return ucwords($this->action);
+    }
+
+    /**
+     * The accessor  to a portion of the uri
+     *
+     * @param int $num  The index of the uri registry
+     * @return string   The portion value
+     */
+    public function Segment($num){
+        if(isset($this->segments[$num])){
+            return $this->segments[$num];
+        }
+        return false;
     }
     
+    public function Params($num){
+        if(isset($this->query_string[$num ])){
+            return $this->query_string[$num];
+        }
+        return false;
+    }
+
     /**
-     * The accessor to the  querystring of the uri
+     * The accessor to the  query_stringing of the uri
      * 
-     * @return String The querystring of the uri 
+     * @return String The query_stringing of the uri
      */
     public function QueryString() {
-        return $this->querystr;
+        return $this->query_string;
     }
 
     /**
@@ -245,14 +287,6 @@ Class Uri {
         exit ();
     }
 
-    public static function Map(){
-        return Uri::$map;
-    }
-
-    public static function Connect($curi,$nuri){
-        Uri::$map[$curl]=$nuri;
-    }
-
     /**
      * This method create a url(to be used as href ) in mvc mode
      *
@@ -260,7 +294,8 @@ Class Uri {
      * @param string $method     The method of the url
      * @param strign $params     The query string
      */
-    public function CreateMvc($controller,$method,$params){
+    public function CreateMvc($controller,$method,$params=null,$prefix=null){
+        //TODO: link
         $paramstr=Yalamo::Void;
         if(is_array($params)){
             foreach($params as $param){
@@ -279,7 +314,8 @@ Class Uri {
      * @param string $page       The page name
      * @param strign $params     The query string
      */
-    public function CreateClassic($page,$params){
+    public function CreateClassic($page,$params=null,$prefix=null){
+        //TODO: link 
         $paramstr=Yalamo::Void;
         if(is_array($params)){
             foreach($params as $param){
@@ -291,12 +327,5 @@ Class Uri {
         }
         return $this->Base()."/$page/$paramstr";
     }
-
-    
-
-}
-
-//TODO: Routing
-class Routes {
 
 }

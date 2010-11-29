@@ -55,9 +55,9 @@ final class Yalamo {
      */
     public static function  Autoload($AutoLoadArray){
       $load=new Loader();
-      $load->Modules($AutoLoadArray['modules']);
-      $load->Helpers($AutoLoadArray['helpers']);
-      $load->Extensions($AutoLoadArray['extensions']);
+      $load->Modules($AutoLoadArray['MODULES']);
+      $load->Helpers($AutoLoadArray['HELPERS']);
+      $load->Extensions($AutoLoadArray['EXTENSIONS']);
     }
     
 }
@@ -110,7 +110,7 @@ class Object  extends ICollectable implements ISerialisable {
      * @return Object           The object in pure Object format
      */
     public function Unserialize($Object){
-        return (Object) unserialize($Object);
+        return (Object) @unserialize($Object);
     }
 
     /**
@@ -162,6 +162,19 @@ class Object  extends ICollectable implements ISerialisable {
     }
 
 }
+//------------------------------------------------------------------------------
+/**
+ * Singleton Class
+ *
+ * The base class for classes that implement the singleton patern
+ */
+abstract class Singleton extends Object {
+    protected static $instance=null;
+    private function __clone() { }
+    private function  __construct(){}
+    public static  function Instance(){}
+}
+
 
 //------------------------------------------------------------------------------
 /**
@@ -227,7 +240,7 @@ final class Loader extends Object {
      * @return Model        An instance of the loade model
      */
     public function Model($model){
-        $fullpath=MVCPATH."models".DS.ucwords($model).EXT;
+        $fullpath=cf("BASE/MVCPATH")."models".DS.ucwords($model).EXT;
         if($this->Load($fullpath)){
             return new $model();
         }
@@ -243,7 +256,7 @@ final class Loader extends Object {
      * @param mixed  $data  The optional data to be passed in
      */
     public function View($view,$data=Null){
-        $fullpath=MVCPATH."views".DS.ucwords($view).EXT;
+        $fullpath=cf("BASE/MVCPATH")."views".DS.ucwords($view).EXT;
         $this->Load($fullpath,$data);
     }
 
@@ -253,7 +266,7 @@ final class Loader extends Object {
      * @param string $controller The controller name
      */
     public function Controller($controller){
-        $fullpath=MVCPATH."controllers".DS.ucwords($controller).EXT;
+        $fullpath=cf("BASE/MVCPATH")."controllers".DS.ucwords($controller).EXT;
         $this->Load($fullpath);
     }
 
@@ -273,7 +286,7 @@ final class Loader extends Object {
      * @param string $name The name of the component
      */
     public function Component($component,$type){
-       $fullpath=MVCPATH.$type.DS."components".DS.ucwords($component).EXT;
+       $fullpath=cf("BASE/MVCPATH").$type.DS."components".DS.ucwords($component).EXT;
        if($this->Load($fullpath)){
             return new $component();
         }
@@ -322,10 +335,8 @@ final class Loader extends Object {
      * @return false|null
      */
     private function  Load($fullpath, $data=null){
-        global $Alias;  
-        if(ENABLEALIAS){ 
-           extract($Alias);
-        }
+        global $BASECONFIG;
+        extract($BASECONFIG["ALIASES"]);
         if( $data!=null){
             extract($data);
         }
@@ -550,26 +561,5 @@ final class Sanitizer extends Object {
         return Sanitizer::Instance()->CleanIn($data,$blacklist);
     }
 
-}
-
-
-/*========== CORE FUNTIONS ===================================================*/
-
-/**
- * Php internal auto loading
- *
- * @param string $classname The name of the class that's trying to be instanciated
- */
-function __autoload($classname){
-   $load=new Loader();
-   $load->Module($classname);
-}
-
-function y($data){
-    echo Sanitizer::ForOut($data);
-}
-
-function _y($object){
-    print_r($object);
 }
 

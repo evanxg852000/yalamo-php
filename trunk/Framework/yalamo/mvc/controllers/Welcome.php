@@ -4,7 +4,11 @@ class Welcome extends Controller {
 public function Index(){
     $data['title']="Yalamo Framework";
     $data['content']="this is the content of my div from the welcome controller!";
-   // $this->Load->Module("Database");
+    
+   
+   
+
+// $this->Load->Module("Database");
  
    
   
