@@ -2,9 +2,8 @@
 class Welcome extends Controller {
 	
 public function Index(){
-    $data['title']="Yalamo Framework";
-    $data['content']="this is the content of my div from the welcome controller!";
-    
+    $this->Set("title","Yalamo Framework" );
+    $this->Set("content","this is the content of my div from the welcome controller!" );
    
    
     $this->Load->Module("Database");
@@ -13,10 +12,10 @@ public function Index(){
 
 
    
-   $db=Database::Parallel("ebookstore");
-   echo "<pre>";
-    _y($db->q("SELECT* FROM links ; ")->ResultSet()->AsAssoc());
-    echo "</pre>";
+   //$db=Database::Parallel("ebookstore");
+   //echo "<pre>";
+   // _y($db->q("SELECT* FROM links ; ")->ResultSet()->AsAssoc());
+   // echo "</pre>";
 //_y($data);
 
     
@@ -28,7 +27,8 @@ public function Index(){
    // $this->Model->InsertUser("Evance");
    //$this->Model->Escape(); 
    Profiler::CheckPoint("Controller");
-   $this->Load->View("index",  $this->Variables);
+   $this->Show("index");
+   //$this->Load->View("index",  $this->Variables);
 }
 	
 public function Hello()	{

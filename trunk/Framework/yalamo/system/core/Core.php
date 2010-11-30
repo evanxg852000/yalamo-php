@@ -54,7 +54,7 @@ final class Yalamo {
      * @param array $AutoLoadArray The User defined array
      */
     public static function  Autoload($AutoLoadArray){
-      $load=new Loader();
+      $load= Loader::Instance();
       $load->Modules($AutoLoadArray['MODULES']);
       $load->Helpers($AutoLoadArray['HELPERS']);
       $load->Extensions($AutoLoadArray['EXTENSIONS']);
@@ -199,10 +199,18 @@ class Component  extends Object {
  * The class that contains the framework enumeration and static methods
  * to do useful thing.
  */
-final class Loader extends Object {
-    public function  __construct() {}
-    public function  __destruct() {}
-    public function  __toString() {return "Object of Type: Loader"; }
+final class Loader extends Singleton {
+    private static $instance=null;
+
+    private function __construct(){}
+
+    public static function Instance(){
+        if(!self::$instance){
+            self::$instance=new Loader();
+        }
+        return self::$instance;
+    }
+
 
     /**
      * Loads a Module from the modules directory
