@@ -28,7 +28,7 @@
  * The class that define the mvc entry point
  * The core calss of the mvc patern in the framework
  */
-final class Mvc {
+final class Mvc extends Object{
     private $mediator;
 
     /**
@@ -58,7 +58,7 @@ final class Mvc {
  * The class that define the mvc mediator which chose where to route the navigation
  * process
  */
-final class Mediator {
+final class Mediator extends Object{
     private $page;
     private $controller;
     private $action;
@@ -166,8 +166,7 @@ abstract class Controller extends Object {
         $this->Uri=Uri::Instance();
         $this->Model=$this->Load->Model(get_class($this));
     }
-    public function  __toString() {return "Object of Type: Controller"; }
-
+    
     final protected function Set($name,$value){
         $this->Variables[$name]=$value;
     }

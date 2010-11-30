@@ -27,53 +27,87 @@
  * 
  */
 final class Mysql extends DBDriver {
-    public function  __construct($configuration) {
-        $this->result=null;
-        $this->resultset=null;
-        $this->resultarray=null;
-        $this->resultobject=null;
 
-        $handle=@mysql_connect(DBSERVER,DBUSER,DBPASSWORD);
-        $currentdb=mysql_select_db(DBNAME);
-        if($handle && $currentdb){
+    public function  __construct($dbname,$configuration) {
+        $this->dbname=$dbname;
+        $this->configuration=& $configuration;
+        $this->statement=Yalamo::Void;
+        $handle=@mysql_connect($this->configuration["HOST"],$this->configuration["USER"],$this->configuration["PASSWORD"]);
+        if($handle){
             $this->connection=$handle;
-        }
-        else {
-            $this->PCollect(Error::YE301,mysql_error() );
-            $this->connection=false;
-        }
-        return $this->connection;
-    }
-    public function  __toString() {return "Object of Type: Mysql"; }
-    public function  __destruct(){
-        mysql_close($this->connection);
-    }
-    
-    public function Connection() {
-        return $this->connection;
-    }
-    public function Create($name){
-        $sql="CREATE DATABASE $name ;";
-        return $this->Execute($sql);
-    }
-    public function Drop($name){
-         $sql="DROP DATABASE $name ;";
-         return $this->Execute($sql);
-    }
-    public function Export($file){
-        $this->Collect(Error::YE001);
-    }
-    public function Databases() {
-        $dbs=array();
-        if($this->connection){
-            $list=mysql_list_dbs($this->connection);
-            while($db= mysql_fetch_row($list)){
-                $dbs[]=$db[0];
+            $currentdb=@mysql_select_db($this->dbname);
+            if(!$currentdb){
+                $this->Collect(mysql_error());
             }
         }
-        return $dbs;
+        else {
+            $this->Collect(Error::YE301,mysql_error() );
+            $this->connection=false;
+        }
+        
+    }
+    public function  __destruct(){
+       if(! @mysql_close($this->connection)){
+           $this->Collect(mysql_error());
+       }
+    }
+    
+
+    //Database opeartion area
+    public function DBCreate($name){
+        return $this->Execute("CREATE DATABASE $name ;");
+    }
+    public function DBDrop($name){
+        return $this->Execute("DROP DATABASE $name ;");
+    }
+    public function DBTables($name){
+        return $this->Execute("SHOW TABLES IN $name ;");
+    }
+    public function DBExport($file,$name){
+         $this->Collect(Error::YE001);
+    }
+    public function Execute($sql){
+        if($this->connection){
+            $this->result= @mysql_query($sql, $this->connection);
+            if(!$this->result){
+                $this->Collect(mysql_error());
+                return false;
+            }
+        }
+        return $this->result;
     }
 
+    //Active recorde area
+    public function On($table){;
+        $this->statement.="{left} ".$table." {right} ";
+    }
+    public function Where($param,$logic="AND"){}
+    public function Limit($s,$count){}
+    public function Order($param,$direction){}
+    public function Join($table,$condition){}
+    public function Insert(){}
+    public function Select(){}
+    public function Update($values){}
+    public function Delete(){}
+
+    //Meta data
+    public function LastId(){}
+    public function NumRows(){}
+    public function AffectedRows(){}
+
+    //Result fetching
+    public function ResultSet(){}
+
+     //security
+    public function Escape($vars){}
+    public function Prepare($sql,$data){}
+
+    
+
+}
+
+
+class Mysqllegcy {
     public function Escape($vars) {
         if(is_array($vars)){
             foreach ($vars as $key => $val) {

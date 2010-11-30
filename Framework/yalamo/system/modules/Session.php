@@ -27,7 +27,6 @@
  */
 class Session extends Object {
     private static  $resgistry;
-    private $cryptor;
     private $id;
     private $object;
     private $cookie;
@@ -36,7 +35,6 @@ class Session extends Object {
  
     public function  __construct() {
         session_start();
-        $this->cryptor=new Encryption(cf("APP/COOKIESALT"), Encryption::McryptRc2, Encryption::TwoWayMode);
         $this->id=session_id();
         $this->cookie_name=cf("APP/SESSIONCOOKIE");
         $this->cookie=new Cookie();
@@ -83,7 +81,7 @@ class Session extends Object {
     }
     public function Set($key, $value){
         if($this->is_safe){        
-            $_SESSION[$key]=  $this->cryptor->Crypt($value);
+            $_SESSION[$key]=$value;
             self::$resgistry=$_SESSION;
             return true;
         }
@@ -92,7 +90,7 @@ class Session extends Object {
     public function Get($key){
         if($this->is_safe){
             if((isset(self::$resgistry[$key])) && (isset($_SESSION[$key])) ){
-                return $this->cryptor->Decrypt(self::$resgistry[$key]) ;
+                return self::$resgistry[$key] ;
             }
         }
         return false;

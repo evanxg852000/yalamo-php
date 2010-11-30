@@ -57,10 +57,7 @@ class Cookie extends Object{
        }
        $this->path=$path;
     }   
-    public function  __toString() {
-        return "Object of Type: Cookie";
-    }
-
+    
     public function Registry(){
         return self::$resgistry;
     }
