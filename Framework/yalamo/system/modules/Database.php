@@ -37,17 +37,17 @@ final class Database extends Singleton {
     private function   __construct($isdefault=true) {  
         if($isdefault){
             $databases=cf("DATABASE");
-            $db_name=key($databases);
-            $configuration=$databases[$db_name];
-             switch ($databases[$db_name]['DRIVER']) {
+            $name=key($databases);
+            $configuration=$databases[$name];
+             switch ($databases[$name]['DRIVER']) {
                     case Yalamo::Mysql:
-                        $this->driver_bject=new Mysql($db_name,$configuration);
+                        $this->driver_object=new Mysql($name,$configuration);
                     break;
                     case Yalamo::Sqlite:
-                        $this->driver_object=new Sqlite($db_name,$configuration);
+                        $this->driver_object=new Sqlite($name,$configuration);
                     break;
                     case Yalamo::Pogsql:
-                        $this->driver_object=new Pogsql($db_name,$configuration);
+                        $this->driver_object=new Pogsql($name,$configuration);
                     break;
               }
         }
@@ -78,7 +78,7 @@ final class Database extends Singleton {
     }
 
     public function Name(){
-       return $this->driver_bject->DBName();
+       return $this->driver_object->DBName();
     }
     public function Configuration(){
         return $this->driver_bject->Configuration();
@@ -109,7 +109,7 @@ final class Database extends Singleton {
         if($name==Yalamo::Void){
             $name=$this->Name();
         }
-        return $this->driver_object->Tables($this->name);
+        return $this->driver_object->DBTables($name);
     }
     public function Export($file,$name=Yalamo::Void){
         if($name==Yalamo::Void){
@@ -117,7 +117,11 @@ final class Database extends Singleton {
         }
         return $this->driver_object->DBExport($file,$name);
     }
-    
+
+    //test
+    public function q($sql) {
+        return $this->driver_object->Execute($sql);
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -196,19 +200,28 @@ abstract  class DBDriver extends Object {
  * The abstract Base Class for Databases Driver. any supported database engine should extends this class
  */
 class ResultSet extends Object {
-    private $result;
+    private $data;
 
-    function  __construct($result_array) {
-        $this->result=$result_array;
+    function  __construct($array) {
+        $this->data=$array;
     }
 
-    public function Object(){
-
+    public function AsArray(){
+        return $this->data;
     }
-    public function Assoc(){
-
+    public function AsObject(){
+        $result=array();
+        foreach ($this->data as $key => $value) {
+            $result[$key]=(Object)$value;
+        }
+        return $result;
     }
-    public function Rarray(){
-
+    public function AsAssoc(){
+        $result=array();
+        foreach ($this->data as $key => $value) {
+            $result["row_".$key]=$value;
+        }
+        return $result;
     }
+    
 }

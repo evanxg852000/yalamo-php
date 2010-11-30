@@ -7,15 +7,19 @@ public function Index(){
     
    
    
+    $this->Load->Module("Database");
 
-            $this->Load->Module("Database");
-    
-    $db=Database::Instance();
-    echo $db;
-    //pr($db->Tables());
-
- 
    
+
+
+   
+   $db=Database::Parallel("ebookstore");
+   echo "<pre>";
+    _y($db->q("SELECT* FROM links ; ")->ResultSet()->AsAssoc());
+    echo "</pre>";
+//_y($data);
+
+    
   
 
    // $s=$this->Component("Sizer");
@@ -24,10 +28,12 @@ public function Index(){
    // $this->Model->InsertUser("Evance");
    //$this->Model->Escape(); 
    Profiler::CheckPoint("Controller");
-   $this->Load->View("index",$data);
+   $this->Load->View("index",  $this->Variables);
 }
 	
 public function Hello()	{
+    
+
     $this->Delegate($this->Uri->Segment(2));
 }
 

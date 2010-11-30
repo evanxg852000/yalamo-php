@@ -37,18 +37,18 @@ final class Mysql extends DBDriver {
             $this->connection=$handle;
             $currentdb=@mysql_select_db($this->dbname);
             if(!$currentdb){
-                $this->Collect(mysql_error());
+                $this->PCollect(Error::YE301,  $this);
             }
         }
         else {
-            $this->Collect(Error::YE301,mysql_error() );
+            $this->PCollect(Error::YE301,mysql_error() );
             $this->connection=false;
         }
         
     }
     public function  __destruct(){
        if(! @mysql_close($this->connection)){
-           $this->Collect(mysql_error());
+           $this->PCollect(Error::YE301,mysql_error());
        }
     }
     
@@ -74,12 +74,13 @@ final class Mysql extends DBDriver {
                 return false;
             }
         }
-        return $this->result;
+        return $this;
     }
 
     //Active recorde area
     public function On($table){;
         $this->statement.="{left} ".$table." {right} ";
+        return $this;
     }
     public function Where($param,$logic="AND"){}
     public function Limit($s,$count){}
@@ -91,12 +92,25 @@ final class Mysql extends DBDriver {
     public function Delete(){}
 
     //Meta data
-    public function LastId(){}
-    public function NumRows(){}
-    public function AffectedRows(){}
+    public function LastId(){
+        return @mysql_insert_id($this->connection);
+    }
+    public function NumRows(){
+        return mysql_num_rows($this->result);
+    }
+    public function AffectedRows(){
+        return @mysql_affected_rows($this->connection);
+    }
 
     //Result fetching
-    public function ResultSet(){}
+    public function ResultSet(){
+        $result=array();
+	while($row=@mysql_fetch_assoc($this->result) ){
+            $array = (array) $row;
+            $result[]=$array;
+	}
+        return new ResultSet($result);;
+    }
 
      //security
     public function Escape($vars){}
