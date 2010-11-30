@@ -7,16 +7,22 @@ $DATABASECONFIG=array(
 	"USER"=>"root",
 	"PASSWORD"=>"",
 	),
-"bart"=>array(
-	"DRIVER"=>"POSTGRESQL",
-	"HOST"=>"",
-	"USER"=>"",
+"ebookstore"=>array(
+	"DRIVER"=>"MYSQL",
+	"HOST"=>"localhost",
+	"USER"=>"root",
+	"PASSWORD"=>"",
+	),
+"carnic"=>array(
+	"DRIVER"=>"MYSQL",
+	"HOST"=>"localhost",
+	"USER"=>"root",
 	"PASSWORD"=>"",
 	),
 "DBNAME"=>array(
-	"DRIVER"=>"",
-	"HOST"=>"",
-	"USER"=>"",
-	"PASSWORD"=>"",
+	"DRIVER"=>"POSTGRESQL",
+	"HOST"=>"server.com",
+	"USER"=>"admin",
+	"PASSWORD"=>"youpass",
 	)
 );
