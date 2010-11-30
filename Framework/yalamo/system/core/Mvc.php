@@ -91,7 +91,7 @@ final class Mediator extends Object{
      *  This method loads the controller and call its method
      */
     public function Route(){
-        $load=new Loader();
+        $load=Loader::Instance();
         if(cf("RUI/MODE")==Yalamo::Classic){
             $load->Page($this->page);
             return;
@@ -162,13 +162,17 @@ abstract class Controller extends Object {
      */
     public function __construct() {
         $this->Variables=array();
-        $this->Load=new Loader();
+        $this->Load=Loader::Instance();
         $this->Uri=Uri::Instance();
         $this->Model=$this->Load->Model(get_class($this));
     }
-    
+
     final protected function Set($name,$value){
         $this->Variables[$name]=$value;
+    }
+
+    final protected function Show($view){
+        $this->Load->View($view, $this->Variables);
     }
 
     final protected function Component($name){
