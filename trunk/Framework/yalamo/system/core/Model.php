@@ -54,8 +54,7 @@ class Model extends Object {
     public function  __destruct(){
         unset($this->Query);
     }
-    public function  __toString() {return "Object of Type: Model"; }
-
+    
     /**
      * Set/Get the table of the model
      *

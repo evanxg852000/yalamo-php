@@ -30,82 +30,92 @@
  * if you whish to manipulate many connections you should use the databse driver instead
  *
  */
-final class Database extends Object {
-    private $driverObject;
-    private $name;
-    private $configuration;
+final class Database extends Singleton {
+    private static $instance=null;
+    private $driver_object;
 
-    private function   __construct($isdefault=true) {
-        global $DATABASES;
+    private function   __construct($isdefault=true) {  
         if($isdefault){
-            $this->name=key($DATABASES);
-            $this->configuration=$DATABASES[$this->name];
-             switch ($DATABASES[$this->name]['DRIVER']) {
+            $databases=cf("DATABASE");
+            $db_name=key($databases);
+            $configuration=$databases[$db_name];
+             switch ($databases[$db_name]['DRIVER']) {
                     case Yalamo::Mysql:
-                        $this->driverObject=new Mysql($this->configuration);
+                        $this->driver_bject=new Mysql($db_name,$configuration);
                     break;
                     case Yalamo::Sqlite:
-                        $this->driverObject=new Sqlite($this->configuration);
+                        $this->driver_object=new Sqlite($db_name,$configuration);
                     break;
                     case Yalamo::Pogsql:
-                        $this->driverObject=new Pogsql($this->configuration);
+                        $this->driver_object=new Pogsql($db_name,$configuration);
                     break;
               }
         }
     }
-        
+    
     public static function Instance(){
         if(!self::$instance){
             self::$instance=new Database();
         }
         return self::$instance;
     }    
-    public static function Parallel($dbname){
-        global $DATABASES;
-        $Instance=new Database(false);
-        $Instance->name=$dbname;
-        $Instance->configuration=$DATABASES[$Instance->name];
-        switch ($Instance->configuration['DRIVER']) {
+    public static function Parallel($name){
+        $databases=cf("DATABASE");
+        $instance=new Database(false);
+        $configuration=$databases[$name];
+        switch ($databases[$name]['DRIVER']) {
             case Yalamo::Mysql:
-                   $Instance->driverObject=new Mysql($Instance->configuration);
+                   $instance->driver_object=new Mysql($name, $configuration);
                 break;
                 case Yalamo::Sqlite:
-                    $Instance->driverObject=new Sqlite($Instance->configuration);
+                    $instance->driver_object=new Sqlite($name,$configuration);
                 break;
                 case Yalamo::Pogsql:
-                     $Instance->driverObject=new Pogsql($Instance->configuration);
+                     $instance->driver_object=new Pogsql($name,$configuration);
 		break;
         }
-        return $Instance;
+        return $instance;
     }
 
     public function Name(){
-       return $this->name;
+       return $this->driver_bject->DBName();
     }
     public function Configuration(){
-        return $this->configuration;
+        return $this->driver_bject->Configuration();
     }
     public function Handle(){
-        return $this->driverObject;
+        return $this->driver_object;
     }
     public function Connection(){;
-        return $this->driverObject->Connection();
+        return $this->driver_object->Connection();
     }
     public function Query(){
         return new Query($this);
     }
 
-    public function Create(){
-      return $this->driverObject->DBCreate($this->name);
+    public function Create($name=Yalamo::Void){
+        if($name==Yalamo::Void){
+            $name=$this->Name();
+        }
+        return $this->driver_object->DBCreate($name);
     }
-    public function Drop(){
-      return $this->driverObject->DBDrop($this->name);
+    public function Drop($name=Yalamo::Void){
+        if($name==Yalamo::Void){
+            $name=$this->Name();
+        }
+        return $this->driver_object->DBDrop($name);
     }
-    public function Tables(){
-        return $this->driverObject->Tables($this->name);
+    public function Tables($name=Yalamo::Void){
+        if($name==Yalamo::Void){
+            $name=$this->Name();
+        }
+        return $this->driver_object->Tables($this->name);
     }
-    public function Export(){
-       return $this->driverObject->DBExport($this->name);
+    public function Export($file,$name=Yalamo::Void){
+        if($name==Yalamo::Void){
+            $name=$this->Name();
+        }
+        return $this->driver_object->DBExport($file,$name);
     }
     
 }
@@ -116,75 +126,89 @@ final class Database extends Object {
  *
  * The abstract Base Class for Databases Driver. any supported database engine should extends this class
  */
-abstract  class DBDriver extends ICollectable {
+abstract  class DBDriver extends Object {
+    protected  $dbname;
+    protected  $configuration;
     protected  $connection;
+    protected  $statement;
     protected  $result;
-    
-    /**
-     * The methode that makes a derived class collectable by the inspector
-     * and provide for that reason an easy way to raise error on that object
-     *
-     * @param Error::Enum $errortype
-     */
-    protected function Collect($errortype) {
-        $inspector=Inspector::Instance();
-        $inspector->Add($errortype,  $this);
+    protected  $last_inserted;
+    protected  $num_rows;
+    protected  $afected_rows;
+
+    public function Configuration(){
+        return $this->configuration;
     }
-    
-    /**
-     * The P means Personalised which helps passed a specific object rather that the
-     * Top level object
-     *
-     * @param Error::Enum $errortype
-     * @param mixed $subject
-     */
-    protected function PCollect($errortype,$subject){
-        $inspector=Inspector::Instance();
-        $inspector->Add($errortype,  $subject);
+    public function Connection(){
+        return $this->connection;
     }
-    
-    public abstract function  __construct($configuration);
+    public function DBName(){
+        return $this->dbname;
+    }
+
+    public abstract function  __construct($dbname,$configuration);
     public abstract function  __destruct();
 
-    public abstract function Connection();
-    public abstract function Create($name);
-    public abstract function Drop($name);
-    public abstract function Export($file);
-    public abstract function Databases();
-
-    public abstract function Escape($vars);
-    public abstract function Prepare($sql,$data);
-
-    public abstract function Execute($sql);
-    public abstract function Select($table,$fields=Yalamo::All,$condition=Yalamo::Void);
-    public abstract function Insert($table,$keys,$values,$single=true);
-    public abstract function Update($table,$values,$condition=Yalamo::Void,$astring=true);
-    public abstract function Delete($table,$condition=Yalamo::Void);
-
-    public abstract function ResultObject();
-    public abstract function ResultSet();
-    public abstract function ResultArray();
-    
-    public abstract function Fields();
-    public abstract function NumRows();
-    public abstract function AffectedRows();
-
-//Database opeartion area
+    //Database opeartion area
     public abstract function DBCreate($name);
     public abstract function DBDrop($name);
-    public abstract function DBTables();
-    public abstract function DBExport();
+    public abstract function DBTables($name);
+    public abstract function DBExport($file,$name);
+    public abstract function Execute($sql);
 
-//Active recorde area
+    //Active recorde area
     public abstract function On($table);
     public abstract function Where($param,$logic="AND");
     public abstract function Limit($s,$count);
     public abstract function Order($param,$direction);
     public abstract function Join($table,$condition);
-    //public abstract function Insert();
-   // public abstract function Select();
-    //public abstract function Update($values);
-   // public abstract  function Delete();
+    public abstract function Insert();
+    public abstract function Select();
+    public abstract function Update($values);
+    public abstract function Delete();
+
+    //Meta data
+    public abstract function LastId();
+    public abstract function NumRows();
+    public abstract function AffectedRows();
+
+    //Result fetching
+    public abstract function ResultSet();
+    
+     //security
+    public abstract function Escape($vars);
+    public abstract function Prepare($sql,$data);
+
 
 }
 
+
+
+//    public abstract function Select($table,$fields=Yalamo::All,$condition=Yalamo::Void);
+//    public abstract function Insert($table,$keys,$values,$single=true);
+//    public abstract function Update($table,$values,$condition=Yalamo::Void,$astring=true);
+//    public abstract function Delete($table,$condition=Yalamo::Void);
+
+//------------------------------------------------------------------------------
+/**
+ * DBDriver Class
+ *
+ * The abstract Base Class for Databases Driver. any supported database engine should extends this class
+ */
+class ResultSet extends Object {
+    private $result;
+
+    function  __construct($result_array) {
+        $this->result=$result_array;
+    }
+
+    public function Object(){
+
+    }
+    public function Assoc(){
+
+    }
+    public function Rarray(){
+
+    }
+}

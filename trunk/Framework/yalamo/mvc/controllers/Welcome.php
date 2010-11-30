@@ -8,7 +8,12 @@ public function Index(){
    
    
 
-// $this->Load->Module("Database");
+            $this->Load->Module("Database");
+    
+    $db=Database::Instance();
+    echo $db;
+    //pr($db->Tables());
+
  
    
   

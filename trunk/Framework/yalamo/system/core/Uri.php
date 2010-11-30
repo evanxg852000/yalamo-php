@@ -29,7 +29,9 @@
 Class Uri extends Singleton{
     const Page="{page}";
     const Controller="{controller}";
-   
+
+    private static $instance=null;
+    
     private $uri_config;
 
     /**
@@ -143,8 +145,7 @@ Class Uri extends Singleton{
             $this->page=null;    
         }
     }
-    public function  __toString() {return "Object of Type: Uri"; }
-
+        
     public static function Instance(){
         if(!self::$instance){
             self::$instance=new Uri();

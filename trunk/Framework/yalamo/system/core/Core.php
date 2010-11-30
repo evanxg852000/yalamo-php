@@ -96,6 +96,8 @@ abstract class ICollectable{
  */
 class Object  extends ICollectable implements ISerialisable {
 
+    public function  __toString() {return "Object of Type: ".  get_class($this); }
+
     /**
      * The serialise method
      * @return string The Object in string format
@@ -169,10 +171,9 @@ class Object  extends ICollectable implements ISerialisable {
  * The base class for classes that implement the singleton patern
  */
 abstract class Singleton extends Object {
-    protected static $instance=null;
-    private function __clone() { }
-    private function  __construct(){}
-    public static  function Instance(){}
+    private final function __clone() { }
+    private function __construct(){}
+    public  static  function Instance(){}
 }
 
 
