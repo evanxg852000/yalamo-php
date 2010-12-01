@@ -1,9 +1,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 	<title>Qj Test Page</title>
-	<link rel="stylesheet" href="Qj.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="qj.css" type="text/css" media="screen" />
 	<script type="text/javascript" src="jquery-1.4.2.js"></script> 
-	<script type="text/javascript" src="Qj.js"></script> 
+	<script type="text/javascript" src="qj-0.8.js"></script> 
 	
 	
 	<script type="text/javascript">
@@ -23,7 +23,7 @@
 		Qj.Ready(function(){				
 			
 			Qj.Select("#notify").click(function(){
-				Qj.Notifycation.Show("This is a simple message","Qj",Qj.Notifycation.Error());
+				Qj.Notifycation.Show("This is a simple message","Qj",Qj.Notifycation.Warning());
 			});
 			Qj.Select("#msg").click(function (){
 				Qj.Messaging.Question('What is Your name?',function(rep){alert(rep);});
@@ -75,7 +75,10 @@
 			border: solid 2px #efefef;
 			background: #fffeee;
 			padding:5px;
-		}		
+		}	
+
+		
+		
 	</style>
 </head>
 	<body>
@@ -87,7 +90,7 @@
 			<input type="text" name="name" id="name"/>
 			
 			<label for="email">Email:</label>
-			<input type="text" name="email" id="email"/><span class="success"></span>
+			<input type="text" name="email" id="email"/><span class="valid">jhskjhdksajhlk</span>
 
 			<label for="description">Description:</label>
 			<textarea name="description" id="description" rows="8" cols="40"></textarea>
@@ -110,15 +113,12 @@
 		<button id="notify" >Notify</button>
 		<button id="msg" >Show Message</button>
 		
-		
-				
-		
-			
-			
+
 		</div>
 		
+
 		
-		
+		<div id="{id}" class="qj-notification notification-info" ><a href="#" class="qj-closebt"></a><p>{message}</p></div>
 		
 		
 		
