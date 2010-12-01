@@ -43,54 +43,73 @@
 }
 
 .qj-notification{
-	-moz-border-radius: 4px;
-    -webkit-border-radius:4px;
-	background:#BFBFBF;
-    border:solid 6px ;
-    border-color: #e1e1e1;
-    margin: 3px;	
-}
-.qj-notification div.qj-header {
-	background:#606060;
-	border-bottom: solid 1px #dfdfdf;
-	height:25px; 
-	padding: 0px;
-	clear: right;
+	/*-moz-border-radius: 4px;
+    -webkit-border-radius:4px;*/				
+	position : relative;
+	padding:2px;
+	border:solid 1px white;
+	margin: 3px;
 }
 
-.qj-notification div.qj-header h4 {
-	color: white;
-	text-transform: capitalize;
-	margin: 0px;
-	padding-left: 5px;
+.qj-notification  a.qj-closebt {
+	background: url(images/sclose.png) no-repeat center;
+	display:block;
+	position: absolute;
+	right:0px;
+	top:0px;
+	width:10px;
+	height:10px; 
+	padding:2px;
 	
-}
-.qj-notification div.qj-header a.qj-closebt {
-	border:none;
-	text-decoration:none;
-	background: transparent url("images/close.png") no-repeat center ;
-	width:24px;
-	height: 24px;
-	float: right;	
 }
 
 .qj-notification p{
-	margin: 5px;
-	padding: 3px;
-}
-
-.notification-info {
-	background-color:#BFBFBF ;
+	margin: 8px 10px 5px 3px; 
+	padding: 0px 0px 5px 32px;
+	background:transparent  no-repeat left top ;
 }
 
 .notification-success {
-	background-color:#AACA87 ;
+	background-color: #effeb9;
+	outline: solid 1px #98c700 ;
+}
+
+.notification-success p {
+	background-image: url("images/nsuccess.png");
 }
 
 .notification-error {
-	background-color: #F9C3C6 ;
+	background-color: #fccac3;
+	outline: solid 1px #ea523a ;
 }
 
+.notification-error p {
+	background-image: url("images/nerror.png");
+}
+
+.notification-warning {
+	background-color: #ffeaa9;
+	outline: solid 1px #fab418 ;
+}
+.notification-warning p{
+	background-image: url("images/nwarning.png");
+}
+
+.notification-info {
+	background-color: #d1e4f3;
+	outline: solid 1px #4d8fcc ;
+}
+.notification-info p{
+	background-image: url("images/ninfo.png");
+}
+.notification-tip {
+	background-color: #feeac9;
+	outline: solid 1px #d38e49 ;
+}
+
+.notification-tip p {
+	background-image: url("images/ntip.png");
+}
 	
 /* MESSAGE BOX */	
 
@@ -173,16 +192,16 @@
 /* FORM VALIDATION */
 
 span.valid {
-	background: url("images/fvsuccess.png") no-repeat left center;
-	margin-left: 3px;
-	padding-left: 20px;	
+	background: url("images/fvsuccess.png") no-repeat left center ;
+	margin: 0px 0px 0px 3px;
+	padding: 3px 8px 3px 20px;	
 	font-size: 12px;
 	color: #a6a6a6;
 }
 span.notvalid {
 	background: url("images/fverror.png") no-repeat left center;
-	margin-left: 3px;
-	padding-left: 20px;
+	margin: 0px 0px 0px 3px;
+	padding: 3px 8px 3px 20px;
 	font-size: 12px;
 	color: #a6a6a6;	
 }

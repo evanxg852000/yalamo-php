@@ -243,22 +243,29 @@ Qj.Notifycation=function(){
 };
 Qj.Notifycation.Position=null;
 
-Qj.Notifycation.Info=function(){
-	return "notification-info";
-};
 Qj.Notifycation.Success=function(){
 	return "notification-success";
 };
 Qj.Notifycation.Error=function(){
 	return "notification-error";
 };
+Qj.Notifycation.Warning=function(){
+	return "notification-warning";
+};
+Qj.Notifycation.Info=function(){
+	return "notification-info";
+};
+Qj.Notifycation.Tip=function(){
+	return "notification-tip";
+};
 
-Qj.Notifycator=function(message,title,type){
-	this.Template='<div id="{id}" class="qj-notification {type}" ><div class="qj-header"><a href="#" class="qj-closebt"></a><h4>{title}</h4></div><p>{message}</p></div>';
+
+
+Qj.Notifycator=function(message,type){
+	this.Template='<div id="{id}" class="qj-notification {type}" ><a href="#" class="qj-closebt"></a><p>{message}</p></div>';
 	this.Handle=Qj.Id("Notoficator");
 	this.Template=this.Template.replace("{id}",this.Handle);
 	this.Template=this.Template.replace("{message}",message);
-    this.Template=this.Template.replace("{title}",title);
     this.Template=this.Template.replace("{type}",type);  
 };
 Qj.Notifycator.prototype.Show=function (delay){
@@ -286,8 +293,8 @@ Qj.Notifycator.prototype.Show=function (delay){
 };	
 
 //static
-Qj.Notifycation.Show=function (message,title,delay,type){
-	var notebox=new Qj.Notifycator(message,title,type);
+Qj.Notifycation.Show=function (message,delay,type){
+	var notebox=new Qj.Notifycator(message,type);
 	notebox.Show(delay);
 };
 
