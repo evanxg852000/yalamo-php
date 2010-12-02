@@ -25,84 +25,76 @@
  *
  * Define methods for querying a database
  */
-class Query {
-    private $driverObject;
+class Query extends Object{
+    private $dbhandle;
 
-    public function __construct(& $database) {
-        $this->driverObject=& $database->Handle();
-    }
-    public function __toString() {return "Object of Type: Query"; }
-
-    public function Escape($vars) {
-        return $this->driverObject->Escape($vars);
-    }
-    public function Prepare($sql,$data) {
-        return $this->driverObject->Prepare($sql,$data);
+    public function __construct(& $dbhandle) {
+        $this->dbhandle=& $dbhandle;
     }
 
     public function Execute($sql){
-        return $this->driverObject->Execute($sql);
-    }
-    public function Select($table,$fields=Yalamo::All,$condition=Yalamo::Void){
-        $this->driverObject->Select($table,$fields,$condition);
-    }
-    public function Insert($table,$keys,$values,$single=true){
-        return $this->driverObject->Insert($table,$keys,$values,$single);
-    }
-    public function Update($table,$values,$condition=Yalamo::Void,$astring=true){
-        return $this->driverObject->Update($table,$values,$condition,$astring);
-    }
-    public function Delete($table,$condition=Yalamo::Void){
-        return $this->driverObject->Delete($table,$condition);
+        $this->dbhandle->Execute($sql);
+        return $this;
     }
 
-    public function ResultObject(){
-        return $this->driverObject->ResultObject();
-    }
-    public function ResultSet(){
-        return $this->driverObject->ResultSet();
-    }
-    public function ResultArray(){
-       return $this->driverObject->ResultArray();
-    }
-
-    public function Fields(){
-        return $this->driverObject->Fields();
-    }
-    public function NumRows(){
-        return $this->driverObject->NumRows();
-    }
-    public function AffectedRows(){
-        return $this->driverObject->AffectedRows();
-    }
-    
     //Active record area
     public function On($table){
-
+        $this->dbhandle->On($table);
+        return $this;
     }
-    public function Where($param,$logic="AND"){
-
+    public function Where($condition,$logic="AND"){
+        $this->dbhandle->Where($condition, $logic);
+        return $this;
     }
-    public function Limit($s,$count){
-
+    public function Limit($sart,$count){
+        $this->dbhandle->Limit($sart, $count);
+         return $this;
     }
-    public function Order($param,$direction){
-
+    public function Order($field,$direction="ASC"){
+        $this->dbhandle->Order($field, $direction);
+         return $this;
     }
-    public function Join($table,$condition){
 
+    public function Insert($keys,$values,$is_multipe=false){
+        $this->dbhandle->Insert($keys, $values, $is_multipe);
+        return $this;
     }
-    public function Insert(){
-
-    }
-    public function Select(){
-
+    public function Select($fields=Yalamo::All){
+       $this->dbhandle->Select($fields);
+       return $this;
     }
     public function Update($values){
-
+        $this->dbhandle->Update($values);
+        return $this;
     }
     public function Delete(){
-
+        $this->dbhandle->Delete();
+        return $this;
     }
-}
 
+    //Meta data
+    public function LastId(){
+        return $this->dbhandle->LastId();
+    }
+    public function NumRows(){
+        return $this->dbhandle->NumRows();
+    }
+    public function AffectedRows(){
+        return $this->dbhandle->AffectedRows();
+    }
+
+    //Result fetching
+    public function ResultSet(){
+        return $this->dbhandle->ResultSet();
+    }
+
+     //security
+    public function Escape($input) {
+        return $this->dbhandle->Escape($input);
+    }
+    public function Prepare($sql,$data) {
+        $this->dbhandle->Prepare($sql,$data);
+        return $this;
+    }
+
+}

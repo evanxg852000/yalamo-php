@@ -5,6 +5,10 @@
 <title><?php  echo $title ?></title>
 </head>
 <body>
-<?php y($content) ?>
+
+    <pre>
+        <?php y($content) ?>
+    </pre>
+
 </body>
 </html>

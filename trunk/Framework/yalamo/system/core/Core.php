@@ -186,10 +186,9 @@ abstract class Singleton extends Object {
 class Component  extends Object {
     protected $Load;
     public function  __construct() {
-        $this->Load=new Loader();
+        $this->Load=Loader::Instance();
     }
     public function  __destruct() {}
-    public function  __toString() {return "Object of Type: Component"; }
 }
 
 //------------------------------------------------------------------------------

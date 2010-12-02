@@ -90,7 +90,7 @@ final class Database extends Singleton {
         return $this->driver_object->Connection();
     }
     public function Query(){
-        return new Query($this);
+        return new Query($this->driver_object);
     }
 
     public function Create($name=Yalamo::Void){
@@ -118,10 +118,6 @@ final class Database extends Singleton {
         return $this->driver_object->DBExport($file,$name);
     }
 
-    //test
-    public function q($sql) {
-        return $this->driver_object->Execute($sql);
-    }
 }
 
 //------------------------------------------------------------------------------
@@ -134,11 +130,31 @@ abstract  class DBDriver extends Object {
     protected  $dbname;
     protected  $configuration;
     protected  $connection;
-    protected  $statement;
     protected  $result;
     protected  $last_inserted;
     protected  $num_rows;
     protected  $afected_rows;
+    protected  $active_record;
+
+    protected function ResetActiveRecord(){
+        $this->active_record=array();
+        $this->active_record['insert']="";
+        $this->active_record["select"]="";
+        $this->active_record["update"]="";
+        $this->active_record["delete"]="";
+
+        $this->active_record["on"]="";
+
+        $this->active_record["where"]="";
+        $this->active_record["where_counter"]=0;
+
+        $this->active_record["limit"]="";
+
+        $this->active_record["order"]="";
+        $this->active_record["order_counter"]=0;
+
+
+    }
 
     public function Configuration(){
         return $this->configuration;
@@ -162,12 +178,12 @@ abstract  class DBDriver extends Object {
 
     //Active recorde area
     public abstract function On($table);
-    public abstract function Where($param,$logic="AND");
+    public abstract function Where($condition,$logic);
     public abstract function Limit($s,$count);
     public abstract function Order($param,$direction);
-    public abstract function Join($table,$condition);
-    public abstract function Insert();
-    public abstract function Select();
+
+    public abstract function Insert($keys,$values,$is_multipe);
+    public abstract function Select($fields);
     public abstract function Update($values);
     public abstract function Delete();
 
@@ -180,18 +196,10 @@ abstract  class DBDriver extends Object {
     public abstract function ResultSet();
     
      //security
-    public abstract function Escape($vars);
+    public abstract function Escape($input);
     public abstract function Prepare($sql,$data);
 
-
 }
-
-
-
-//    public abstract function Select($table,$fields=Yalamo::All,$condition=Yalamo::Void);
-//    public abstract function Insert($table,$keys,$values,$single=true);
-//    public abstract function Update($table,$values,$condition=Yalamo::Void,$astring=true);
-//    public abstract function Delete($table,$condition=Yalamo::Void);
 
 //------------------------------------------------------------------------------
 /**
@@ -216,10 +224,10 @@ class ResultSet extends Object {
         }
         return $result;
     }
-    public function AsAssoc(){
+    public function AsAssoc($prefix){
         $result=array();
         foreach ($this->data as $key => $value) {
-            $result["row_".$key]=$value;
+            $result[$prefix."_".$key]=$value;
         }
         return $result;
     }

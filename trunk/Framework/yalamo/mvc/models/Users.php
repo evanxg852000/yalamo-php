@@ -9,13 +9,11 @@ class Users extends Model {
         $u=new User();
         $u->id=null;
         $u->name=$name;
-
         $item=$u->Rows()->Create($u);
-        parent::Insert($item);
+        return parent::Insert($item);
     }
     public function SelectAll(){
-        parent::Select();
-        return $this->ResultObject();
+       return parent::Select(Yalamo::All);
     }
     public function Escape(){
         $vars="evance'soumaor \nis fiek ";
@@ -23,6 +21,10 @@ class Users extends Model {
         echo $this->Query->Prepare("SELECT* FROM Table Where Name={name} AND Age={age} ", array("name"=>"evan'ce","age"=>56));
         
 
+    }
+
+    public function  Delete($condition) {
+        parent::Delete($condition);
     }
 
 }
