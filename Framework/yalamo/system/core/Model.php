@@ -48,8 +48,8 @@ class Model extends Object {
     protected $Table;
 
     public function  __construct() {
-        $this->Query=new Query();
-        $this->Table=get_class($this);
+        $this->Query=Database::Instance()->Query();
+        $this->Table=strtolower(get_class($this));
     }
     public function  __destruct(){
         unset($this->Query);
@@ -70,51 +70,15 @@ class Model extends Object {
             $this->Table=$table;
         }
     }
-
-    /**
-     * The accessor to the resultset
-     *
-     * @return array The resultset as an associative array
-     */
-    protected function ResultSet(){
-        return $this->Query->ResultSet();
-    }
-
-    /**
-     * The accessor to the resultset
-     *
-     * @return Object The resultset as an object
-     */
-    protected function ResultObject(){
-        return $this->Query->ResultObject();
-    }
-
-    /**
-     * The accessor to the resultset
-     *
-     * @return array The resultset an array
-     */
-    protected function ResultArray(){
-        return $this->Query->ResultArray();
-    }
-
-    /**
-     * The getter for the numbers of rows from the
-     * last query
-     *
-     * @return int The numbers of rows
-     */
-    protected function NumRows(){
-        return $this->Query->NumRows();
-    }
+ 
     /**
      * Select in the current table of the model from the database
      *
      * @param  string $condition    The conditions in sql statment to be appended to the query
      * @return Object               The resultset as Object
      */
-    protected function Select($condition=Yalamo::Void){
-        $this->Query->Select($this->Table,Yalamo::All,$condition);
+    protected function Select($fields){
+        return $this->Query->On($this->Table)->Select($fields)->ResultSet()->AsObject();
     }
 
     /**
@@ -126,7 +90,7 @@ class Model extends Object {
     protected function Insert($item){
         $keys=array_keys($item);
         $values=array_values($item);
-        $this->Query->Insert($this->Table, $keys, $values);
+        $this->Query->On($this->Table)->Insert($keys, $values);
         return $this->Query->AffectedRows();
     }
 
@@ -137,8 +101,8 @@ class Model extends Object {
      * @param string $condition     The condition  in sql statment to be appended to the query
      * @return <type>
      */
-    protected function Update($values, $condition=Yalamo::Void,$astring=true){
-        $this->Query->Update($this->Table, $values, $condition,$astring);
+    protected function Update($values){
+        $this->Query->On($this->Table)->Update($values);
         return $this->Query->AffectedRows();
     }
 
@@ -147,14 +111,13 @@ class Model extends Object {
      *
      * @return int   The number of rows that was affected
      */
-    protected function Delete($condition=Yalamo::Void){
-        $this->Query->Delete($this->Table, $condition);
+    protected function Delete($condition){
+        $this->Query->On($this->Table)->Where($condition)->Delete();
         return $this->Query->AffectedRows();
     }
 
     protected function Component($name){
-         $l=new Loader();
-         return $l->Component($name, "models");
+         return Loader::Instance()->Component($name, "models");
     }
 
 }
@@ -174,8 +137,7 @@ abstract  class Table extends Object {
      * Drop the abstracted table in the database
      */
     public final function Drop(){
-      $sql="DROP TABLE ".get_class($this)." ;";
-      $db=Database::Instance()->Handle()->Execute($sql);
+      Database::Instance()->Handle()->Execute("DROP TABLE ".get_class($this)." ;");
     }
 
     /**
@@ -193,7 +155,7 @@ abstract  class Table extends Object {
      *
      * @return TableRow   The tableRow Object on which to call Create method
      */
-    public function Rows(){
+    public final function Rows(){
         return new TableRow(get_class($this));
     }
 
@@ -208,7 +170,7 @@ abstract  class Table extends Object {
  * into an actual table row usable in an sql Query object (or Database statement)
  * This class shouldn't be use directly. instead use it through The Table Class
  */
-final class TableRow {
+final class TableRow extends Object{
     /**
      * Table for which to create row
      * @var Object that inherite from table
@@ -243,3 +205,6 @@ final class TableRow {
     }
 
 }
+
+
+    

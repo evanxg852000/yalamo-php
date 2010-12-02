@@ -5,8 +5,7 @@
  * @param string $classname The name of the class that's trying to be instanciated
  */
 function __autoload($classname){
-   $load=new Loader();
-   $load->Module($classname);
+  Loader::Instance()->Module($classname);
 }
 
 // base/sub/sub2/

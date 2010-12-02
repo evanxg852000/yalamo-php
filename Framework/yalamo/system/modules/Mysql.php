@@ -27,11 +27,10 @@
  * 
  */
 final class Mysql extends DBDriver {
-
+    
     public function  __construct($dbname,$configuration) {
         $this->dbname=$dbname;
         $this->configuration=& $configuration;
-        $this->statement=Yalamo::Void;
         $handle=@mysql_connect($this->configuration["HOST"],$this->configuration["USER"],$this->configuration["PASSWORD"]);
         if($handle){
             $this->connection=$handle;
@@ -44,14 +43,13 @@ final class Mysql extends DBDriver {
             $this->PCollect(Error::YE301,mysql_error() );
             $this->connection=false;
         }
-        
+        $this->ResetActiveRecord();
     }
     public function  __destruct(){
        if(! @mysql_close($this->connection)){
            $this->PCollect(Error::YE301,mysql_error());
        }
     }
-    
 
     //Database opeartion area
     public function DBCreate($name){
@@ -70,7 +68,7 @@ final class Mysql extends DBDriver {
         if($this->connection){
             $this->result= @mysql_query($sql, $this->connection);
             if(!$this->result){
-                $this->Collect(mysql_error());
+                $this->PCollect(Error::YE301,mysql_error());
                 return false;
             }
         }
@@ -79,24 +77,103 @@ final class Mysql extends DBDriver {
 
     //Active recorde area
     public function On($table){;
-        $this->statement.="{left} ".$table." {right} ";
+        $this->active_record["on"]=$table;
+        return $this;
+    }   
+    public function Where($condition,$logic){
+        if( $this->active_record["where_counter"]<=0){
+            $sql ="WHERE ".$condition;
+        }  else {
+            $sql = " ".$logic." ".$condition;
+        }
+        $this->active_record["where_counter"]++;
+        $this->active_record['where'] .=$sql;
         return $this;
     }
-    public function Where($param,$logic="AND"){}
-    public function Limit($s,$count){}
-    public function Order($param,$direction){}
-    public function Join($table,$condition){}
-    public function Insert(){}
-    public function Select(){}
-    public function Update($values){}
-    public function Delete(){}
+    public function Limit($sart,$count){
+        $sql="LIMIT $sart , $count";
+
+        $this->active_record["limit"]=$sql;
+        return $this;
+    }
+    public function Order($field,$direction){
+        $Stmt="ORDER BY {fields}  {$direction}";
+        if( $this->active_record["order_counter"]<=0){
+            $sql ="ORDER BY  ".$field." ".$direction ;
+        }  else {
+            $sql =", ".$field." ".$direction ;
+        }
+        $this->active_record["order_counter"]++;
+        $this->active_record['order'] .=$sql;
+        return $this;
+    }
+   
+    public function Insert($keys,$values,$is_multipe){
+        if((!is_array($keys) || (!is_array($values)))){
+            $this->PCollect(Error::YE101,array($keys,$values) );
+            return false;
+        }
+        if(!$is_multipe){
+            foreach ($values as  $key=>$val) {
+                $temp[$key]=  $this->get_sql_data($val);
+            }
+            $values="( ".implode(",", $temp)." ) ";
+        }
+        else{
+            foreach ($values as  $records) {
+                foreach ($records as $key=>$val){
+                    $tempval[$key]=  $this->get_sql_data($val);
+                }
+                $temp[]="( ".implode(",", $tempval)." ) ";
+            }
+            $values=implode(",", $temp);
+        }
+        $sql="INSERT INTO {table} ( {keys} ) VALUES {values};";
+        $sql=str_replace("{table}", $this->active_record["on"], $sql);
+        $sql=str_replace("{keys}", implode(" , ",$keys), $sql);
+        $sql=str_replace("{values}",$values, $sql);
+        $this->ResetActiveRecord();
+        return $this->Execute($sql);
+    }
+    public function Select($fields){
+        if(is_array($fields)){
+            $fields=implode(" , ", $fields);
+        }
+        $sql="SELECT {fields} From {table} {condition} {limit};";
+        $sql=str_replace("{fields}", $fields, $sql);
+        $sql=str_replace("{table}", $this->active_record["on"], $sql);
+        $sql=str_replace("{condition}", $this->active_record["where"], $sql);
+        $sql=str_replace("{limit}",  $this->active_record["limit"], $sql);
+        $this->ResetActiveRecord();
+        return $this->Execute($sql);
+    }
+    public function Update($values){
+        if(is_array($values)){
+            $values=implode(" , ", $values);
+        }
+        $sql="UPDATE {table} SET {values} {condition} {limit};";
+        $sql=str_replace("{table}", $this->active_record["on"], $sql);
+        $sql=str_replace("{values}",  $values, $sql);
+        $sql=str_replace("{condition}", $this->active_record["where"], $sql);
+        $sql=str_replace("{limit}",  $this->active_record["limit"], $sql);
+        $this->ResetActiveRecord();
+        return $this->Execute($sql);
+    }
+    public function Delete(){
+        $sql="DELETE FROM {table} {condition} {limit};";
+        $sql=str_replace("{table}", $this->active_record["on"], $sql);
+        $sql=str_replace("{condition}", $this->active_record["where"], $sql);
+        $sql=str_replace("{limit}",  $this->active_record["limit"], $sql);
+        $this->ResetActiveRecord();
+        return $this->Execute($sql);
+    }
 
     //Meta data
     public function LastId(){
         return @mysql_insert_id($this->connection);
     }
     public function NumRows(){
-        return mysql_num_rows($this->result);
+        return @mysql_num_rows($this->result);
     }
     public function AffectedRows(){
         return @mysql_affected_rows($this->connection);
@@ -106,167 +183,35 @@ final class Mysql extends DBDriver {
     public function ResultSet(){
         $result=array();
 	while($row=@mysql_fetch_assoc($this->result) ){
-            $array = (array) $row;
-            $result[]=$array;
+            $result[]=(array) $row;
 	}
-        return new ResultSet($result);;
+        return new ResultSet($result);
     }
 
      //security
-    public function Escape($vars){}
-    public function Prepare($sql,$data){}
-
-    
-
-}
-
-
-class Mysqllegcy {
-    public function Escape($vars) {
-        if(is_array($vars)){
-            foreach ($vars as $key => $val) {
-                $vars[$key]=@mysql_real_escape_string($val, $this->connection);
+    public function Escape($input){
+        if(is_array($input)){
+            foreach ($input as $key => $value) {
+                $output[$key]=@mysql_real_escape_string($value, $this->connection);
             }
+            return $output;
         }
-        else{
-            $vars=@mysql_real_escape_string($vars, $this->connection);
-        }
-        return $vars;
+        return @mysql_real_escape_string($input, $this->connection);     
     }
-    public function Prepare($sql,$data) {
+    public function Prepare($sql,$data){
       if(is_array($data)){
           foreach ($data as $key => $val) {
-              $val=  $this->Escape($val);
-              $sql=str_replace("{".$key."}", $val, $sql);
+              $sql=str_replace("{".$key."}",$this->Escape($val), $sql);
           }
-        return $sql;
+        return $this->Execute($sql);
       }
-      else {
-          $this->Collect(Error::YE101);
-          return false;
-      }
-    }
+      $this->Collect(Error::YE101);
+      return $this;
+    }  
 
-    public function Execute($sql) {
-        if($this->connection){
-            $this->result= @mysql_query($sql, $this->connection);
-            if(!$this->result){
-                $this->PCollect(Error::YE301, mysql_error());
-                return false;
-            }
-        }
-        return $this->result;
-    }
-    public function Select($table,$fields=Yalamo::All,$condition=Yalamo::Void){
-        if(is_array($fields)){
-            $fields=implode(" , ", $fields);
-        }
-        $sql="SELECT $fields FROM $table ".$condition." ;" ;
-        $this->Execute($sql);
-    }
-    public function Insert($table,$keys,$values,$single=true){
-        if((!is_array($keys) || (!is_array($values)))){
-            $this->PCollect(Error::YE101,array($keys,$values) );
-            return false;
-        }
-        $keys=implode(" , ",$keys);
-        if($single){
-            foreach ($values as  $val) {
-                if(is_string($val)){ $val="'$val'";}
-                if(is_null($val)){ $val="NULL"; }
-                $str[]=$val;
-            }
-            $values="( ".implode(",", $str)." ) ";
-        }
-        else{
-            $temparray=array();
-            for ($i=0; $i<count($values);$i++) {
-                $str=array();
-                foreach ($values[$i] as  $val) {
-                if(is_string($val)){
-                    $val="'$val'";
-                }
-                 $str[]=$val;
-                }
-                $temparray[]="( ".implode(",", $str)." ) ";
-            }
-
-            $values=implode(",", $temparray);
-        }
-        $sql="INSERT INTO $table ( $keys ) VALUES  $values ;";
-        $this->Execute($sql);
-        return $this->AffectedRows();
-    }
-    public function Update($table,$values,$condition=Yalamo::Void,$astring=true){
-        if(is_array($values)){
-            foreach ($values as $key => $val) {
-                if(!is_string($key)){ $this->PCollect(Error::YE101, $values);  return false;}
-                if((is_string($val)) && ($astring==true)){ $val="'$val'"; }
-                $str[]=$key."=".$val;
-            }
-            $values=implode(" , ", $str);
-        }
-        else{
-            $this->PCollect(Error::YE101, $values);
-            return false;
-        }
-        $sql="UPDATE $table SET $values ".$condition." ;";
-        $this->Execute($sql);
-        return $this->AffectedRows();
-    }
-    public function Delete($table,$condition=Yalamo::Void){
-        $sql="DELETE FROM $table ".$condition." ;";
-        $this->Execute($sql);
-        return $this->AffectedRows();
-    }
-
-    public function ResultObject() {
-        $resultobjects=array();
-        while($obj= @mysql_fetch_object($this->result)){
-                $resultobjects[]=$obj;
-        }
-        return $resultobjects;
-    }
-    public function ResultSet() {
-        $result=array();
-	while($row=@mysql_fetch_assoc($this->result) ){
-            $array = (array) $row;
-            $result[]=$array;
-	}
-        return $result;
-    }
-    public function ResultArray() {
-        $result=array();
-	while($row =mysql_fetch_row($this->result)){
-            $result[]=$row;
-	}
-        return $result;
-    }
-
-    public function Fields(){
-        $result=array();
-	while($row =mysql_fetch_field($this->result)){
-            $fieldObject=new stdClass();
-            $fieldObject->Name =$row->name;
-            $fieldObject->Table =$row->table;
-            $fieldObject->Default =$row->def;
-            $fieldObject->MaxLength =$row->max_length;
-            $fieldObject->NotNull =$row->not_null;
-            $fieldObject->PrimaryKey =$row->primary_key;
-            $result[]=$fieldObject;
-	}
-        return $result;
-    }
-    public function NumRows(){
-        return @mysql_num_rows($this->result);
-    }
-    public function AffectedRows(){
-        if($this->connection){
-            return @mysql_affected_rows($this->connection);
-        }
-         else {
-            return 0;
-        }
-    }
-
+    private function get_sql_data($data){
+        if(is_null($data)){return "NULL";}
+        if(is_string($data)){ return "'$data'";}
+        return $data;
+    } 
 }

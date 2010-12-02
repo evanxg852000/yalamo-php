@@ -52,7 +52,7 @@
 }
 
 .qj-notification  a.qj-closebt {
-	background: url(images/sclose.png) no-repeat center;
+	background: url(images/nclosebt.png) no-repeat center;
 	display:block;
 	position: absolute;
 	right:0px;
@@ -60,7 +60,7 @@
 	width:10px;
 	height:10px; 
 	padding:2px;
-	
+	cursor:default;
 }
 
 .qj-notification p{

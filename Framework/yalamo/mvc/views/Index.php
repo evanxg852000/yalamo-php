@@ -77,14 +77,12 @@ code {
    border-radius:3px;
 }
 
-
-
-
 </style>
 <title><?php echo $title ?></title>
 <?php loadjs(Jslib::Jquery, "1.4.2")  ?>
 </head>
 <body>
+   
     <h1>Hi Sparky !</h1>
     <p>
         Welcome to yalamo framework, the fastest and constraint free web application framework!<br/>
