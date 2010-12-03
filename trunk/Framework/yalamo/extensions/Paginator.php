@@ -1,36 +1,40 @@
 <?php
-final  class Paginator {
+$PAGINATORCONFIG=array(
+"item_per_page"=>4,
+"page_limit"=>9,
+"css_class"=>"pagination",
+"previous"=>array("Text"=>"« Previous","css_class"=>"previous"),
+"next"=>array("Text"=>"Next »","css_class"=>'next'),
+"current"=>array("css_class"=>"current"),
+"Desable"=>array("css_class"=>"off")
+);
 
-    public static $Configuration=array(
-            "Itemlimit"=>4,
-            "Pagelimit"=>9,
-            "Class"=>"pagination",
-            "Previous"=>array("Text"=>"« Previous","Class"=>"previous"),
-            "Next"=>array("Text"=>"Next »","Class"=>'next'),
-            "Current"=>array("Class"=>"current"),
-            "Desable"=>array("Class"=>"off")
-        );
-   
-    public function  __construct() {  }
+final  class Paginator {
+    private $configuration;
+    public function  __construct() {
+        global $PAGINATORCONFIG;
+        $this->configuration=& $PAGINATORCONFIG;
+
+    }
 
     public function Render($total,$url,$currentpage=1, $dump=true){       
-        $paginatorstr='<ul class="'.self::$Configuration['Class'].'">{content}</ul>';
+        $paginatorstr='<ul class="'.$this->configuration['css_class'].'">{content}</ul>';
         $content="";
         //previous
         if($currentpage==1){
-            $prev='<li><span  class="'.self::$Configuration['Desable']['Class'].'">'
-            .self::$Configuration['Previous']['Text'] .'</span></li>';
+            $prev='<li><span  class="'.$this->configuration['Desable']['css_class'].'">'
+            .$this->configuration['previous']['Text'] .'</span></li>';
         }
         else {
             $param=$currentpage-1;
-            $prev='<li><a href="'.$url.$param.'"  class="'.self::$Configuration['Previous']['Class'].'">'
-            .self::$Configuration['Previous']['Text'] .'</a></li>';
+            $prev='<li><a href="'.$url.$param.'"  class="'.$this->configuration['previous']['css_class'].'">'
+            .$this->configuration['previous']['Text'] .'</a></li>';
         }
        $content.=$prev;
 
        //pages 1 2 3 ...
-        $pagecount=ceil($total/self::$Configuration['Itemlimit']);
-        $pagelimit=self::$Configuration['Pagelimit'];
+        $pagecount=ceil($total/$this->configuration['item_per_page']);
+        $pagelimit=$this->configuration['page_limit'];
         $begin=1;
         if($currentpage>=6){
             $begin=$currentpage-3;
@@ -40,20 +44,20 @@ final  class Paginator {
             if($i>$pagecount){ break; }
             $param=$i;
             if($i==$currentpage){
-                $content.='<li><span class="'.self::$Configuration['Current']['Class'].'">'.$i.'</span></li>';
+                $content.='<li><span class="'.$this->configuration['current']['css_class'].'">'.$i.'</span></li>';
                 continue;
             }
             $content.='<li><a href="'.$url.$i.'">'.$i.'</a></li>';  
         }
         //next
         if($currentpage==$pagecount){
-            $next='<li><span class="'.self::$Configuration['Desable']['Class'].'">'
-            .self::$Configuration['Next']['Text'] .'</span></li>';
+            $next='<li><span class="'.$this->configuration['Desable']['css_class'].'">'
+            .$this->configuration['next']['Text'] .'</span></li>';
         }
         else {
             $param=$currentpage+1;
-            $next='<li><a href="'.$url.$param.'" class="'.self::$Configuration['Next']['Class'].'">'
-            .self::$Configuration['Next']['Text'] .'</a></li>';
+            $next='<li><a href="'.$url.$param.'" class="'.$this->configuration['next']['css_class'].'">'
+            .$this->configuration['next']['Text'] .'</a></li>';
         }
         $content.=$next;
         $paginatorstr=str_replace("{content}", $content, $paginatorstr);

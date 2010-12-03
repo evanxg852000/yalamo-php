@@ -60,18 +60,6 @@ class Session extends Object {
         }
         self::$resgistry=$_SESSION;
     }
-    public function  __toString() {return "Object of Type: Session"; }
-    private function create_session_object(){
-        $this->object=new Object();
-        $this->object->id= Encryption::UnicKey();
-        $this->object->si= $this->id;
-        $this->object->ip= $_SERVER["REMOTE_ADDR"];
-        $this->object->ua= $_SERVER["HTTP_USER_AGENT"];
-        $this->object->st= time();
-        $cookie_value=$this->object->Serialize();
-        $this->cookie->Set($this->cookie_name,$cookie_value);
-        $_SESSION[$this->cookie_name]=$cookie_value;
-    }
 
     public function Id(){
         return $this->id;
@@ -128,5 +116,17 @@ class Session extends Object {
             $uri->Redirect($redirect);
         }
     }
-     
+
+    private function create_session_object(){
+        $this->object=new Object();
+        $this->object->id= Encryption::UnicKey();
+        $this->object->si= $this->id;
+        $this->object->ip= $_SERVER["REMOTE_ADDR"];
+        $this->object->ua= $_SERVER["HTTP_USER_AGENT"];
+        $this->object->st= time();
+        $cookie_value=$this->object->Serialize();
+        $this->cookie->Set($this->cookie_name,$cookie_value);
+        $_SESSION[$this->cookie_name]=$cookie_value;
+    }
+    
 }
