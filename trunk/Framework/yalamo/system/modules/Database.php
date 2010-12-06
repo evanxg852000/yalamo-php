@@ -231,5 +231,7 @@ class ResultSet extends Object {
         }
         return $result;
     }
-    
+    public function AsJson(){
+        return json_encode($this->data);
+    }
 }

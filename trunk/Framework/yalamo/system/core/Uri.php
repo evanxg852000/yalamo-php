@@ -295,38 +295,11 @@ Class Uri extends Singleton{
      * @param string $method     The method of the url
      * @param strign $params     The query string
      */
-    public function CreateMvc($controller,$method,$params=null,$prefix=null){
-        //TODO: link
-        $paramstr=Yalamo::Void;
-        if(is_array($params)){
-            foreach($params as $param){
-                $paramstr .="/".$param;
-            }
+    public function Create($page,$prefix=null){
+        if(!is_null($prefix)){
+           $prefix=trim($prefix,"/")."/";
         }
-        if(substr($this->Base(), -1)==="/"){
-         return $this->Base()."$controller/$method/$paramstr";
-        }
-        return $this->Base()."/$controller/$method/$paramstr";
-    }
-
-    /**
-     * This method create a url(to be used as href ) in classic mode
-     *
-     * @param string $page       The page name
-     * @param strign $params     The query string
-     */
-    public function CreateClassic($page,$params=null,$prefix=null){
-        //TODO: link 
-        $paramstr=Yalamo::Void;
-        if(is_array($params)){
-            foreach($params as $param){
-                $paramstr .="/".$param;
-            }
-        }
-        if(substr($this->Base(), -1)==="/"){
-         return $this->Base()."$page/$paramstr";
-        }
-        return $this->Base()."/$page/$paramstr";
+        return $this->Base().$prefix.trim($page,"/");
     }
 
 }

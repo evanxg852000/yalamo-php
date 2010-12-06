@@ -20,48 +20,35 @@
  * about uri. These functions can be called from oo mode
  */
 
-function GetUri(){
-    $uri=new Uri() ;
-    return $uri->Full();
+function uri_get(){
+    return Uri::Instance()->Full();
 }
 
-function GetUriBase(){
-    $uri=new Uri() ;
-    return $uri->Base();
+function uri_get_base(){
+    return Uri::Instance()->Base();
 }
 
-function GetUriSegement($num){
-     $uri=new Uri() ;
-     return $uri->Segment($num);
+function uri_get_segement($num){
+     return Uri::Instance()->Segment($num);
 }
 
-function GetUriController(){
-    $uri=new Uri() ;
-    return $uri->Controller();
+function uri_get_controller(){
+    return Uri::Instance()->Controller();
 }
 
-function GetUriMethod(){
-    $uri=new Uri() ;
-     return $uri->Method();
+function uri_get_method(){
+    return Uri::Instance()->Method();
 }
 
-function GetUriQueryString(){
-    $uri=new Uri() ;
-    return $uri->QueryString();
+function uri_get_query(){
+    return Uri::Instance()->QueryString();
 }
 
-function Redirect($url){
+function uri_redirect($url){
     $uri=new Uri();
-    $uri->Redirect($url);
+    Uri::Instance()->Redirect($url);
 }
 
-function MvcUrl($controller,$method,$params){
-   $uri=new Uri();
-   return $uri->CreateMvc($controller, $method, $params);
+function uri_create($page,$prefix=null){
+   return Uri::Instance()->Create($page,$prefix);
 }
-
-function ClassicUrl($page,$params){
-     $uri=new Uri();
-     return $uri->CreateClassic($page, $params);
-}
-

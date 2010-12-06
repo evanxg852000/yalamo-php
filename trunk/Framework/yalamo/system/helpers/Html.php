@@ -19,22 +19,21 @@
  * Includes usefull functions for user that want to use the framework in procedural mode
  * about regular expressions. These functions can be called from oo mode
  */
-
-function TagOptions($options){
-    $stroption=Yalamo::Void;
-    if(!is_array($options)){
+Class Html {
+    public static function TagOption($options){
+        if(!is_array($options)){
            return;
+        }
+        foreach ($options as $name=>$value){
+            if(is_numeric($name)){continue;}
+            $stroption .=" $name=\"$value\" ";
+        }
+        return $stroption;
     }
-    foreach ($options as $name=>$value){
-        if(is_numeric($name)){continue;}
-        $stroption .=" $name=\"$value\" ";
-    }
-    return $stroption;
 }
 
-function Anchor($url, $text,$options){
-    $opt=TagOptions($options);
-    echo $opt;
-    return "<a href=\"$url\" $opt >$text</a>";
+
+function anchor($url, $text,$options){
+    y('<a href="$url"'.Html::TagOption($options).'>'.$text.'</a>');
 }
 

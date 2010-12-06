@@ -7,10 +7,14 @@ public function Index(){
 
     $this->Model=$this->Load->Model('Users');
     //$this->Model->Delete("name='Barbara'");
-    $this->Set("data",$this->Model->SelectAll());
+   //
+   //$this->Set("data",$this->Model->SelectAll());
    
-    
+   
+   //echo $this->Uri->Create("/pave/view/news/","/blogpost/test");
 
+  // $this->Load->Extension("Paypal");
+ 
    
    // $s=$this->Component("Sizer");
    // 

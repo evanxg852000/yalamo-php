@@ -164,12 +164,8 @@ class Environment extends Object{
      * @return string      It returns false if there is no match
      */
     public static function Application($key){
-        global $AppConfig;
-        if(!array_key_exists($key,$AppConfig)) {
-           self::scollect(Error::YE100);
-           return false;
-        }
-         return $AppConfig[$key];
+        global $APPCONFIG;
+        return (isset($APPCONFIG["CUSTOM"][$key]))? $APPCONFIG["CUSTOM"][$key] : null  ;
     }
 
     /**
