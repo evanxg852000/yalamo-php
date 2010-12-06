@@ -1,0 +1,4 @@
+<FilesMatch ".(pdf|mp3|zip|rar|tar)$">
+ Order Allow,Deny
+ Deny from all
+</FilesMatch>

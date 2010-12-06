@@ -13,7 +13,8 @@ class Users extends Model {
         return parent::Insert($item);
     }
     public function SelectAll(){
-       return parent::Select(Yalamo::All);
+        $rs=new ResultSet(parent::Select(Yalamo::All));
+        return $rs->AsJson();
     }
     public function Escape(){
         $vars="evance'soumaor \nis fiek ";

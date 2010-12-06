@@ -20,14 +20,14 @@
  * about string. These functions can be called from oo mode
  */
 
-function getStringFirst($string,$lenght){
+function string_first($string,$lenght){
     return substr($string,0,$lenght);
 }
 
-function getStringLast($string,$lenght){
+function string_last($string,$lenght){
     return substr($string, -$lenght);
 }
 
-function getStringEmpty(){
+function string_empty(){
     return Yalamo::Void;
 }

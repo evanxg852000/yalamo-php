@@ -16,6 +16,7 @@ function cf($path){
         return false;
     }
      $category=$path[0]."CONFIG";
+     
      $array=(isset($$category))? $$category: array();
      $result=false;
     switch (count($path)) {
@@ -29,7 +30,7 @@ function cf($path){
          case 3:
             $section=$path[1];
             $item=$path[2];
-            $result=(isset($array[$section][$item]))? $array[$Section][$item] : false  ;
+            $result=(isset($array[$section][$item]))? $array[$section][$item] : false  ;
             break;
     }
     return $result;

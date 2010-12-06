@@ -8,7 +8,7 @@ $APPCONFIG["SESSIONCOOKIE"]="client";
 
 $APPCONFIG["COOKIESALT"]="xcaluborrer";
 
-$APPCONFIG['CUSTOME']=array(
+$APPCONFIG['CUSTOM']=array(
     "AdminEmail"=> "evanxg852000@yahoo.fr",
     "Title"=>"Yalamo Framework",
     "Copyright"=> "Evansofts 2010"

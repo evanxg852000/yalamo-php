@@ -20,11 +20,11 @@
  * about core functionalities. These functions can be called from oo mode
  */
 
-function AppConfig($key){
+function app_config($key){
     return Environment::Application($key);
 }
 
-function loadModule($modules){
+function load_module($modules){
     $load=new Loader();
     if(!is_array($modules)){
         $load->Module($modules);
@@ -33,7 +33,7 @@ function loadModule($modules){
     $load->Modules($modules);
 }
 
-function loadHelper($helpers){
+function load_helper($helpers){
     $load=new Loader();
     if(!is_array($helpers)){
         $load->Helper($helpers);
@@ -42,7 +42,7 @@ function loadHelper($helpers){
     $load->Helpers($helpers);
 }
 
-function loadExtension($extensions){
+function load_extension($extensions){
     $load=new Loader();
     if(!is_array($extensions)){
         $load->Extension($extensions);
@@ -51,17 +51,17 @@ function loadExtension($extensions){
     $load->Extensions($extensions);
 }
 
-function loadModel($model){
+function load_model($model){
     $load=new Loader();
     return $load->Model($model);
 }
 
-function loadView($view, $data=null){
+function load_view($view, $data=null){
      $load=new Loader();
      $load->View($view, $data);
 }
 
-function loadController($controller){
+function load_controller($controller){
     $load=new Loader();
     $load->Controller($controller);
 }

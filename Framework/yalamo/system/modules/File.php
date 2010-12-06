@@ -47,7 +47,10 @@ class File extends Object {
     }
     public function Content(){
         if(file_exists($this->path->FullPath())){
-           return file_get_contents($this->path->FullPath());
+            $handle = fopen($this->path->FullPath(), "rb");
+            $contents = fread($handle, filesize($this->path->FullPath()));
+            fclose($handle);
+           return $contents; 
         }
         $this->Collect(Error::YE205);
         return false;       
@@ -136,8 +139,23 @@ class File extends Object {
             }
 	}
     }  
-    public function Download($targetfolder){
-        return @copy($this->path->FullPath(), $targetfolder.$this->path->FileName());
+    public function Download(){
+        if(file_exists($this->path->FullPath())){
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename='.$this->path->FileName());
+            header('Content-Transfer-Encoding: binary');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($this->path->FullPath()));
+            ob_clean();
+            flush();
+            readfile($this->path->FullPath());
+            exit;
+        }
+        $this->Collect(Error::YE205);
+        return false;
     }
   
 }
