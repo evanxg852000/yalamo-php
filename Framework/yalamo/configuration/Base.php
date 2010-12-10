@@ -2,7 +2,9 @@
 
 $BASECONFIG["MVCPATH"]=YPATH."mvc/";
 
-$BASECONFIG["PROFILING"]=TRUE;
+$BASECONFIG["CACHEPATH"]=YFSBASE."cache/";
+
+$BASECONFIG["PROFILING"]=true;
 
 $BASECONFIG["AUTOLOAD"]["MODULES"]=array("Cookie");
 
@@ -15,6 +17,6 @@ $BASECONFIG["ALIASES"]=array(
     "fc"=>"getController"
 );
 
-//TODO use require 
+ 
 
 

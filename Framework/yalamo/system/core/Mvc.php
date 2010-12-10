@@ -63,6 +63,7 @@ final class Mediator extends Object{
     private $controller;
     private $action;
     private $controller_instance;
+    private $cache_object;
 
     /**
      * Constructor get the current controller and sets up the mediator member variables
@@ -72,6 +73,7 @@ final class Mediator extends Object{
         $this->page=$uri->Page();
         $this->controller=$uri->Controller();
         $this->action=$uri->Action();
+        $this->cache_object= Caching::Instance();
            
         if( cf("RUI/MODE")===Yalamo::Classic){
             $file=$this->page.EXT;
@@ -94,6 +96,7 @@ final class Mediator extends Object{
         $load=Loader::Instance();
         if(cf("RUI/MODE")==Yalamo::Classic){
             $load->Page($this->page);
+            $this->cache_object->Output();
             return;
         }
        
@@ -118,6 +121,8 @@ final class Mediator extends Object{
         //call the action
         $var_action=$this->action;
         $this->controller_instance->$var_action();
+        //check for caching
+        $this->cache_object->Output();
     }
 
 }
@@ -199,6 +204,10 @@ abstract class Controller extends Object {
         }
         //call the action
         $sub_instance->$action();
+    }
+
+    final protected function Cache($delay){
+        Caching::Instance()->Cache($delay);
     }
 
     /**

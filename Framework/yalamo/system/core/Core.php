@@ -171,7 +171,7 @@ class Object  extends ICollectable implements ISerialisable {
  * The base class for classes that implement the singleton patern
  */
 abstract class Singleton extends Object {
-    private final function __clone() { }
+    private final function __clone(){ }
     private function __construct(){}
     public  static  function Instance(){}
 }
@@ -571,3 +571,50 @@ final class Sanitizer extends Object {
 
 }
 
+/**
+ * function for caching
+ */
+
+class Caching  extends Singleton {
+    private static $instance=null;
+    private $enable;
+    private $file;
+
+    private function  __construct() {
+        $this->enable=false;
+        $this->file=cf("BASE/CACHEPATH");
+        $this->file .= preg_replace("/[^a-z0-9.-]/", "", strtolower(Uri::Instance()->Full()))."yalchache.ych";
+    }
+    
+    public  static  function Instance(){
+        if(!self::$instance){
+            self::$instance=new Caching();
+        }
+        return self::$instance;
+    }
+
+    public function Cache($delay){
+        $this->enable=true;
+        if((file_exists($this->file)) && (time()-filemtime($this->file)<= $delay) ){
+            echo file_get_contents($this->file);
+            exit ();
+        }
+        ob_start();
+    }
+
+    public function Output(){
+        if($this->enable){
+            $content=ob_get_contents();
+            ob_end_clean();
+            $this->savecontent($content);
+            echo $content;
+            exit();
+        }
+    }
+
+    private function savecontent($content){
+        $f=new File($this->file);
+        $f->Create($content);
+    }
+
+}
