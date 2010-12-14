@@ -1,0 +1,112 @@
+# depslib dependency file v1.0
+1292323602 source:c:\users\administrator\desktop\train\yalamonconsole\src\main.cpp
+	<stdlib.h>
+	<iostream>
+	"application.h"
+
+1292338282 source:c:\users\administrator\desktop\train\yalamonconsole\src\application.cpp
+	"application.h"
+	"constants.h"
+	"actions.h"
+
+1292338273 c:\users\administrator\desktop\train\yalamonconsole\src\application.h
+	<stdlib.h>
+	<direct.h>
+	<iostream>
+	<sstream>
+	<string>
+	<vector>
+	"array.h"
+
+1292338764 c:\users\administrator\desktop\train\yalamonconsole\src\constants.h
+	<string>
+
+1292338957 c:\users\administrator\desktop\train\yalamonconsole\src\array.h
+	<vector>
+	<string>
+
+1292337585 source:c:\users\administrator\desktop\train\yalamonconsole\src\constants.cpp
+	"constants.h"
+	<iostream>
+
+1292316528 source:c:\users\administrator\desktop\train\yalamonconsole\src\actions.cpp
+	"application.h"
+
+1292339634 c:\users\administrator\desktop\train\yalamonconsole\src\actions.h
+	<fstream>
+	<cctype>
+	<cstring>
+	<dirent.h>
+
+1292337585 source:c:\wamp\www\framework\yalamoquick\src\constants.cpp
+	"constants.h"
+	<iostream>
+
+1292338764 c:\wamp\www\framework\yalamoquick\src\constants.h
+	<string>
+
+1292323602 source:c:\wamp\www\framework\yalamoquick\src\main.cpp
+	<stdlib.h>
+	<iostream>
+	"application.h"
+
+1292338273 c:\wamp\www\framework\yalamoquick\src\application.h
+	<stdlib.h>
+	<direct.h>
+	<iostream>
+	<sstream>
+	<string>
+	<vector>
+	"array.h"
+
+1292338957 c:\wamp\www\framework\yalamoquick\src\array.h
+	<vector>
+	<string>
+
+1292338282 source:c:\wamp\www\framework\yalamoquick\src\application.cpp
+	"application.h"
+	"constants.h"
+	"actions.h"
+
+1292339634 c:\wamp\www\framework\yalamoquick\src\actions.h
+	<fstream>
+	<cctype>
+	<cstring>
+	<dirent.h>
+
+1292337585 source:c:\wamp\www\framework\quicktool\src\constants.cpp
+	"constants.h"
+	<iostream>
+
+1292338764 c:\wamp\www\framework\quicktool\src\constants.h
+	<string>
+
+1292323602 source:c:\wamp\www\framework\quicktool\src\main.cpp
+	<stdlib.h>
+	<iostream>
+	"application.h"
+
+1292338273 c:\wamp\www\framework\quicktool\src\application.h
+	<stdlib.h>
+	<direct.h>
+	<iostream>
+	<sstream>
+	<string>
+	<vector>
+	"array.h"
+
+1292338957 c:\wamp\www\framework\quicktool\src\array.h
+	<vector>
+	<string>
+
+1292338282 source:c:\wamp\www\framework\quicktool\src\application.cpp
+	"application.h"
+	"constants.h"
+	"actions.h"
+
+1292339634 c:\wamp\www\framework\quicktool\src\actions.h
+	<fstream>
+	<cctype>
+	<cstring>
+	<dirent.h>
+

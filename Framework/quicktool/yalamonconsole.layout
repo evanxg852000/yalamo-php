@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Release" />
+	<File name="src\actions.h" open="0" top="0" tabpos="0">
+		<Cursor position="756" topLine="26" />
+	</File>
+	<File name="src\application.cpp" open="0" top="0" tabpos="4">
+		<Cursor position="72" topLine="0" />
+	</File>
+	<File name="src\application.h" open="0" top="0" tabpos="3">
+		<Cursor position="86" topLine="0" />
+	</File>
+	<File name="src\array.h" open="0" top="0" tabpos="4">
+		<Cursor position="291" topLine="0" />
+	</File>
+	<File name="src\constants.cpp" open="0" top="0" tabpos="2">
+		<Cursor position="69" topLine="0" />
+	</File>
+	<File name="src\constants.h" open="0" top="0" tabpos="5">
+		<Cursor position="145" topLine="0" />
+	</File>
+	<File name="src\main.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="152" topLine="0" />
+	</File>
+</CodeBlocks_layout_file>
