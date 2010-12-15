@@ -1,23 +1,16 @@
 <?php 
 class Welcome extends Controller {
 	
-public function Index(){
-    
+public function Index(){    
     $this->Set("title","Yalamo Framework" );
     $this->Set("content","this is the content of my div from the welcome controller!" );
     $this->Model=$this->Load->Model('Users');
-    //$this->Model->Delete("name='Barbara'");
-   //
-   //$this->Set("data",$this->Model->SelectAll());
+    
+    tr("L001");
    
-   
-   //echo $this->Uri->Create("/pave/view/news/","/blogpost/test");
 
-  // $this->Load->Extension("Paypal");
- 
-   
-   // $s=$this->Component("Sizer");
-   // 
+
+// $s=$this->Component("Sizer");
     //$data["users"]=$this->Model->SelectAll();
    // $this->Model->InsertUser("Evance");
    //$this->Model->Escape();

@@ -1,28 +1,44 @@
-<?php
-$PAGINATORCONFIG=array(
-"item_per_page"=>4,
-"page_limit"=>9,
-"css_class"=>"pagination",
-"previous"=>array("Text"=>"« Previous","css_class"=>"previous"),
-"next"=>array("Text"=>"Next »","css_class"=>'next'),
-"current"=>array("css_class"=>"current"),
-"Desable"=>array("css_class"=>"off")
-);
+<?php if ( ! defined('YPATH')) exit('Access Denied !');
+/**
+ * Yalamo framework
+ *
+ * A fast,light, and constraint-free Php framework.
+ *
+ * @package		Yalamo
+ * @author		Evance Soumaoro
+ * @copyright           Copyright (c) 2009 - 2011, Evansofts.
+ * @license		http://projects.evansofts.com/yalamof/license.html
+ * @link		http://evansofts.com
+ * @version		Version 0.1
+ * @filesource          Paypal.php
+ */
 
 final  class Paginator {
+    public static $CONFIG=array(
+    "item_per_page"=>4,
+    "page_limit"=>9,
+    "css_class"=>"pagination",
+    "previous"=>array("Text"=>"« Previous","css_class"=>"previous"),
+    "next"=>array("Text"=>"Next »","css_class"=>'next'),
+    "current"=>array("css_class"=>"current"),
+    "desable"=>array("css_class"=>"off")
+    );
+    
     private $configuration;
-    public function  __construct() {
-        global $PAGINATORCONFIG;
-        $this->configuration=& $PAGINATORCONFIG;
-
+    public function  __construct($config=null) {
+        $this->configuration=& $config ;
+        if(is_null($config)){
+            $this->configuration=& Paginator::$CONFIG;
+        }  
     }
 
-    public function Render($total,$url,$currentpage=1, $dump=true){       
+    public function Render($total,$url,$currentpage=1, $dump=true){
+        var_dump($this->configuration);
         $paginatorstr='<ul class="'.$this->configuration['css_class'].'">{content}</ul>';
         $content="";
         //previous
         if($currentpage==1){
-            $prev='<li><span  class="'.$this->configuration['Desable']['css_class'].'">'
+            $prev='<li><span  class="'.$this->configuration['desable']['css_class'].'">'
             .$this->configuration['previous']['Text'] .'</span></li>';
         }
         else {
@@ -51,7 +67,7 @@ final  class Paginator {
         }
         //next
         if($currentpage==$pagecount){
-            $next='<li><span class="'.$this->configuration['Desable']['css_class'].'">'
+            $next='<li><span class="'.$this->configuration['desable']['css_class'].'">'
             .$this->configuration['next']['Text'] .'</span></li>';
         }
         else {
@@ -69,6 +85,7 @@ final  class Paginator {
     
 }
 
+ 
 /*Pagination  default Style
 
 .pagination {

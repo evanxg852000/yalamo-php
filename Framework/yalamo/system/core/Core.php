@@ -345,7 +345,7 @@ final class Loader extends Singleton {
     private function  Load($fullpath, $data=null){
         global $BASECONFIG;
         extract($BASECONFIG["ALIASES"]);
-        if( $data!=null){
+        if(!is_null($data)){
             extract($data);
         }
         if(file_exists($fullpath)){
@@ -355,7 +355,6 @@ final class Loader extends Singleton {
         else{
             return false;
         }
-
     }
 
 }
@@ -367,7 +366,7 @@ final class Loader extends Singleton {
  * The class to benchmarke the application speed
  */
 final class Profiler extends Object{
-    public static $instance=NULL;
+    public static $instance=null;
     private $checkpoints;
 
     private function  __construct() {}
@@ -511,7 +510,7 @@ final class Profiler extends Object{
  * The class that cleans input data
  */
 final class Sanitizer extends Object {
-    private static $instance=NULL;
+    private static $instance=null;
     private static $ListNoc;
 
     private  function   __construct() {
@@ -524,7 +523,7 @@ final class Sanitizer extends Object {
     private function  __clone() { }
     public  function  __toString() { return "Object of Type: Sanitizer";}
 
-    public function CleanOut($data,$blacklist=NULL){
+    public function CleanOut($data,$blacklist=null){
         self::AddToList($blacklist);
         if(is_array($data)){
               $result=array();
@@ -535,7 +534,7 @@ final class Sanitizer extends Object {
         }
         return str_replace(array_keys(self::$ListNoc),  array_values(self::$ListNoc), $data);;
     }
-    public function CleanIn($data,$blacklist=NULL){
+    public function CleanIn($data,$blacklist=null){
         self::$ListNoc=array_flip(self::$ListNoc);
         return $this->CleanOut($data,$blacklist);
     }
