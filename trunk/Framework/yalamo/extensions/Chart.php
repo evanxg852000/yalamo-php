@@ -26,3 +26,6 @@ class Chart extends Object {
     public function  __toString() {return "Object of Type: Chart"; }
 
 }
+
+
+

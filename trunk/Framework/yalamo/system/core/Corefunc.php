@@ -50,11 +50,12 @@ function _y($object){
     print_r($object);
 }
 
-function tr(){
-    echo "translation function not implemetated";
+function tr($ressourcekey){
+    global $APPCONFIG,$LANGUAGES;
+    if(array_key_exists($ressourcekey,$LANGUAGES[$APPCONFIG["LANG"]] )){
+        echo $LANGUAGES[$APPCONFIG["LANG"]][$ressourcekey];
+    }
+    else{
+        return false;
+    }
 }
-
-
-
-
-

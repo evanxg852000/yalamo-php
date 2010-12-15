@@ -120,3 +120,4 @@ final class Javascript {
 function loadjs($library,$version,$insert=true){
     Javascript::Load($library, $version,$insert);
 }
+

@@ -17,29 +17,30 @@
  * PAYPAL EXTENSION
  *
  * Payapal extension for making simple checkout
- * const Usd="USD|EN";
-    const Gbp="GBP|GB";
-    const Euro="EUR|FR";
  *
  */
 
-$PAYPAYCONFIG=array (
-"is_sandbox"=>true,
-"receiver_email"=>"evanxg85200@yourbusiness.com",
-"currency"=>"USD",
-"language"=>"EN",
-"button"=>"https://www.paypal.com/en_US/i/btn/x-click-but23.gif",
-"valiadte_url"=>"https://www.yoursite.com/showconfirm.php",
-"cancel_url"=>"http://www.yoursite.com/index.php",
-"notification_url"=>"http://www.yourbusiness.co.uk/paypalipn.php"
-);
 
-class Paypal extends Object{
+class Paypal {
+    public static $CONFIG=array (
+        "is_sandbox"=>false,
+        "receiver_email"=>"evance123@yahoo.fr",
+        "currency"=>"USD",
+        "language"=>"EN",
+        "button"=>"https://www.paypal.com/en_US/i/btn/x-click-but23.gif",
+        "validate_url"=>"http://localhost/Framework/showconfirm",
+        "cancel_url"=>"http://localhost/Framework/",
+        "notification_url"=>"http://localhost/Framework/paypalipn"
+    );
+    
     private $configuration;
     private $html;
 
-    public function __construct($config){
-	$this->configuration=$config;
+    public function __construct($config=null){
+        $this->configuration=& $config ;
+        if(is_null($config)){
+            $this->configuration=& Paypal::$CONFIG;
+        } 
         if($this->configuration["is_sandbox"]){
             $this->html='<form id="paypal-form" action="https://www.sandbox.paypal.com/cgi-bin/webscr"  method="post">';
         }
@@ -48,27 +49,27 @@ class Paypal extends Object{
         }
     }
 
-    public function Initiate($itemname,$quantity, $amount,$itemid){
+    public function Initiate($transactionname,$itemname,$quantity, $amount){
         $this->html .='
-                <input type="hidden" name="cmd" value="_xclick">
-                <input type="hidden" name="rm" value="2">
-                <input type="hidden" name="no_shipping" value="1">
-                <input type="hidden" name="no_note" value="1">
-                <input type="hidden" name="currency_code" value="'.$this->configuration["currency"].'">
-                <input type="hidden" name="lc" value="'.$this->configuration["language"].'">
-                <input type="hidden" name="business" value="'.$this->configuration["receiver_email"].'">
-                <input type="hidden" name="item_name" value="'.$itemname.'">
-                <input type="hidden" name="quantity" value="value="'.$quantity.'">
-                <input type="hidden" name="item_number" value="'.$itemid.'">
-                <input type="hidden" name="amount" value="'.$amount.'">
-                <input type="hidden" name="bn" value="PP-BuyNowBF">
+                <input type="hidden" name="cmd" value="_xclick"/>
+                <input type="hidden" name="rm" value="2"/>
+                <input type="hidden" name="no_shipping" value="1"/>
+                <input type="hidden" name="no_note" value="1"/>
+                <input type="hidden" name="currency_code" value="'.$this->configuration["currency"].'"/>
+                <input type="hidden" name="lc" value="'.$this->configuration["language"].'"/>
+                <input type="hidden" name="business" value="'.$this->configuration["receiver_email"].'"/>
+                <input type="hidden" name="item_name" value="'.$transactionname.'"/>
+                <input type="hidden" name="quantity" value="'.$quantity.'"/>
+                <input type="hidden" name="item_number" value="'.$itemname.'"/>
+                <input type="hidden" name="amount" value="'.number_format($amount,2).'"/>
+                <input type="hidden" name="bn" value="PP-BuyNowBF"/>
                 <input type="image" src="'.$this->configuration["button"].'" border="0"
-                name="submit" alt="Make payments with PayPal - it\'s fast, free and secure!">
-                <input type="hidden" name="return" value="'.$this->configuration["validate_url"].'">
-                <input type="hidden" name="cancel_return" value="'.$this->configuration["cancel_url"].'">
+                name="submit" alt="Make payments with PayPal - it\'s fast, free and secure!"/>
+                <input type="hidden" name="return" value="'.$this->configuration["validate_url"].'"/>
+                <input type="hidden" name="cancel_return" value="'.$this->configuration["cancel_url"].'"/>
                 <input type="hidden" name="notify_url" value="'.$this->configuration["notification_url"].'" />
                 </form>';
-
+        return $this->html;
     }
     public function AddCustom($value){
         $this->html .='<input type="hidden" name="custom" value="'.$value.'">';
@@ -94,7 +95,7 @@ class Paypal extends Object{
         else {
             $fp = fsockopen ('www.paypal.com', 443, $errno, $errstr, 30);
         }
-        
+
         if (!$fp) {
                 // HTTP ERROR Failed to connect
               $handler->OnError("HTTPERROR",null);
@@ -134,12 +135,12 @@ class Paypal extends Object{
 }
 
 interface IPayapalNotifyable {
-    
+
     /*
      * Called when the transaction is completed
      *
      * Specific checks should be done in this handler
-     * check the amount payed 
+     * check the amount payed
      * check the transaction id
      * @param $data will contain transaction information
      */
@@ -160,3 +161,4 @@ interface IPayapalNotifyable {
      */
     public function OnError($status,$data);
 }
+
