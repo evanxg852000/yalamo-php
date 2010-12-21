@@ -14,7 +14,7 @@ class Users extends Model {
     }
     public function SelectAll(){
         $rs=new ResultSet(parent::Select(Yalamo::All));
-        return $rs->AsJson();
+        return $rs->AsArray();
     }
     public function Escape(){
         $vars="evance'soumaor \nis fiek ";
@@ -22,6 +22,9 @@ class Users extends Model {
         echo $this->Query->Prepare("SELECT* FROM Table Where Name={name} AND Age={age} ", array("name"=>"evan'ce","age"=>56));
         
 
+    }
+    public function NumUser(){
+        return count($this->SelectAll());
     }
 
     public function  Delete($condition) {

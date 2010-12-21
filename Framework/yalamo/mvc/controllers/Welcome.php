@@ -6,16 +6,17 @@ public function Index(){
     $this->Set("content","this is the content of my div from the welcome controller!" );
     $this->Model=$this->Load->Model('Users');
     $this->Set("paypalinitiation","");
- 
-    
 
-// $s=$this->Component("Sizer");
-    //$data["users"]=$this->Model->SelectAll();
-   // $this->Model->InsertUser("Evance");
+    
+ 
+
+    $this->Set('users',$this->Model->SelectAll());
+   //
    //$this->Model->Escape();
     //$this->Load->View("index",  $this->Variables);
     Profiler::CheckPoint("Controller");
     $this->Show("index");
+    Inspector::Instance()->Investigate(true);
    
 }
 
