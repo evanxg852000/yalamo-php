@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding ='UTF-8'?>
+<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://schema.example.com" targetNamespace="http://schema.example.com">
+	<wsdl:types>
+		<xsd:schema targetNamespace="http://schema.example.com"/>
+	</wsdl:types>
+	<message name="EnglishRequest"><part name="params" type="xsd:string"/></message>
+	<message name="EnglishResponse"><part name="EnglishReturn" type="xsd:string"/></message>
+	
+	<message name="FrenchRequest"><part name="params" type="xsd:string"/></message>
+	<message name="FrenchResponse"><part name="FrenchReturn" type="xsd:string"/></message>
+	
+	<message name="AfricanRequest"><part name="params" type="xsd:string"/></message>
+	<message name="AfricanResponse"><part name="AfricanReturn" type="xsd:string"/></message>
+	
+	<wsdl:portType name="GreetingPortType">
+		<wsdl:operation name="English">
+			<wsdl:input message="tns:EnglishRequest"/>
+			<wsdl:output message="tns:EnglishResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="French">
+			<wsdl:input message="tns:FrenchRequest"/>
+			<wsdl:output message="tns:FrenchResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="African">
+			<wsdl:input message="tns:AfricanRequest"/>
+			<wsdl:output message="tns:AfricanResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<binding name="GreetingBinding" type="tns:GreetingPortType">
+		<soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="English">
+			<soap:operation soapAction="http://localhost/welcome/index/english" style="rpc"/>
+			<wsdl:input>
+				<soap:body use="encoded" namespace="http://schema.example.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="encoded" namespace="http://schema.example.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="French">
+			<soap:operation soapAction="http://localhost/welcome/index/french" style="rpc"/>
+			<wsdl:input>
+				<soap:body use="encoded" namespace="http://schema.example.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="encoded" namespace="http://schema.example.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</wsdl:output>
+		</wsdl:operation>
+			<wsdl:operation name="African">
+			<soap:operation soapAction="http://localhost/welcome/index/african" style="rpc"/>
+			<wsdl:input>
+				<soap:body use="encoded" namespace="http://schema.example.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="encoded" namespace="http://schema.example.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</binding>
+	<wsdl:service name="Greeting">
+		<wsdl:port name="GreetingPort" binding="tns:GreetingBinding">
+			<soap:address location="http://localhost/Framework/"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

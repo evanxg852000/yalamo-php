@@ -184,6 +184,9 @@ abstract class Singleton extends Object {
  * The base class for Component
  */
 class Component  extends Object {
+    const Controller="controllers";
+    const Model="models";
+    
     protected $Load;
     public function  __construct() {
         $this->Load=Loader::Instance();
@@ -296,7 +299,7 @@ final class Loader extends Singleton {
     public function Component($component,$type){
        $fullpath=cf("BASE/MVCPATH").$type.DS."components".DS.ucwords($component).EXT;
        if($this->Load($fullpath)){
-            return new $component();
+             return new $component();
         }
          else {
              return null;
