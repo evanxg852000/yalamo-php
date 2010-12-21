@@ -30,44 +30,45 @@ final class Sqlite extends DBDriver{
     public function  __construct($dbname,$configuration) {
         $this->dbname=$dbname;
         $this->configuration=& $configuration;
-        $handle=@mysql_connect($this->configuration["HOST"],$this->configuration["USER"],$this->configuration["PASSWORD"]);
-        if($handle){
-            $this->connection=$handle;
-            $currentdb=@mysql_select_db($this->dbname);
-            if(!$currentdb){
-                $this->PCollect(Error::YE301,  $this);
-            }
+        try{
+           $handle= new SQLite3($this->configuration["HOST"],SQLITE3_OPEN_READWRITE);
+           $this->connection=$handle;
         }
-        else {
-            $this->PCollect(Error::YE301,mysql_error() );
+        catch (Exception $e){
+            $this->PCollect(Error::YE301,$e->getMessage());
             $this->connection=false;
         }
         $this->ResetActiveRecord();
     }
     public function  __destruct(){
-       if(! @mysql_close($this->connection)){
-           $this->PCollect(Error::YE301,mysql_error());
+       if(is_object($this->connection)){
+           try{
+                $this->connection->close();
+            }
+            catch (Exception $e){
+                $this->PCollect(Error::YE301,$e->getMessage());
+            }
        }
     }
 
     //Database opeartion area
     public function DBCreate($name){
-        return $this->Execute("CREATE DATABASE $name ;");
+        return new SQLite3($name,SQLITE3_OPEN_CREATE);
     }
     public function DBDrop($name){
-        return $this->Execute("DROP DATABASE $name ;");
+        return unlink($name);
     }
     public function DBTables($name){
-        return $this->Execute("SHOW TABLES IN $name ;");
+        return $this->Execute("SELECT * FROM $name.sqlite_master WHERE type='table';");
     }
     public function DBExport($file,$name){
          $this->Collect(Error::YE001);
     }
     public function Execute($sql){
         if($this->connection){
-            $this->result= @mysql_query($sql, $this->connection);
+            $this->result=$this->connection->query($sql);
             if(!$this->result){
-                $this->PCollect(Error::YE301,mysql_error());
+                $this->PCollect(Error::YE301,$this->connection->lastErrorMsg());
                 return false;
             }
         }
@@ -169,19 +170,23 @@ final class Sqlite extends DBDriver{
 
     //Meta data
     public function LastId(){
-        return @mysql_insert_id($this->connection);
+        return $this->connection->lastInsertRowID();
     }
     public function NumRows(){
-        return @mysql_num_rows($this->result);
+        $counter=0;
+	while($row=$this->result->fetchArray()){
+            $counter++;
+	}
+        return $counter;
     }
     public function AffectedRows(){
-        return @mysql_affected_rows($this->connection);
+        return $this->connection->changes();
     }
 
     //Result fetching
     public function ResultSet(){
         $result=array();
-	while($row=@mysql_fetch_assoc($this->result) ){
+	while($row=$this->result->fetchArray(SQLITE3_ASSOC)){
             $result[]=(array) $row;
 	}
         return new ResultSet($result);
@@ -191,11 +196,11 @@ final class Sqlite extends DBDriver{
     public function Escape($input){
         if(is_array($input)){
             foreach ($input as $key => $value) {
-                $output[$key]=@mysql_real_escape_string($value, $this->connection);
+                $output[$key]=$this->connection->escapeString($value);
             }
             return $output;
         }
-        return @mysql_real_escape_string($input, $this->connection);
+        return $this->connection->escapeString($value);
     }
     public function Prepare($sql,$data){
       if(is_array($data)){
