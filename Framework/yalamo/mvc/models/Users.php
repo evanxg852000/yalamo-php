@@ -14,7 +14,7 @@ class Users extends Model {
     }
     public function SelectAll(){
         $rs=new ResultSet(parent::Select(Yalamo::All));
-        return $rs->AsArray();
+        return $rs->AsObject();
     }
     public function Escape(){
         $vars="evance'soumaor \nis fiek ";

@@ -15,8 +15,8 @@
 
 /*
  * MYSQL DRIVER IMPLEMENTATION
- *
- *  The class that implements the driver for Mysql database engine
+ * REQUIRE PHP EXT/ php_mysql
+ * The class that implements the driver for Mysql database engine
  */
 
 //------------------------------------------------------------------------------
@@ -47,7 +47,7 @@ final class Mysql extends DBDriver {
     }
     public function  __destruct(){
        if(! @mysql_close($this->connection)){
-           $this->PCollect(Error::YE301,mysql_error());
+           $this->PCollect(Error::YE301,  mysql_error($this->connection));
        }
     }
 
@@ -68,7 +68,7 @@ final class Mysql extends DBDriver {
         if($this->connection){
             $this->result= @mysql_query($sql, $this->connection);
             if(!$this->result){
-                $this->PCollect(Error::YE301,mysql_error());
+                $this->PCollect(Error::YE301,mysql_error($this->connection));
                 return false;
             }
         }

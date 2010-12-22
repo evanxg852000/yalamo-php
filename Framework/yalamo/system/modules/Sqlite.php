@@ -15,7 +15,7 @@
 
 /*
  * SQLITE DRIVER IMPLEMENTATION
- *
+ * REQUIRE PHP EXT/ php_sqlit3
  * The class that implements the driver for Sqlite database engine
  */
 
@@ -28,23 +28,23 @@
 final class Sqlite extends DBDriver{
 
     public function  __construct($dbname,$configuration) {
-        $this->connection=false;
         $this->dbname=$dbname;
         $this->configuration=& $configuration;
-
         $handle= new SQLite3($this->configuration["HOST"],SQLITE3_OPEN_READWRITE);
-        $this->connection=$handle;
-        
+        if($handle){
+            $this->connection=$handle;
+        }
+        else{
+            $this->connection=false;
+            $this->PCollect(Error::YE300,$handle->lastErrorMsg());
+        }
         $this->ResetActiveRecord();
     }
     public function  __destruct(){
        if(is_object($this->connection)){
-           try{
-                $this->connection->close();
-            }
-            catch (Exception $e){
-                $this->PCollect(Error::YE301,$e->getMessage());
-            }
+          if(!$this->connection->close()){
+              $this->PCollect(Error::YE301,$this->connection->lastErrorMsg());
+          }
        }
     }
 
@@ -56,10 +56,17 @@ final class Sqlite extends DBDriver{
         return unlink($name);
     }
     public function DBTables($name){
-        return $this->Execute("SELECT * FROM $name.sqlite_master WHERE type='table';");
+        return $this->Execute("SELECT name FROM sqlite_master WHERE type='table';");
     }
     public function DBExport($file,$name){
-         $this->Collect(Error::YE001);
+       $sql= "SELECT sql FROM sqlite_master WHERE type='table';";
+       $tables=$this->Execute($sql)->ResultSet()->AsObject();
+       $content="--dumping database {$name} \n";
+       foreach($tables as $val ){
+         $content .= $val->sql." ; \n";
+       }
+       $f=new File($file.".sql");
+       return $f->Create($content);
     }
     public function Execute($sql){
         if($this->connection){
