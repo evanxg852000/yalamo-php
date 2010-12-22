@@ -7,10 +7,11 @@ public function Index(){
     $this->Model=$this->Load->Model('Users');
     $this->Set("paypalinitiation","");
 
-    
+ 
  
 
     $this->Set('users',$this->Model->SelectAll());
+    var_dump($this->Variables['users']);
    //
    //$this->Model->Escape();
     //$this->Load->View("index",  $this->Variables);

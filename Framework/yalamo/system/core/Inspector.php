@@ -229,17 +229,35 @@ function _yerror($level, $string, $file, $line) {
     if(!(error_reporting() & $level)){
         return;
     }
-    $errorcontent='
-<pre style="font-family: consolas ;-moz-border-radius:3px;-webkit-border-radius:3px;
-background-color: #f9f9f9; border: 2px solid #D0D0D0;padding:10px;margin:3px;">
-Yalamo Encountered An Error
-Level: '.$level.'
-Message:  '.$string.'
-Filename: '.$file.'
-Line Number: '.$line.'
-Inspection:
-'.Inspector::Instance()->Investigate().'
-</pre>';
-    echo $errorcontent;
+    $error_content='
+    <pre style="font-family: consolas ;-moz-border-radius:3px;-webkit-border-radius:3px;
+    background-color: #f9f9f9; border: 2px solid #D0D0D0;padding:10px;margin:3px;">
+    Yalamo Encountered An Error
+    Level: '.$level.'
+    Message:  '.$string.'
+    Filename: '.$file.'
+    Line Number: '.$line.'
+    Inspection:
+    '.Inspector::Instance()->Investigate().'
+    </pre>';
+    echo $error_content;
 }
 set_error_handler("_yerror");
+
+/**
+ * Exception reporter
+ * @param <Exception> $exception
+ */
+function _yexception($exception) {
+    $exception_content='
+    <pre style="font-family: consolas ;-moz-border-radius:3px;-webkit-border-radius:3px;
+    background-color: #f9f9f9; border: 2px solid #D0D0D0;padding:10px;margin:3px;">
+    Yalamo Encountered An Exception
+    Level: '.$exception->getCode().'
+    Message:  '.$exception->getMessage().'
+    Filename: '.$exception->getFile().'
+    Line Number: '.$exception->getLine().'
+    </pre>';
+    echo $exception_content;
+}
+set_exception_handler("_yexception");

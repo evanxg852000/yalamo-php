@@ -27,15 +27,8 @@
  */
 class Dataset extends Object{
     private $registry;
-    //,$schema is an array or collumn headers
-    //TODO: finishe Dataset before 20/11/2010
-    //TODO: Build a more robust Active record  (db spec)
-    //TODO: lower case when query database (model)
-    //TODO: Add Route connect and to a redirect if it exist
-    //TODO: Escape according to type using is_func.. (db spec)
-    //TODO: support for transaction.. (db spec)
-    //TODO: Error handling in a better way
-    //TODO: XML RPC , FTP , ROBUST MAIL Class
+    //$schema is an array or collumn headers
+    //TODO: finishe Dataset before  version >1 feature
 
     private function __construct($schema) {
         $this->registry=array();

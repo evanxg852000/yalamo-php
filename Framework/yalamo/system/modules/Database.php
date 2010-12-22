@@ -39,7 +39,12 @@ final class Database extends Singleton {
             $databases=cf("DATABASE");
             $name=key($databases);
             $configuration=$databases[$name];
-             switch ($databases[$name]['DRIVER']) {
+            //TODO: use cf("APP/USEPDO") starting version>1 feature
+            if(YVERSION>0.1){
+                $this->driver_object=new Pdosql($name,$configuration);
+            }
+            else{
+                switch ($databases[$name]['DRIVER']) {
                     case Yalamo::Mysql:
                         $this->driver_object=new Mysql($name,$configuration);
                     break;
@@ -49,7 +54,8 @@ final class Database extends Singleton {
                     case Yalamo::Pogsql:
                         $this->driver_object=new Pogsql($name,$configuration);
                     break;
-              }
+                 }
+            }
         }
     }
     

@@ -21,6 +21,8 @@ $APPCONFIG["SESSIONCOOKIE"]="client";
 
 $APPCONFIG["COOKIESALT"]="xcaluborrer";
 
+$APPCONFIG["USEPDO"]=false;
+
 $APPCONFIG['CUSTOM']=array(
     "AdminEmail"=> "evanxg852000@yahoo.fr",
     "Title"=>"Yalamo Framework",
