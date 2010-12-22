@@ -18,24 +18,25 @@ $DATABASECONFIG=array(
 	"DRIVER"=>"SQLITE" ,
 	"HOST"=>"C:\wamp\apps\sqlitemanager1.2.4\data\slitedb.sqlite3",
 	"USER"=>"",
-	"PASSWORD"=>"",
+	"PASSWORD"=>""
 	),
 "test"=>array(
 	"DRIVER"=>"MYSQL",
 	"HOST"=>"localhost",
 	"USER"=>"root",
-	"PASSWORD"=>"",
+	"PASSWORD"=>""
 	),
 "carnic"=>array(
 	"DRIVER"=>"MYSQL",
 	"HOST"=>"localhost",
 	"USER"=>"root",
-	"PASSWORD"=>"",
+	"PASSWORD"=>""
 	),
 "DBNAME"=>array(
 	"DRIVER"=>"POSTGRESQL",
 	"HOST"=>"server.com",
 	"USER"=>"admin",
 	"PASSWORD"=>"youpass",
+        "PORT"=>5432
 	)
 );

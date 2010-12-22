@@ -1,51 +1,26 @@
-<?php if ( ! defined('YPATH')) exit('Access Denied !');
-/**
- * Yalamo framework
- *
- * A fast,light, and constraint-free Php framework.
- *
- * @package		Yalamo
- * @author		Evance Soumaoro
- * @copyright           Copyright (c) 2009 - 2011, Evansofts.
- * @license		http://projects.evansofts.com/yalamof/license.html
- * @link		http://evansofts.com
- * @version		Version 0.1
- * @filesource          Sqlite.php
- */
+<?php
+//To be available in version 1.0
 
-/*
- * SQLITE DRIVER IMPLEMENTATION
- *
- * The class that implements the driver for Sqlite database engine
- */
-
-//------------------------------------------------------------------------------
-/**
- * Sqlite Class
- *
- * Implements abstract methods from the DBDriver class for Sqlite engine
- */
-final class Sqlite extends DBDriver{
-
+class Pdosql extends DBDriver {
     public function  __construct($dbname,$configuration) {
         $this->connection=false;
         $this->dbname=$dbname;
-        $this->configuration=& $configuration;
-
-        $handle= new SQLite3($this->configuration["HOST"],SQLITE3_OPEN_READWRITE);
-        $this->connection=$handle;
-        
+        $this->configuration=& $configuration; 
+        switch ($this->configuration["DRIVER"]) {
+            case Yalamo::Mysql:
+                $this->connection=new PDO("mysql:host={$this->configuration["HOST"]};dbname={$this->dbname}", $this->configuration["USER"], $this->configuration["PASSWORD"]);
+                break;
+            case Yalamo::Sqlite:
+                $this->connection=new PDO("sqlite:{$this->configuration["HOST"]}", $this->configuration["USER"], $this->configuration["PASSWORD"]);
+                break;
+            case Yalamo::Pogsql:
+                $this->connection=new PDO("pgsql:host={$this->configuration["HOST"]};port={$this->configuration["PORT"]};dbname={$this->dbname};user={$this->configuration["USER"]};password={$this->configuration["PASSWORD"]}");
+            break;
+        }
         $this->ResetActiveRecord();
     }
     public function  __destruct(){
-       if(is_object($this->connection)){
-           try{
-                $this->connection->close();
-            }
-            catch (Exception $e){
-                $this->PCollect(Error::YE301,$e->getMessage());
-            }
-       }
+        unset($this->connection);
     }
 
     //Database opeartion area
