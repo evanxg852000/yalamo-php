@@ -78,7 +78,7 @@ class Model extends Object {
      * @return Object               The resultset as Object
      */
     protected function Select($fields){
-        return $this->Query->On($this->Table)->Select($fields)->ResultSet()->AsObject();
+        return $this->Query->On($this->Table)->Select($fields)->ResultSet()->AsArray();
     }
 
     /**

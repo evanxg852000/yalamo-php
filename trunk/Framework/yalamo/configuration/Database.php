@@ -14,17 +14,24 @@
  */
 
 $DATABASECONFIG=array(
+"test"=>array(
+	"DRIVER"=>"MYSQL",
+	"HOST"=>"localhost",
+	"USER"=>"root",
+	"PASSWORD"=>""
+	),
 "slite"=>array(
 	"DRIVER"=>"SQLITE" ,
 	"HOST"=>"C:\wamp\apps\sqlitemanager1.2.4\data\slitedb.sqlite3",
 	"USER"=>"",
 	"PASSWORD"=>""
 	),
-"test"=>array(
-	"DRIVER"=>"MYSQL",
+"pog"=>array(
+	"DRIVER"=>"POSTGRESQL",
 	"HOST"=>"localhost",
-	"USER"=>"root",
-	"PASSWORD"=>""
+	"USER"=>"postgres",
+	"PASSWORD"=>"root",
+        "PORT"=>5432
 	),
 "carnic"=>array(
 	"DRIVER"=>"MYSQL",
@@ -36,7 +43,7 @@ $DATABASECONFIG=array(
 	"DRIVER"=>"POSTGRESQL",
 	"HOST"=>"server.com",
 	"USER"=>"admin",
-	"PASSWORD"=>"youpass",
+	"PASSWORD"=>"yourpass",
         "PORT"=>5432
 	)
 );

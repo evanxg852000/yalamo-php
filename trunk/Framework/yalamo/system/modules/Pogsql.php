@@ -15,7 +15,7 @@
 
 /*
  * POSTGRESQL DRIVER IMPLEMENTATION
- *
+ * REQUIRE PHP EXT/ php_pgsql
  * The class that implements the driver for Postgre sql database engine
  */
 
@@ -26,185 +26,187 @@
  * Implements abstract methods from the DBDriver class for Postgre sql engine
  */
 final class Pogsql extends DBDriver{
-    public function  __construct() {
-        $this->result=NULL;
-        $handle=@mysql_connect(DBSERVER,DBUSER,DBPASSWORD);
-        $currentdb=mysql_select_db(DBNAME);
-        if($handle && $currentdb){
+
+    public function  __construct($dbname,$configuration) {
+        $this->dbname=$dbname;
+        $this->configuration=& $configuration;
+        $handle=@pg_connect("host={$this->configuration["HOST"]} port={$this->configuration["PORT"]} dbname={$this->dbname} user={$this->configuration["USER"]} password={$this->configuration["PASSWORD"]}");;
+        if($handle){
             $this->connection=$handle;
         }
         else {
-            $this->PCollect(Error::YE301,mysql_error() );
+            $this->PCollect(Error::YE301,pg_last_error() );
             $this->connection=false;
         }
-        return $this->connection;
+        $this->ResetActiveRecord();
     }
-    public function  __toString() {return "Object of Type: Pogsql"; }
     public function  __destruct(){
-        mysql_close($this->connection);
+       if(! @pg_close($this->connection)){
+           $this->PCollect(Error::YE301,pg_last_error($this->connection));
+       }
     }
 
-    public function Connection() {
-        return $this->connection;
+    //Database opeartion area
+    public function DBCreate($name){
+        return $this->Execute("CREATE DATABASE $name ;");
     }
-    public function Create($name){
-        $sql="CREATE DATABASE $name ;";
-        return $this->Execute($sql);
+    public function DBDrop($name){
+        return $this->Execute("DROP DATABASE $name ;");
     }
-    public function Drop($name){
-         $sql="DROP DATABASE $name ;";
-         return $this->Execute($sql);
+    public function DBTables($name){
+        return $this->Execute("SELECT tablename,schemaname  FROM pg_tables WHERE tablename !~ '^pg_+'; ;");
     }
-    public function Export($file){
-        $this->Collect(Error::YE001);
+    public function DBExport($file,$name){
+         $this->Collect(Error::YE001);
     }
-    public function Databases() {
-        $dbs=array();
+    public function Execute($sql){
         if($this->connection){
-            $list=mysql_list_dbs($this->connection);
-            while($db= mysql_fetch_row($list)){
-                $dbs[]=$db[0];
-            }
-        }
-        return $dbs;
-    }
-
-    public function Escape($vars) {
-        if(is_array($vars)){
-            for($i=0 ; $i<count($vars); $i++) {
-                $vars[$i]=@mysql_real_escape_string($vars[$i], $this->connection);
-            }
-        }
-        else{
-            $vars=@mysql_real_escape_string($vars, $this->connection);
-        }
-        return $vars;
-    }
-    public function Prepare($sql) {
-      $this->Collect(Error::YE001);
-    }
-
-    public function Execute($sql) {
-        if($this->connection){
-            $this->result= @mysql_query($sql, $this->connection);
+            $this->result= @pg_query($this->connection,$sql);
             if(!$this->result){
-                $this->PCollect(Error::YE301, mysql_error());
+                $this->PCollect(Error::YE301, pg_last_error($this->connection));
                 return false;
             }
         }
-        return $this->result;
+        return $this;
     }
-    public function Select($table,$fields=Yalamo::All,$condition=Yalamo::Void){
-        if(is_array($fields)){
-            $fields=implode(" , ", $fields);
+
+    //Active recorde area
+    public function On($table){;
+        $this->active_record["on"]=$table;
+        return $this;
+    }
+    public function Where($condition,$logic){
+        if( $this->active_record["where_counter"]<=0){
+            $sql ="WHERE ".$condition;
+        }  else {
+            $sql = " ".$logic." ".$condition;
         }
-        $sql="SELECT $fields FROM $table ".$condition." ;" ;
-        $this->Execute($sql);
-        return $this->ResultSet();
+        $this->active_record["where_counter"]++;
+        $this->active_record['where'] .=$sql;
+        return $this;
     }
-    public function Insert($table,$keys,$values,$single=true){
+    public function Limit($sart,$count){
+        $sql="LIMIT $sart , $count";
+
+        $this->active_record["limit"]=$sql;
+        return $this;
+    }
+    public function Order($field,$direction){
+        $Stmt="ORDER BY {fields}  {$direction}";
+        if( $this->active_record["order_counter"]<=0){
+            $sql ="ORDER BY  ".$field." ".$direction ;
+        }  else {
+            $sql =", ".$field." ".$direction ;
+        }
+        $this->active_record["order_counter"]++;
+        $this->active_record['order'] .=$sql;
+        return $this;
+    }
+
+    public function Insert($keys,$values,$is_multipe){
         if((!is_array($keys) || (!is_array($values)))){
             $this->PCollect(Error::YE101,array($keys,$values) );
             return false;
         }
-        $keys=implode(" , ",$keys);
-        if($single){
-            foreach ($values as  $val) {
-                if(is_string($val)){ $val="'$val'";}
-                if(is_null($val)){ $val="NULL"; }
-                $str[]=$val;
+        if(!$is_multipe){
+            foreach ($values as  $key=>$val) {
+                $temp[$key]=  $this->get_sql_data($val);
             }
-            $values="( ".implode(",", $str)." ) ";
+            $values="( ".implode(",", $temp)." ) ";
         }
         else{
-            $temparray=array();
-            for ($i=0; $i<count($values);$i++) {
-                $str=array();
-                foreach ($values[$i] as  $val) {
-                if(is_string($val)){
-                    $val="'$val'";
+            foreach ($values as  $records) {
+                foreach ($records as $key=>$val){
+                    $tempval[$key]=  $this->get_sql_data($val);
                 }
-                 $str[]=$val;
-                }
-                $temparray[]="( ".implode(",", $str)." ) ";
+                $temp[]="( ".implode(",", $tempval)." ) ";
             }
-
-            $values=implode(",", $temparray);
+            $values=implode(",", $temp);
         }
-        $sql="INSERT INTO $table ( $keys ) VALUES  $values ;";
-        $this->Execute($sql);
-        return $this->AffectedRows();
+        $sql="INSERT INTO {table} ( {keys} ) VALUES {values};";
+        $sql=str_replace("{table}", $this->active_record["on"], $sql);
+        $sql=str_replace("{keys}", implode(" , ",$keys), $sql);
+        $sql=str_replace("{values}",$values, $sql);
+        $this->ResetActiveRecord();
+        return $this->Execute($sql);
     }
-    public function Update($table,$values,$condition=Yalamo::Void,$astring=true){
+    public function Select($fields){
+        if(is_array($fields)){
+            $fields=implode(" , ", $fields);
+        }
+        $sql="SELECT {fields} From {table} {condition} {limit};";
+        $sql=str_replace("{fields}", $fields, $sql);
+        $sql=str_replace("{table}", $this->active_record["on"], $sql);
+        $sql=str_replace("{condition}", $this->active_record["where"], $sql);
+        $sql=str_replace("{limit}",  $this->active_record["limit"], $sql);
+        $this->ResetActiveRecord();
+        return $this->Execute($sql);
+    }
+    public function Update($values){
         if(is_array($values)){
-            foreach ($values as $key => $val) {
-                if(!is_string($key)){ $this->PCollect(Error::YE101, $values);  return false;}
-                 if((is_string($val)) && ($astring==true)){ $val="'$val'"; }
-                $str[]=$key."=".$val;
-            }
-            $values=implode(" , ", $str);
+            $values=implode(" , ", $values);
         }
-        else{
-            $this->PCollect(Error::YE101, $values);
-            return false;
-        }
-        $sql="UPDATE $table SET $values ".$condition." ;";
-        $this->Execute($sql);
-        return $this->AffectedRows();
+        $sql="UPDATE {table} SET {values} {condition} {limit};";
+        $sql=str_replace("{table}", $this->active_record["on"], $sql);
+        $sql=str_replace("{values}",  $values, $sql);
+        $sql=str_replace("{condition}", $this->active_record["where"], $sql);
+        $sql=str_replace("{limit}",  $this->active_record["limit"], $sql);
+        $this->ResetActiveRecord();
+        return $this->Execute($sql);
     }
-    public function Delete($table,$condition=Yalamo::Void){
-        $sql="DELETE FROM $table ".$condition." ;";
-        $this->Execute($sql);
-        return $this->AffectedRows();
+    public function Delete(){
+        $sql="DELETE FROM {table} {condition} {limit};";
+        $sql=str_replace("{table}", $this->active_record["on"], $sql);
+        $sql=str_replace("{condition}", $this->active_record["where"], $sql);
+        $sql=str_replace("{limit}",  $this->active_record["limit"], $sql);
+        $this->ResetActiveRecord();
+        return $this->Execute($sql);
     }
 
-    public function ResultObject() {
-        $resultobjects=array();
-        while($obj=  mysql_fetch_object($this->result)){
-                $resultobjects[]=$obj;
-        }
-        return $resultobjects;
-    }
-    public function ResultSet() {
-        $result=array();
-	while($row=@mysql_fetch_assoc($this->result) ){
-            $array = (array) $row;
-            $result[]=$array;
-	}
-        return $result;
-    }
-    public function ResultArray() {
-        $result=array();
-	while($row =mysql_fetch_row($this->result)){
-            $result[]=$row;
-	}
-        return $result;
-    }
-
-    public function Fields(){
-        $result=array();
-	while($row =mysql_fetch_field($this->result)){
-            $fieldObject=new stdClass();
-            $fieldObject->Name =$row->name;
-            $fieldObject->Table =$row->table;
-            $fieldObject->Default =$row->def;
-            $fieldObject->MaxLength =$row->max_length;
-            $fieldObject->NotNull =$row->not_null;
-            $fieldObject->PrimaryKey =$row->primary_key;
-            $result[]=$fieldObject;
-	}
-        return $result;
+    //Meta data
+    public function LastId(){
+        return @pg_i_insert_id($this->connection);
     }
     public function NumRows(){
-        return @mysql_num_rows($this->result);
+        return @pg_num_rows($this->result);
     }
     public function AffectedRows(){
-        if($this->connection){
-            return @mysql_affected_rows($this->connection);
-        }
-         else {
-            return 0;
-        }
+        return @pg_affected_rows($this->connection);
     }
- 
+
+    //Result fetching
+    public function ResultSet(){
+        $result=array();
+	while($row=@pg_fetch_assoc($this->result) ){
+            $result[]=(array) $row;
+	}
+        return new ResultSet($result);
+    }
+
+     //security
+    public function Escape($input){
+        if(is_array($input)){
+            foreach ($input as $key => $value) {
+                $output[$key]=@pg_escape_string($value, $this->connection);
+            }
+            return $output;
+        }
+        return @pg_escape_string($input, $this->connection);
+    }
+    public function Prepare($sql,$data){
+      if(is_array($data)){
+          foreach ($data as $key => $val) {
+              $sql=str_replace("{".$key."}",$this->Escape($val), $sql);
+          }
+        return $this->Execute($sql);
+      }
+      $this->Collect(Error::YE101);
+      return $this;
+    }
+
+    private function get_sql_data($data){
+        if(is_null($data)){return "NULL";}
+        if(is_string($data)){ return "'$data'";}
+        return $data;
+    }
 }
