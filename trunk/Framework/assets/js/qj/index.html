@@ -11,16 +11,18 @@
 			//initialise ui style here
 			//alert("loading");
 			Qj.Tooltip.Styles={
-				"background":"#55ea55",
-				"color":"#000000"	
+				//"background":"#55ea55",
+				//"color":"#000000"	
 			};
 			Qj.Notifycation.Position={
 			
 			}
 			
+			
 		});
 		
 		Qj.Ready(function(){				
+		
 			
 			Qj.Select("#notify").click(function(){
 				Qj.Notifycation.Show("This is a simple message","Qj",Qj.Notifycation.Warning());
@@ -29,12 +31,13 @@
 				Qj.Messaging.Question('What is Your name?',function(rep){alert(rep);});
 			});
 			
-			Qj.Select("#save").click(function(){			
-				var validators=new Qj.Form.Validators();
+			var validators=new Qj.Form.Validators();
 				validators.Add("name",Qj.Matcher.Name , "Name should be at least 6 carater long !");
 				validators.Add("email",Qj.Matcher.Email, "Email should be at least 6 carater long !");
 				validators.Add("description",Qj.Matcher.Text, "Description should be at least 6 carater long !");
-				
+						
+			Qj.Select("#save").click(function(evt){
+				console.log(validators);
 				var f=new Qj.Form(validators);
 				if(f.Validate()){
 					alert("Posting...");
@@ -90,7 +93,9 @@
 			<input type="text" name="name" id="name"/>
 			
 			<label for="email">Email:</label>
-			<input type="text" name="email" id="email"/><span class="valid">jhskjhdksajhlk</span>
+			<input type="text" name="email" id="email"/><span class="qj-tooltip">ihskjhdksajhlk hgdhj
+			jhdajsakjshdksh ajhdsjla ahdjakfpaf evannjk
+			aukjhd ahdkuhd</span>
 
 			<label for="description">Description:</label>
 			<textarea name="description" id="description" rows="8" cols="40"></textarea>
