@@ -6,10 +6,5 @@
 </head>
 <body>
     Yalamo Running in Classic Mode
-<?php
-$u=new Uri();
-
-
-?>
 </body>
 </html>
