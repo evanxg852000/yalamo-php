@@ -8,7 +8,7 @@ Application::Application(){
     this->exit=false;
     char currentpath[FILENAME_MAX];
     getcwd(currentpath, sizeof(currentpath)) ;
-    this->path=(string)currentpath ;
+    this->path=(string)currentpath+"\\" ;
 }
 
 void Application::Run(string commad, string arg){

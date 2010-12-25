@@ -25,6 +25,9 @@ public function Hello()	{
     $this->Delegate($this->Uri->Segment(2));
 }
 
+public function License(){
+    $this->Show("license");
+}
 
 }
 

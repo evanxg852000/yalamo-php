@@ -16,8 +16,6 @@
 /*
  * MVC ENTRY POINT
  *
- * To rename index.php if you choose to run in MVC-MODE
- *
  */
 
 /* Include the Framework */

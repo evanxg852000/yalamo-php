@@ -79,7 +79,9 @@ void SetPath(Application *app, Array &args){
         }
         return ;
     }
-    paramerror();
+    else{
+        cout<<app->GetPath()<<endl;
+    }
 }
 
 void ListDir (Application *app, Array &args){
@@ -109,10 +111,10 @@ void Project(Application *app, Array &args){
 
 void Module (Application *app, Array &args){
    if(checkarglength(args,1)){
-        string modulename=args.getvalueof(0);
+        string modulename=capitalise(args.getvalueof(0));
         if(modulename !=""){
             string path=app->GetPath()+Constants::dirmodule+modulename+".php";
-            string content="<?php\nclass "+capitalise(modulename)+" extentds Object {\n\tpublic function __construct(){\n\n\t}\n}";
+            string content="<?php\nclass "+modulename+" extends Object {\n\tpublic function __construct(){\n\n\t}\n}";
             if(!createfile(path,content)){
                 cout<<"Not able to create the module !"<<endl;
             }
@@ -124,10 +126,10 @@ void Module (Application *app, Array &args){
 
 void Extension (Application *app, Array &args){
     if(checkarglength(args,1)){
-        string extname=args.getvalueof(0);
+        string extname=capitalise(args.getvalueof(0));
         if(extname !=""){
             string path=app->GetPath()+Constants::dirextension+extname+".php";
-            string content="<?php\nclass "+capitalise(extname)+" extentds Object {\n\tpublic function __construct(){\n\n\t}\n}";
+            string content="<?php\nclass "+extname+" extends Object {\n\tpublic function __construct(){\n\n\t}\n}";
             if(!createfile(path,content)){
                 cout<<"Not able to create the extension !"<<endl;
             }
@@ -139,10 +141,10 @@ void Extension (Application *app, Array &args){
 
 void Controller(Application *app, Array &args){
     if(checkarglength(args,1)){
-        string ctrlname=args.getvalueof(0);
+        string ctrlname=capitalise(args.getvalueof(0));
         if(ctrlname !=""){
             string path=app->GetPath()+Constants::dircontroller+ctrlname+".php";
-            string content="<?php\nclass "+capitalise(ctrlname)+" extentds Controller {\n\tpublic function  Index() {\n\t\t$this->Show('view');\n\t}\n}";
+            string content="<?php\nclass "+ctrlname+" extends Controller {\n\tpublic function  Index() {\n\t\t$this->Show('view');\n\t}\n}";
             if(!createfile(path,content)){
                 cout<<"Not able to create the controller !"<<endl;
             }
@@ -154,10 +156,10 @@ void Controller(Application *app, Array &args){
 
 void Model (Application *app, Array &args){
     if(checkarglength(args,1)){
-        string modelname=args.getvalueof(0);
+        string modelname=capitalise(args.getvalueof(0));
         if(modelname !=""){
             string path=app->GetPath()+Constants::dirmodel+modelname+".php";
-            string content="<?php\nclass "+capitalise(modelname)+" extentds Model {\n\tpublic function  __construct() {\n\t\tparent::__construct();\n\t}\n}";
+            string content="<?php\nclass "+modelname+" extends Model {\n\tpublic function  __construct() {\n\t\tparent::__construct();\n\t}\n}";
             if(!createfile(path,content)){
                 cout<<"Not able to create the model !"<<endl;
             }
@@ -169,10 +171,10 @@ void Model (Application *app, Array &args){
 
 void View (Application *app, Array &args){
     if(checkarglength(args,1)){
-        string viewname=args.getvalueof(0);
+        string viewname=capitalise(args.getvalueof(0));
         if(viewname !=""){
-            string path=app->GetPath()+Constants::dirview+capitalise(viewname)+".php";
-            string content="<html>\n<head>\n\t<title>"+capitalise(viewname)+"</title>\n</head>\n<body>\n\n</body>\n</html>";
+            string path=app->GetPath()+Constants::dirview+viewname+".php";
+            string content="<html>\n<head>\n\t<title>"+viewname+"</title>\n</head>\n<body>\n\n</body>\n</html>";
             if(!createfile(path,content)){
                 cout<<"Not able to create the view !"<<endl;
             }

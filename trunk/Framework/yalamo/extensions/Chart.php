@@ -23,7 +23,6 @@ class Chart extends Object {
     public function  __construct() {
         $this->Collect(Error::YE001);
     }
-    public function  __toString() {return "Object of Type: Chart"; }
 
 }
 
