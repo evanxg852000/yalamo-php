@@ -4,7 +4,7 @@
  * @author		Evance Soumaoro
  * @copyright   Copyright (c) 2009 - 2011, Evansofts.
  * @link		http://evansofts.com
- * @version		0.1
+ * @version		0.8
  * @filesource  Qj.js 
  */
  
@@ -151,15 +151,10 @@ Qj.Form.prototype.Validate=function(){
 		Qj.Matcher.Test(
 			item.Rule,
 			Qj.Select("#"+this.item.Id).val(),
-			function(){	
-				Qj.Select("#"+this.item.Id+"+ span" ).remove();
-				Qj.Select("#"+this.item.Id).removeClass("notvalid").addClass("valid")
-				.after('<span class="valid"></span>');
+			function(subject,result){	
+				//do nothing
 			},
-			function(){
-				Qj.Select("#"+this.item.Id+"+ span" ).remove();
-				Qj.Select("#"+this.item.Id).removeClass("valid").addClass("notvalid")
-				.after('<span class="notvalid">'+this.item.Message+'</span>');
+			function(subject,result){
 				assertion=false;
 			});
 	});
@@ -176,6 +171,24 @@ Qj.Form.Validators=function(rules){
 		};
 		var validator={	Id:id, Rule:rule, Message:message};
 		this.Push(validator);
+		//mouse leave evt for visual feedback	
+		Qj.Select("#"+id).blur(function(evt){
+			Qj.Matcher.Test(
+			rule,
+			Qj.Select("#"+id).val(),
+			function(sub,result){	
+				Qj.Select("#"+id+"+ span" ).remove();
+				Qj.Select("#"+id).removeClass("notvalid").addClass("valid")
+				.after('<span class="valid"></span>');
+			},
+			function(sub,result){
+				Qj.Select("#"+id+"+ span" ).remove();
+				Qj.Select("#"+id).removeClass("valid").addClass("notvalid")
+				.after('<span class="notvalid">'+message+'</span>');
+			});	
+		});
+		
+		
 	};
 	
 };
@@ -427,20 +440,4 @@ Qj.Editable=function(){
 		});	
 	});	
 };
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
