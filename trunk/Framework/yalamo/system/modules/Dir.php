@@ -47,7 +47,7 @@ final class Dir extends Object{
         if (@mkdir($this->path->FullPath(), 0750,$recurssive)) {
             return true;
         }
-         $this->Collect(Error::YE204);
+         $this->Collect(Error::YE206);
          return false;
     }
 
