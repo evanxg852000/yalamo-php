@@ -43,8 +43,10 @@ final class Error {
     const YE201 = "YE201| Directory not found in the specified path";
     const YE202 = "YE202| Access denied on specified file";
     const YE203 = "YE203| Impossible to upload file";
-    const YE204 = "YE204| Directory operation not successfully completed";
-    const YE205 = "YE205| File operation not successfully completed";
+    const YE204 = "YE204| File size too big to be uploaded";
+    const YE205 = "YE205| File type not allowed for upload";
+    const YE206 = "YE207| Directory operation not successfully completed";
+    const YE207 = "YE208| File operation not successfully completed";
 
     /* Database zone */
     const YE300 = "YE300| Unable to connect to the database";

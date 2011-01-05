@@ -7,6 +7,7 @@ public function Index(){
     $this->Model=$this->Load->Model('Users');
     $this->Set("paypalinitiation","");
 
+    
 
     //$this->Model->InsertUser("Tome");
     //$this->Set('users',$this->Model->SelectAll());
