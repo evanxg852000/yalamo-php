@@ -40,15 +40,17 @@ final class Mysql extends DBDriver {
             }
         }
         else {
-            $this->PCollect(Error::YE301,mysql_error() );
-            $this->connection=false;
+			$this->connection=false;
+			$this->PCollect(Error::YE301, $this );
         }
         $this->ResetActiveRecord();
     }
     public function  __destruct(){
-       if(! @mysql_close($this->connection)){
-           $this->PCollect(Error::YE301,  mysql_error($this->connection));
-       }
+        if(is_resource($this->connection)){
+            if(! @mysql_close($this->connection)){
+                $this->PCollect(Error::YE301,  mysql_error($this->connection));
+            }
+	}
     }
 
     //Database opeartion area

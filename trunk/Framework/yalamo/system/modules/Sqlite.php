@@ -30,14 +30,20 @@ final class Sqlite extends DBDriver{
     public function  __construct($dbname,$configuration) {
         $this->dbname=$dbname;
         $this->configuration=& $configuration;
-        $handle= new SQLite3($this->configuration["HOST"],SQLITE3_OPEN_READWRITE);
-        if($handle){
-            $this->connection=$handle;
-        }
-        else{
+	try{
+            $handle= new SQLite3($this->configuration["HOST"],SQLITE3_OPEN_READWRITE);
+            if($handle){
+                $this->connection=$handle;
+            }
+            else {
+                $this->connection=false;
+                $this->PCollect(Error::YE300,$this);
+            }
+	}
+	catch(Exception $e){
             $this->connection=false;
-            $this->PCollect(Error::YE300,$handle->lastErrorMsg());
-        }
+            $this->PCollect(Error::YE300,$e->getMessage());
+	}
         $this->ResetActiveRecord();
     }
     public function  __destruct(){

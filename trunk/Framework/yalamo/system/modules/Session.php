@@ -28,19 +28,27 @@
 class Session extends Object {
     private static  $resgistry;
     private $id;
+    private $is_session_cookie_active;
     private $object;
     private $cookie;
     private $cookie_name;
+    private $session_refresh;
     private $is_safe;
+
  
     public function  __construct() {
         session_start();
         $this->id=session_id();
+        $this->is_session_cookie_active=cf("APP/USESESSIONCOKIE");
+        if(!$this->is_session_cookie_active){
+            return;
+        }        
         $this->cookie_name=cf("APP/SESSIONCOOKIE");
-        $this->cookie=new Cookie();
+        $this->session_refresh=cf("APP/SESSIONREFRESH");
+        $this->cookie=new Cookie("20M","/");
         $this->is_safe=false;
 
-        if(!isset($_COOKIE["PHPSESSID"])){
+        if(!isset($_SESSION[$this->cookie_name])){
             //fisrt visit
             $this->create_session_object();
             $this->is_safe=true;
@@ -51,8 +59,7 @@ class Session extends Object {
             $session_object= @unserialize($this->cookie->Get($this->cookie_name));
             if($this->object==$session_object){
                 //update that object after 5 min
-                if((time()-$this->object->st) >=5*60 ){
-                    echo "updating";
+                if((time()-$this->object->st) >=$this->session_refresh*60 ){
                     $this->create_session_object();
                 }
                 $this->is_safe=true;
@@ -65,10 +72,20 @@ class Session extends Object {
         return $this->id;
     }
     public function Registry(){
-        return self::$resgistry;
+        if(!$this->is_session_cookie_active){
+           return self::$resgistry;
+        }
+        else if($this->is_safe){
+            return self::$resgistry;
+        }
     }
     public function Set($key, $value){
-        if($this->is_safe){        
+        if(!$this->is_session_cookie_active){
+            $_SESSION[$key]=$value;
+            self::$resgistry=$_SESSION;
+            return true;
+        }
+        else if($this->is_safe){
             $_SESSION[$key]=$value;
             self::$resgistry=$_SESSION;
             return true;
@@ -76,12 +93,18 @@ class Session extends Object {
         return false;
     }    
     public function Get($key){
-        if($this->is_safe){
+        if(!$this->is_session_cookie_active){
+            if((array_key_exists($key, self::$resgistry)) && (array_key_exists($key, $_SESSION))){
+                return self::$resgistry[$key];
+            }
+            return;
+        }
+        else if($this->is_safe){
             if((isset(self::$resgistry[$key])) && (isset($_SESSION[$key])) ){
                 return self::$resgistry[$key] ;
             }
         }
-        return false;
+        return;
     }
     public function Clear($keys=Yalamo::All){
         if($keys===Yalamo::All){
@@ -89,27 +112,25 @@ class Session extends Object {
                 unset ($_SESSION[$key]);
             }
             self::$resgistry=$_SESSION;
-            return true;
         }
-        if(is_array($keys)){
+        else if (is_array($keys)){
             foreach($keys as $key){
                 unset ($_SESSION[$key]);
             }
             self::$resgistry=$_SESSION;
-            return true;
         }
         else {
            unset ($_SESSION[$keys]);
            self::$resgistry=$_SESSION;
-           return true;
         }
-
-
+        return true;
     }
     public function End($redirect=Yalamo::Void){
         session_unset();
         session_destroy();
-        $this->cookie->Clear($this->cookie_name);
+        if($this->is_session_cookie_active){
+            $this->cookie->Clear($this->cookie_name);
+        }
         self::$resgistry=$_SESSION;
         if(!empty($redirect)){
             $uri=Uri::Instance();
