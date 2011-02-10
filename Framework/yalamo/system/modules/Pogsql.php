@@ -35,15 +35,17 @@ final class Pogsql extends DBDriver{
             $this->connection=$handle;
         }
         else {
-            $this->PCollect(Error::YE301,pg_last_error() );
             $this->connection=false;
+			$this->PCollect(Error::YE301, @pg_last_error() );
         }
         $this->ResetActiveRecord();
     }
     public function  __destruct(){
-       if(! @pg_close($this->connection)){
-           $this->PCollect(Error::YE301,pg_last_error($this->connection));
-       }
+	if(is_resource($this->connection)){
+            if(! @pg_close($this->connection)){
+                $this->PCollect(Error::YE301, @pg_last_error());
+            }
+        }
     }
 
     //Database opeartion area

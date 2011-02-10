@@ -63,7 +63,13 @@ class Cookie extends Object{
     }
     public function Set($key, $value){
         $value=$this->cryptor->Crypt($value);
-        if(setcookie($key, $value,  time()+$this->lifetime)){
+        if($this->path==Yalamo::Void){
+            if(setcookie($key, $value,  time()+$this->lifetime)){
+                self::$resgistry=$_COOKIE;
+                return  true;
+            }
+        }
+        else if(setcookie($key, $value,  time()+$this->lifetime,$this->path)){
             self::$resgistry=$_COOKIE;
             return  true;
         }
@@ -75,7 +81,7 @@ class Cookie extends Object{
             return $this->cryptor->Decrypt(self::$resgistry[$key]) ;
         }
         $this->Collect(Error::YE403);
-        return false;
+        return ;
     }
     public function Clear($keys=Yalamo::All){
         if($keys===Yalamo::All){
