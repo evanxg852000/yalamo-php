@@ -205,6 +205,14 @@ span.valid {
 	font-size: 12px;
 	color: #a6a6a6;
 }
+span.checking {
+	background: url("images/loading.gif") no-repeat left center ;
+	margin: 0px 0px 0px 3px;
+	padding: 3px 8px 3px 20px;	
+	font-size: 12px;
+	color: #a6a6a6;
+}
+
 span.notvalid {
 	background: url("images/fverror.png") no-repeat left center;
 	margin: 0px 0px 0px 3px;
